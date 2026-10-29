@@ -22,6 +22,8 @@ El zoom usa la preferencia nativa de Chromium (`partition.default_zoom_level.x =
 
 ## Rendimiento: evidencia de compilación
 
+La primera compilación de Preview detectó un archivo de bloqueo incompleto para paquetes opcionales de Linux (`@emnapi`). Se regeneró desde una carpeta sin `node_modules`, manteniendo las versiones directas. Después pasaron una instalación limpia con `npm ci`, las cuatro comprobaciones locales y la validación del lock con npm 12 para Linux/x64 en una carpeta vacía. La corrección no modifica la interfaz.
+
 La skill `next-bundle-optimizer` se aplicó a las tres rutas (`/`, `/_not-found`, `/icon.svg`) en modo de auditoría. Se usó el esquema `next/analyze/graph-v1.schema.json` de Next.js instalado; captura `audit-before-d4e857c` y captura final del rediseño. Las exportaciones `.jsonl.gz` quedan en `output/analyze`, ignorado en Git.
 
 | Métrica atribuida del conjunto cliente           |   Antes | Después |
