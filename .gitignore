@@ -1,0 +1,28 @@
+# Dependencias y compilación
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+
+# Configuración local y credenciales
+.env*
+!.env.example
+.vercel/
+.netrc
+.npmrc.local
+credentials*.json
+*.pem
+*.key
+supabase/.temp/
+public/escudos/*.zip
+
+# Archivos del sistema y registros
+.DS_Store
+Thumbs.db
+desktop.ini
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

@@ -1,0 +1,400 @@
+{
+  "titulo": "Escudos originales para Champions Fútbol Prohibido",
+  "generador": "image_gen integrado",
+  "total": 48,
+  "formato": "PNG RGBA con fondo transparente",
+  "dimensiones": [
+    1254,
+    1254
+  ],
+  "nota": "Los clubes son referencias de inspiración. Los números de archivo identifican los diseños y no asignan números a los equipos del torneo.",
+  "prompt_base": "Use case: logo-brand. Asset: ONE original football team crest for the Champions Fútbol Prohibido Roblox tournament gallery. Create a single finished crest on a square canvas with a genuinely TRANSPARENT alpha background. Style: premium contemporary classic football heraldry, crisp vector-like geometric edges, clean flat solid-color fields, bold consistent outlines, balanced symmetry, restrained emblematic detail, strong silhouette readable at 64 pixels. All 48 badges in this collection must have uniform professional quality and visual weight. Framing: full crest centered, occupying about 82 percent of square canvas height, comfortable transparent padding on all sides, flat front view. Text: NONE. Absolutely NO names, letters, initials, digits, dates, monograms, text banners, watermark or signature. No background plate, scene, mockup, cast shadow, photograph, texture or 3D rendering. Invent an original composition inspired by the club's colors and heraldic vocabulary rather than reproducing its official badge. ",
+  "sufijo_prompt": "Club reference: {club}. Design direction: {design}. Output exactly ONE individual crest, never a collage or contact sheet.",
+  "escudos": [
+    {
+      "id": "01",
+      "league": "Inglaterra",
+      "club": "Manchester United",
+      "slug": "manchester-united",
+      "file": "01-inglaterra-manchester-united.png",
+      "prompt_override": "Use case: logo-brand. Asset: one original football team crest for a Roblox tournament gallery. Generate ONE single crest on a square 1024 by 1024 canvas with a genuinely transparent alpha background. Inspiration: Manchester United's scarlet red, black and warm gold football heraldry, but invent an original composition rather than reproducing the club badge. Design: a compact angular pointed shield, scarlet field, bold black and ivory border, a clean gold three-pronged spear rising behind a small black-and-ivory football. Contemporary classic football heraldry, exceptionally crisp flat vector-like geometry, solid colors, balanced symmetry, restrained detail, strong silhouette readable at 64 pixels. Center the fully visible crest occupying about 82 percent of canvas height, with comfortable transparent padding on all sides. Flat front view. This is the first of a coherent set of 48 badges: professional, collectible, clean and uniform visual weight. Absolutely NO text, names, letters, initials, digits, monograms, dates, words, banners for text, watermarks, signatures, background plate, shadows, mockup, photographic texture, 3D effect or gradients. Do not add lettering even as decoration. Output only the single finished transparent crest."
+    },
+    {
+      "id": "02",
+      "league": "Inglaterra",
+      "club": "Liverpool",
+      "slug": "liverpool",
+      "design": "deep red, ivory and a restrained teal accent; an original tall rounded shield with a rising red firebird, sweeping wings and a small ivory football sun",
+      "file": "02-inglaterra-liverpool.png"
+    },
+    {
+      "id": "03",
+      "league": "Inglaterra",
+      "club": "Arsenal",
+      "slug": "arsenal",
+      "design": "scarlet, ivory, navy and gold; an original beveled octagonal shield with a single gold diagonal cannon silhouette over a football wheel and simple red panels",
+      "file": "03-inglaterra-arsenal.png"
+    },
+    {
+      "id": "04",
+      "league": "Inglaterra",
+      "club": "Chelsea",
+      "slug": "chelsea",
+      "design": "royal blue, white and warm gold; an original round heraldic badge with a bold blue lion in profile, a small football at its base and a clean gold rim",
+      "file": "04-inglaterra-chelsea.png"
+    },
+    {
+      "id": "05",
+      "league": "Inglaterra",
+      "club": "Manchester City",
+      "slug": "manchester-city",
+      "design": "sky blue, deep navy, white and gold; an original circular crest with a compact geometric three-sailed ship above two blue waves and a small football",
+      "file": "05-inglaterra-manchester-city.png"
+    },
+    {
+      "id": "06",
+      "league": "Italia",
+      "club": "Juventus",
+      "slug": "juventus",
+      "design": "black, ivory and restrained gold; an original elongated oval shield featuring a bold geometric zebra head above black-and-white vertical stripes and a small football",
+      "file": "06-italia-juventus.png"
+    },
+    {
+      "id": "07",
+      "league": "Italia",
+      "club": "AC Milan",
+      "slug": "ac-milan",
+      "design": "red, black and ivory; an original pointed oval crest with alternating red-black diagonal panels, a stylized falcon wing and a small ivory football",
+      "file": "07-italia-ac-milan.png"
+    },
+    {
+      "id": "08",
+      "league": "Italia",
+      "club": "Inter",
+      "slug": "inter",
+      "design": "royal blue, black and gold; an original concentric circular crest containing a striking radial geometric football sun, absolutely no interlocking initials or monograms",
+      "file": "08-italia-inter.png"
+    },
+    {
+      "id": "09",
+      "league": "Italia",
+      "club": "Napoli",
+      "slug": "napoli",
+      "design": "bright sky blue, white and deep navy; an original round shield with a clean stylized volcano silhouette rising above a white football and two simple wave arcs, no letter N",
+      "file": "09-italia-napoli.png"
+    },
+    {
+      "id": "10",
+      "league": "Italia",
+      "club": "Roma",
+      "slug": "roma",
+      "design": "deep maroon, ochre gold and ivory; an original broad pointed shield with a powerful stylized gold wolf head in side profile and a small ivory football",
+      "file": "10-italia-roma.png"
+    },
+    {
+      "id": "11",
+      "league": "España",
+      "club": "Real Madrid",
+      "slug": "real-madrid",
+      "design": "ivory white, royal blue and gold; an original round-bottom shield with an understated geometric crown above, a central gold football sun and a clean diagonal blue band, no initials",
+      "file": "11-espana-real-madrid.png"
+    },
+    {
+      "id": "12",
+      "league": "España",
+      "club": "Barcelona",
+      "slug": "barcelona",
+      "design": "burgundy, deep blue and warm gold; an original curved shield with bold blue-burgundy vertical panels, a geometric gold sunrise in its upper section and a small gold football below",
+      "file": "12-espana-barcelona.png"
+    },
+    {
+      "id": "13",
+      "league": "España",
+      "club": "Atlético de Madrid",
+      "slug": "atletico-de-madrid",
+      "design": "red, white and navy; an original angular shield with diagonal red-white stripes, a small stylized navy bear head in the upper field and an ivory football below",
+      "file": "13-espana-atletico-de-madrid.png"
+    },
+    {
+      "id": "14",
+      "league": "España",
+      "club": "Athletic Club",
+      "slug": "athletic-club",
+      "design": "red, white, black and a subtle forest green accent; an original flat-top shield with red-white stripes, a bold green oak leaf and a small black-and-white football",
+      "file": "14-espana-athletic-club.png"
+    },
+    {
+      "id": "15",
+      "league": "España",
+      "club": "Valencia",
+      "slug": "valencia",
+      "design": "black, orange, ivory and gold; an original diamond-bottom shield containing a bold angular black bat with orange chest above a small football and restrained red-gold stripes",
+      "file": "15-espana-valencia.png"
+    },
+    {
+      "id": "16",
+      "league": "Alemania",
+      "club": "Bayern Múnich",
+      "slug": "bayern-munich",
+      "design": "red, white and royal blue; an original circular heraldic badge with a geometric blue-white diamond mosaic surrounding a central football, thick red outer rim, no lettering",
+      "file": "16-alemania-bayern-munich.png"
+    },
+    {
+      "id": "17",
+      "league": "Alemania",
+      "club": "Borussia Dortmund",
+      "slug": "borussia-dortmund",
+      "design": "vivid yellow and near-black; an original six-sided shield with an abstract black bee with angular wings, a small yellow-black football and bold solid framing",
+      "file": "17-alemania-borussia-dortmund.png"
+    },
+    {
+      "id": "18",
+      "league": "Alemania",
+      "club": "Schalke 04",
+      "slug": "schalke-04",
+      "design": "royal blue and white; an original round-bottom shield with two geometric silver-white mining picks framing a central football and a simple blue inset, absolutely no 04 or other digits",
+      "file": "18-alemania-schalke-04.png"
+    },
+    {
+      "id": "19",
+      "league": "Alemania",
+      "club": "Hamburgo",
+      "slug": "hamburgo",
+      "design": "royal blue, black and white; an original wide diamond-shaped crest combining a strong black diamond border, angular harbor waves and a centered geometric white football",
+      "file": "19-alemania-hamburgo.png"
+    },
+    {
+      "id": "20",
+      "league": "Alemania",
+      "club": "Borussia Mönchengladbach",
+      "slug": "borussia-monchengladbach",
+      "design": "emerald green, black and white; an original elongated diamond crest with white geometric laurel fronds framing a small football over a black-green split field, no letter B",
+      "file": "20-alemania-borussia-monchengladbach.png"
+    },
+    {
+      "id": "21",
+      "league": "Francia",
+      "club": "PSG",
+      "slug": "psg",
+      "design": "deep navy, crimson, white and a small gold accent; an original circular crest with a slender abstract Paris-inspired tower made of three bold strokes above a small football and a red central field",
+      "file": "21-francia-psg.png"
+    },
+    {
+      "id": "22",
+      "league": "Francia",
+      "club": "Olympique de Marsella",
+      "slug": "olympique-marsella",
+      "design": "azure blue, white and gold; an original pointed shield with a bold gold compass sun above an azure sail and a small football, generous white negative space, no intertwined letters",
+      "file": "22-francia-olympique-marsella.png",
+      "edit_prompt": "Edit the provided football crest. Change ONLY framing and edge cleanup: scale the entire existing crest down uniformly so that its top compass point and bottom shield point both have at least 9 percent of the square canvas height in transparent padding. The complete crest should occupy about 82 percent of canvas height. Restore any clipped tip. Preserve exactly the existing azure blue, white and gold crest design, sailboat, compass, football, proportions, colors and heraldic illustration style. Remove stray isolated colored specks outside the crest silhouette. Keep the square canvas and a genuinely transparent alpha background. NO text, letters, initials, numbers, words, watermark, added symbols or background. The asset must be fully visible, clean and centered."
+    },
+    {
+      "id": "23",
+      "league": "Francia",
+      "club": "Olympique de Lyon",
+      "slug": "olympique-lyon",
+      "design": "royal blue, red, white and gold; an original squared-top shield with a stylized gold lion head in profile, red-blue divided field and small white football",
+      "file": "23-francia-olympique-lyon.png"
+    },
+    {
+      "id": "24",
+      "league": "Francia",
+      "club": "Saint-Étienne",
+      "slug": "saint-etienne",
+      "design": "emerald green, white and restrained gold; an original rounded shield with a bold white oak branch embracing a small green-white football and a simple gold upper chevron",
+      "file": "24-francia-saint-etienne.png"
+    },
+    {
+      "id": "25",
+      "league": "Francia",
+      "club": "Mónaco",
+      "slug": "monaco",
+      "design": "red, white and gold; an original tall shield with a small geometric crown above, alternating red-white diamond facets and a central white football outlined in red",
+      "file": "25-francia-monaco.png"
+    },
+    {
+      "id": "26",
+      "league": "Brasil",
+      "club": "Flamengo",
+      "slug": "flamengo",
+      "design": "red, black and white; an original rounded pointed shield with broad horizontal red-black bands, an abstract sweeping white wing and a small football, no monogram",
+      "file": "26-brasil-flamengo.png"
+    },
+    {
+      "id": "27",
+      "league": "Brasil",
+      "club": "Corinthians",
+      "slug": "corinthians",
+      "design": "black, white and crimson; an original compact diamond shield with a bold ivory anchor integrated with a football, two restrained red nautical arcs and a heavy black border",
+      "file": "27-brasil-corinthians.png"
+    },
+    {
+      "id": "28",
+      "league": "Brasil",
+      "club": "Palmeiras",
+      "slug": "palmeiras",
+      "design": "deep emerald, ivory and muted gold; an original circular crest with two bold palm fronds surrounding an ivory football on a green radial field, no letter P",
+      "file": "28-brasil-palmeiras.png"
+    },
+    {
+      "id": "29",
+      "league": "Brasil",
+      "club": "São Paulo",
+      "slug": "sao-paulo",
+      "design": "white, red and black; an original broad inverted triangular shield with a red upper panel, black side panel and a central geometric football, no initials or stars",
+      "file": "29-brasil-sao-paulo.png"
+    },
+    {
+      "id": "30",
+      "league": "Brasil",
+      "club": "Vasco da Gama",
+      "slug": "vasco-da-gama",
+      "design": "black, white and crimson; an original elongated shield with a bold white diagonal sail, a red four-point compass star and a small football at the base, original nautical composition",
+      "file": "30-brasil-vasco-da-gama.png"
+    },
+    {
+      "id": "31",
+      "league": "México",
+      "club": "América",
+      "slug": "america",
+      "design": "warm pale yellow, navy and red; an original circular shield with a bold navy eagle spreading its wings around a small football, fine red inner rim, no map or initials",
+      "file": "31-mexico-america.png"
+    },
+    {
+      "id": "32",
+      "league": "México",
+      "club": "Chivas",
+      "slug": "chivas",
+      "design": "red, white, navy and restrained gold; an original curved shield with red-white diagonal stripes, a stylized gold goat head in profile above a small football, navy outer frame",
+      "file": "32-mexico-chivas.png"
+    },
+    {
+      "id": "33",
+      "league": "México",
+      "club": "Cruz Azul",
+      "slug": "cruz-azul",
+      "design": "royal blue, white and red; an original octagonal crest with four bold white arms surrounding a small blue-white football and a red inset border, no words or letters",
+      "file": "33-mexico-cruz-azul.png"
+    },
+    {
+      "id": "34",
+      "league": "México",
+      "club": "Pumas",
+      "slug": "pumas",
+      "design": "deep navy, warm gold and ivory; an original inverted triangular shield with a sleek full-bodied gold puma leaping diagonally above a small football, no reproduction of the official puma face",
+      "file": "34-mexico-pumas.png"
+    },
+    {
+      "id": "35",
+      "league": "México",
+      "club": "Toluca",
+      "slug": "toluca",
+      "design": "crimson red, white and dark burgundy; an original round-bottom crest with an abstract red flame ending in two subtle horn-like tips around a white football, strong clean silhouette",
+      "file": "35-mexico-toluca.png"
+    },
+    {
+      "id": "36",
+      "league": "Argentina",
+      "club": "Boca Juniors",
+      "slug": "boca-juniors",
+      "design": "deep navy and golden yellow; an original rounded shield with a broad gold horizontal band, a small gold football sun and restrained navy geometric rays, no letters or stars",
+      "file": "36-argentina-boca-juniors.png"
+    },
+    {
+      "id": "37",
+      "league": "Argentina",
+      "club": "River Plate",
+      "slug": "river-plate",
+      "design": "ivory white, red and black; an original angular shield with a strong red diagonal band, a black framed ivory football and a double stepped border, no monogram",
+      "file": "37-argentina-river-plate.png"
+    },
+    {
+      "id": "38",
+      "league": "Argentina",
+      "club": "Independiente",
+      "slug": "independiente",
+      "design": "vivid red, ivory white and a restrained navy accent; an original squared-top pointed shield with a bold rising ivory flame embracing a small red-white football, no initials",
+      "file": "38-argentina-independiente.png"
+    },
+    {
+      "id": "39",
+      "league": "Argentina",
+      "club": "Racing",
+      "slug": "racing",
+      "design": "sky blue, white and navy; an original octagonal shield with broad sky-blue-white vertical stripes, a stylized navy wing and a small geometric football",
+      "file": "39-argentina-racing.png"
+    },
+    {
+      "id": "40",
+      "league": "Argentina",
+      "club": "San Lorenzo",
+      "slug": "san-lorenzo",
+      "design": "deep navy, crimson, ivory and a small gold accent; an original tall shield with alternating navy-crimson vertical fields, a bold raven wing surrounding a football and a clean gold inset",
+      "file": "40-argentina-san-lorenzo.png"
+    },
+    {
+      "id": "41",
+      "league": "MLS",
+      "club": "Inter Miami",
+      "slug": "inter-miami",
+      "design": "soft vivid pink, black and white; an original angular round-bottom shield with two abstract slender herons forming an arch above a small pink-black football, no circular official layout or letters",
+      "file": "41-mls-inter-miami.png"
+    },
+    {
+      "id": "42",
+      "league": "MLS",
+      "club": "Chicago Fire",
+      "slug": "chicago-fire",
+      "design": "red, navy, sky blue and white; an original six-sided shield with a strong stylized red flame around a white football and a small sky-blue six-point compass star, no text",
+      "file": "42-mls-chicago-fire.png"
+    },
+    {
+      "id": "43",
+      "league": "MLS",
+      "club": "Orlando City",
+      "slug": "orlando-city",
+      "design": "royal purple, warm gold and white; an original round shield with a powerful geometric gold lion head, three restrained diagonal gold rays and a small white football",
+      "file": "43-mls-orlando-city.png"
+    },
+    {
+      "id": "44",
+      "league": "MLS",
+      "club": "LAFC",
+      "slug": "lafc",
+      "design": "black, warm gold and ivory; an original pentagonal shield with a bold gold winged football and angular upward wing feathers on a solid black field, absolutely no LA or other initials",
+      "file": "44-mls-lafc.png"
+    },
+    {
+      "id": "45",
+      "league": "Costa Rica",
+      "club": "Saprissa",
+      "slug": "saprissa",
+      "design": "deep purple, ivory white and black; an original broad pointed shield with a powerful stylized purple dragon head, a white mane-like outline and a small purple-white football",
+      "file": "45-costa-rica-saprissa.png"
+    },
+    {
+      "id": "46",
+      "league": "Costa Rica",
+      "club": "Alajuelense",
+      "slug": "alajuelense",
+      "design": "red, black, ivory and a subtle gold accent; an original angular shield with red-black divided vertical fields, a bold ivory lion head and a small football, no letters",
+      "file": "46-costa-rica-alajuelense.png"
+    },
+    {
+      "id": "47",
+      "league": "Costa Rica",
+      "club": "Cartaginés",
+      "slug": "cartagines",
+      "design": "royal blue, white and deep navy; an original round-bottom shield with three strong slanted blue-white stripes, a simple ivory stone arch and a small football, no initials",
+      "file": "47-costa-rica-cartagines.png"
+    },
+    {
+      "id": "48",
+      "league": "Costa Rica",
+      "club": "Herediano",
+      "slug": "herediano",
+      "design": "red, golden yellow and black; an original flat-top pointed shield with red-yellow vertical fields, a bold geometric black tiger head and a small gold-black football",
+      "file": "48-costa-rica-herediano.png"
+    }
+  ]
+}
