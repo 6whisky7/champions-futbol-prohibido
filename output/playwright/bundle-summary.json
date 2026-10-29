@@ -1,0 +1,38 @@
+[
+  {
+    "name": "before",
+    "snapshot": "audit-before-d4e857c",
+    "routes": [
+      "/",
+      "/_not-found",
+      "/icon.svg"
+    ],
+    "clientFiles": 57,
+    "compressedBytes": 467437,
+    "jsCompressedBytes": 222737,
+    "fontFiles": 18,
+    "coverage": {
+      "exact": 15,
+      "not_a_chunk": 42
+    },
+    "serverMatches": []
+  },
+  {
+    "name": "after",
+    "snapshot": "audit-after-final",
+    "routes": [
+      "/",
+      "/_not-found",
+      "/icon.svg"
+    ],
+    "clientFiles": 25,
+    "compressedBytes": 304724,
+    "jsCompressedBytes": 248309,
+    "fontFiles": 2,
+    "coverage": {
+      "exact": 15,
+      "not_a_chunk": 10
+    },
+    "serverMatches": []
+  }
+]

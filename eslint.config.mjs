@@ -23,7 +23,14 @@ export default defineConfig([
   {
     files: ["scripts/**/*.mjs"],
     languageOptions: {
-      globals: { process: "readonly", console: "readonly", Buffer: "readonly", URL: "readonly" },
+      globals: {
+        process: "readonly",
+        console: "readonly",
+        Buffer: "readonly",
+        URL: "readonly",
+        window: "readonly",
+        document: "readonly",
+      },
     },
   },
 ]);

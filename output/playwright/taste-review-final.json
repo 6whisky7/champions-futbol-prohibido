@@ -1,0 +1,1923 @@
+{
+ "url": "http://127.0.0.1:3100",
+ "at": "2026-10-29T21:23:57.923Z",
+ "allow": [
+  "still-page"
+ ],
+ "viewports": [
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.43,
+    0.84,
+    0.57,
+    0.45,
+    0.68
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 4058,
+     "screens": 4.5,
+     "words": 351,
+     "img": 15,
+     "video": 0,
+     "canvas": 0,
+     "svg": 18,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 15,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "image?url=%2Fescudos%2F41-mls-inter-miami.png&w=",
+      "image?url=%2Fescudos%2F45-costa-rica-saprissa.pn",
+      "image?url=%2Fescudos%2F36-argentina-boca-juniors",
+      "image?url=%2Fescudos%2F45-costa-rica-saprissa.pn",
+      "image?url=%2Fescudos%2F46-costa-rica-alajuelense",
+      "image?url=%2Fescudos%2F47-costa-rica-cartagines.",
+      "image?url=%2Fescudos%2F48-costa-rica-herediano.p",
+      "image?url=%2Fescudos%2F11-espana-real-madrid.png"
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "CHAMPIONS",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 96,
+     "vw": 6.7,
+     "font": "barlow",
+     "weight": 700,
+     "tracking": -0.02,
+     "leading": 1.05,
+     "upper": true,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "left",
+     "widthRatio": 0.26,
+     "top": 151,
+     "tag": "span",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+     "words": 3,
+     "lines": 1,
+     "size": 96,
+     "font": "barlow"
+    },
+    "headings": [
+     {
+      "text": "CHAMPIONS",
+      "words": 1,
+      "chars": 9,
+      "lines": 1,
+      "size": 96,
+      "vw": 6.7,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": -0.02,
+      "leading": 1.05,
+      "upper": true,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.26,
+      "top": 151,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "Escudos para tu equipo",
+      "words": 4,
+      "chars": 22,
+      "lines": 1,
+      "size": 60,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.54,
+      "top": 801,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Así se juega el torneo",
+      "words": 5,
+      "chars": 22,
+      "lines": 1,
+      "size": 60,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.54,
+      "top": 2562,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Liguilla",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 32,
+      "vw": 2.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.27,
+      "top": 2708,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Eliminatorias",
+      "words": 1,
+      "chars": 13,
+      "lines": 1,
+      "size": 32,
+      "vw": 2.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.25,
+      "top": 2708,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Final",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 32,
+      "vw": 2.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.25,
+      "top": 2708,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Lo que debes saber antes de jugar",
+      "words": 7,
+      "chars": 33,
+      "lines": 2,
+      "size": 44,
+      "vw": 3.1,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.36,
+      "top": 2927,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Sigue el torneo en TikTok.",
+      "words": 5,
+      "chars": 26,
+      "lines": 2,
+      "size": 60,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.38,
+      "top": 3639,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 8,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "manrope",
+       "share": 0.93,
+       "mono": false
+      },
+      {
+       "family": "barlow",
+       "share": 0.07,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      14,
+      16,
+      18,
+      20,
+      21,
+      22,
+      32,
+      44,
+      60,
+      64,
+      96
+     ],
+     "sizeCount": 11,
+     "notLoaded": [],
+     "body": {
+      "font": "manrope",
+      "size": 18,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 17.1
+     },
+     "measureChars": 85,
+     "max": {
+      "size": 96,
+      "vw": 6.7,
+      "font": "barlow",
+      "text": "Champions"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [
+     {
+      "text": "Victoria: 3 puntos",
+      "above": "Lo que debes saber antes de jugar",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 18,
+      "top": 2833
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#020612",
+     "bodyBgHsl": {
+      "h": 225,
+      "s": 0.8,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#091326",
+       "top": 741,
+       "hsl": {
+        "h": 219,
+        "s": 0.62,
+        "l": 0.09
+       }
+      },
+      {
+       "color": "#101e34",
+       "top": 3575,
+       "hsl": {
+        "h": 217,
+        "s": 0.53,
+        "l": 0.13
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b5c3d9",
+       "share": 0.48
+      },
+      {
+       "color": "#f3f6fc",
+       "share": 0.45
+      },
+      {
+       "color": "#a7ceff",
+       "share": 0.04
+      },
+      {
+       "color": "#06132a",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#a7ceff",
+      "hsl": {
+       "h": 213,
+       "s": 1,
+       "l": 0.83
+      },
+      "fg": "#06132a"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 2,
+     "radius": 8,
+     "height": 54,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Saltar al contenido",
+      "Explorar los escudos"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 12,
+     "boxRadius": 12,
+     "squareMedia": 13,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 5,
+     "fixed": true,
+     "height": 92,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "manrope",
+     "manrope fallback",
+     "barlow"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 4058,
+    "margins": {
+     "left": 80,
+     "right": 100
+    },
+    "sections": [
+     {
+      "sel": "section#inicio.hero.page-width",
+      "tag": "section",
+      "top": 92,
+      "height": 649,
+      "words": 30,
+      "media": 3,
+      "middle": 24,
+      "heading": {
+       "text": "Champions",
+       "size": 96,
+       "tag": "h1"
+      },
+      "left": 80,
+      "right": 85,
+      "textLeft": 80,
+      "textRight": 728,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#escudos.gallery-section",
+      "tag": "section",
+      "top": 741,
+      "height": 1741,
+      "words": 102,
+      "media": 12,
+      "middle": 0,
+      "heading": {
+       "text": "Escudos para tu equipo",
+       "size": 60,
+       "tag": "h2"
+      },
+      "left": 80,
+      "right": 100,
+      "textLeft": 80,
+      "textRight": 289,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#torneo.tournament-section.page-width",
+      "tag": "section",
+      "top": 2482,
+      "height": 1093,
+      "words": 210,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Así se juega el torneo",
+       "size": 60,
+       "tag": "h2"
+      },
+      "left": 80,
+      "right": 145,
+      "textLeft": 80,
+      "textRight": 145,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#comunidad.community-section",
+      "tag": "section",
+      "top": 3575,
+      "height": 349,
+      "words": 29,
+      "media": 0,
+      "middle": 517,
+      "heading": {
+       "text": "Sigue el torneo",
+       "size": 60,
+       "tag": "h2"
+      },
+      "left": 80,
+      "right": 150,
+      "textLeft": 80,
+      "textRight": 150,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.page-width",
+      "tag": "footer",
+      "top": 3924,
+      "height": 134,
+      "words": 16,
+      "media": 0,
+      "middle": 366,
+      "heading": null,
+      "left": 88,
+      "right": 80,
+      "textLeft": 88,
+      "textRight": 80,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+      "size": 96,
+      "top": 134,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 80,
+      "n": 12
+     },
+     {
+      "x": 104,
+      "n": 3
+     },
+     {
+      "x": 488,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 16,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0.13,
+    "voidBox": {
+     "x": 0,
+     "y": 660,
+     "w": 1440,
+     "h": 120
+    }
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 5,
+   "filled": [
+    0.52,
+    0.77,
+    0.54,
+    0.74,
+    0.64
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 4285,
+     "screens": 4.2,
+     "words": 351,
+     "img": 15,
+     "video": 0,
+     "canvas": 0,
+     "svg": 18,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 12,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "image?url=%2Fescudos%2F45-costa-rica-saprissa.pn",
+      "image?url=%2Fescudos%2F46-costa-rica-alajuelense",
+      "image?url=%2Fescudos%2F47-costa-rica-cartagines.",
+      "image?url=%2Fescudos%2F48-costa-rica-herediano.p",
+      "image?url=%2Fescudos%2F11-espana-real-madrid.png",
+      "image?url=%2Fescudos%2F12-espana-barcelona.png&w",
+      "image?url=%2Fescudos%2F36-argentina-boca-juniors",
+      "image?url=%2Fescudos%2F37-argentina-river-plate."
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+     "words": 3,
+     "chars": 26,
+     "lines": 1,
+     "size": 64,
+     "vw": 8.3,
+     "font": "barlow",
+     "weight": 700,
+     "tracking": -0.03,
+     "leading": 1.05,
+     "upper": true,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.92,
+     "top": 134,
+     "tag": "h1",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+     "words": 3,
+     "lines": 1,
+     "size": 96,
+     "font": "barlow"
+    },
+    "headings": [
+     {
+      "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+      "words": 3,
+      "chars": 26,
+      "lines": 1,
+      "size": 64,
+      "vw": 8.3,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": -0.03,
+      "leading": 1.05,
+      "upper": true,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 134,
+      "tag": "h1",
+      "kind": "heading"
+     },
+     {
+      "text": "Escudos para tu equipo",
+      "words": 4,
+      "chars": 22,
+      "lines": 1,
+      "size": 40,
+      "vw": 5.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 655,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Así se juega el torneo",
+      "words": 5,
+      "chars": 22,
+      "lines": 1,
+      "size": 40,
+      "vw": 5.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.92,
+      "top": 2509,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Liguilla",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.27,
+      "top": 2635,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Eliminatorias",
+      "words": 1,
+      "chars": 13,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.25,
+      "top": 2635,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Final",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 32,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "right",
+      "widthRatio": 0.25,
+      "top": 2635,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Lo que debes saber antes de jugar",
+      "words": 7,
+      "chars": 33,
+      "lines": 2,
+      "size": 32,
+      "vw": 4.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.37,
+      "top": 2942,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Sigue el torneo en TikTok.",
+      "words": 5,
+      "chars": 26,
+      "lines": 2,
+      "size": 40,
+      "vw": 5.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "left",
+      "widthRatio": 0.56,
+      "top": 3878,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 8,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "manrope",
+       "share": 0.93,
+       "mono": false
+      },
+      {
+       "family": "barlow",
+       "share": 0.07,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      14,
+      16,
+      18,
+      20,
+      22,
+      32,
+      40,
+      48,
+      64
+     ],
+     "sizeCount": 9,
+     "notLoaded": [],
+     "body": {
+      "font": "manrope",
+      "size": 18,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 18.7
+     },
+     "measureChars": 73,
+     "max": {
+      "size": 64,
+      "vw": 8.3,
+      "font": "barlow",
+      "text": "Champions"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#020612",
+     "bodyBgHsl": {
+      "h": 225,
+      "s": 0.8,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#091326",
+       "top": 595,
+       "hsl": {
+        "h": 219,
+        "s": 0.62,
+        "l": 0.09
+       }
+      },
+      {
+       "color": "#101e34",
+       "top": 3814,
+       "hsl": {
+        "h": 217,
+        "s": 0.53,
+        "l": 0.13
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b5c3d9",
+       "share": 0.48
+      },
+      {
+       "color": "#f3f6fc",
+       "share": 0.45
+      },
+      {
+       "color": "#a7ceff",
+       "share": 0.04
+      },
+      {
+       "color": "#06132a",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#a7ceff",
+      "hsl": {
+       "h": 213,
+       "s": 1,
+       "l": 0.83
+      },
+      "fg": "#06132a"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 4,
+     "inHero": 2,
+     "radius": 8,
+     "height": 54,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Saltar al contenido",
+      "Explorar los escudos"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 16,
+     "boxRadius": 12,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 2942
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 5,
+     "fixed": true,
+     "height": 92,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "manrope",
+     "manrope fallback",
+     "barlow"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 4285,
+    "margins": {
+     "left": 32,
+     "right": 37
+    },
+    "sections": [
+     {
+      "sel": "section#inicio.hero.page-width",
+      "tag": "section",
+      "top": 92,
+      "height": 503,
+      "words": 30,
+      "media": 0,
+      "middle": 18,
+      "heading": {
+       "text": "Champions",
+       "size": 64,
+       "tag": "h1"
+      },
+      "left": 32,
+      "right": 37,
+      "textLeft": 32,
+      "textRight": 176,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#escudos.gallery-section",
+      "tag": "section",
+      "top": 595,
+      "height": 1834,
+      "words": 102,
+      "media": 12,
+      "middle": 0,
+      "heading": {
+       "text": "Escudos para tu equipo",
+       "size": 40,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 32,
+      "textLeft": 32,
+      "textRight": 99,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#torneo.tournament-section.page-width",
+      "tag": "section",
+      "top": 2429,
+      "height": 1385,
+      "words": 210,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Así se juega el torneo",
+       "size": 40,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 57,
+      "textLeft": 32,
+      "textRight": 57,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#comunidad.community-section",
+      "tag": "section",
+      "top": 3814,
+      "height": 337,
+      "words": 29,
+      "media": 0,
+      "middle": 94,
+      "heading": {
+       "text": "Sigue el torneo",
+       "size": 40,
+       "tag": "h2"
+      },
+      "left": 32,
+      "right": 102,
+      "textLeft": 32,
+      "textRight": 102,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.page-width",
+      "tag": "footer",
+      "top": 4151,
+      "height": 134,
+      "words": 16,
+      "media": 0,
+      "middle": 78,
+      "heading": null,
+      "left": 40,
+      "right": 32,
+      "textLeft": 40,
+      "textRight": 32,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+      "size": 96,
+      "top": 134,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 32,
+      "n": 12
+     },
+     {
+      "x": 56,
+      "n": 3
+     },
+     {
+      "x": 301,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 16,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  },
+  {
+   "width": 390,
+   "height": 844,
+   "load": "load",
+   "screens": 7,
+   "filled": [
+    0.54,
+    0.81,
+    0.79,
+    0.68,
+    0.48,
+    0.91,
+    0.77
+   ],
+   "motion": {
+    "elements": 0,
+    "css": 0,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "page": {
+     "height": 5576,
+     "screens": 6.6,
+     "words": 345,
+     "img": 15,
+     "video": 0,
+     "canvas": 0,
+     "svg": 18,
+     "sections": 4,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 12,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [
+      "image?url=%2Fescudos%2F45-costa-rica-saprissa.pn",
+      "image?url=%2Fescudos%2F46-costa-rica-alajuelense",
+      "image?url=%2Fescudos%2F47-costa-rica-cartagines.",
+      "image?url=%2Fescudos%2F48-costa-rica-herediano.p",
+      "image?url=%2Fescudos%2F11-espana-real-madrid.png",
+      "image?url=%2Fescudos%2F12-espana-barcelona.png&w",
+      "image?url=%2Fescudos%2F36-argentina-boca-juniors",
+      "image?url=%2Fescudos%2F37-argentina-river-plate."
+     ],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "CHAMPIONS",
+     "words": 1,
+     "chars": 9,
+     "lines": 1,
+     "size": 62.4,
+     "vw": 16,
+     "font": "barlow",
+     "weight": 700,
+     "tracking": -0.031,
+     "leading": 1.05,
+     "upper": true,
+     "italic": false,
+     "mono": false,
+     "align": "left",
+     "position": "center",
+     "widthRatio": 0.9,
+     "top": 104,
+     "tag": "span",
+     "kind": "heading"
+    },
+    "h1": {
+     "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+     "words": 3,
+     "lines": 2,
+     "size": 96,
+     "font": "barlow"
+    },
+    "headings": [
+     {
+      "text": "CHAMPIONS",
+      "words": 1,
+      "chars": 9,
+      "lines": 1,
+      "size": 62.4,
+      "vw": 16,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": -0.031,
+      "leading": 1.05,
+      "upper": true,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.9,
+      "top": 104,
+      "tag": "span",
+      "kind": "heading"
+     },
+     {
+      "text": "Escudos para tu equipo",
+      "words": 4,
+      "chars": 22,
+      "lines": 1,
+      "size": 40,
+      "vw": 10.3,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.9,
+      "top": 778,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Así se juega el torneo",
+      "words": 5,
+      "chars": 22,
+      "lines": 1,
+      "size": 40,
+      "vw": 10.3,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.9,
+      "top": 3168,
+      "tag": "h2",
+      "kind": "heading"
+     },
+     {
+      "text": "Liguilla",
+      "words": 1,
+      "chars": 8,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.83,
+      "top": 3349,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Eliminatorias",
+      "words": 1,
+      "chars": 13,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.83,
+      "top": 3526,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Final",
+      "words": 1,
+      "chars": 5,
+      "lines": 1,
+      "size": 32,
+      "vw": 8.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.83,
+      "top": 3702,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Lo que debes saber antes de jugar",
+      "words": 7,
+      "chars": 33,
+      "lines": 2,
+      "size": 36,
+      "vw": 9.2,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.9,
+      "top": 3897,
+      "tag": "h3",
+      "kind": "heading"
+     },
+     {
+      "text": "Sigue el torneo en TikTok.",
+      "words": 5,
+      "chars": 26,
+      "lines": 2,
+      "size": 40,
+      "vw": 10.3,
+      "font": "barlow",
+      "weight": 700,
+      "tracking": 0,
+      "leading": 1.05,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.9,
+      "top": 5005,
+      "tag": "h2",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 8,
+     "maxLines": 2,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": 4,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "manrope",
+       "share": 0.93,
+       "mono": false
+      },
+      {
+       "family": "barlow",
+       "share": 0.07,
+       "mono": false
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      14,
+      16,
+      18,
+      32,
+      36,
+      37,
+      40,
+      62
+     ],
+     "sizeCount": 8,
+     "notLoaded": [],
+     "body": {
+      "font": "manrope",
+      "size": 18,
+      "leading": 1.65,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 18.7
+     },
+     "measureChars": 34,
+     "max": {
+      "size": 62.4,
+      "vw": 16,
+      "font": "barlow",
+      "text": "Champions"
+     },
+     "monoShare": 0,
+     "monoProseShare": 0,
+     "monoFamilies": [],
+     "monoSamples": [],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.01,
+     "smallText": 0
+    },
+    "eyebrows": [
+     {
+      "text": "Un partido por la copa",
+      "above": "Lo que debes saber antes de jugar",
+      "upper": false,
+      "tracked": false,
+      "mono": false,
+      "pill": false,
+      "size": 18,
+      "top": 3819
+     }
+    ],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#020612",
+     "bodyBgHsl": {
+      "h": 225,
+      "s": 0.8,
+      "l": 0.04
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#091326",
+       "top": 730,
+       "hsl": {
+        "h": 219,
+        "s": 0.62,
+        "l": 0.09
+       }
+      },
+      {
+       "color": "#101e34",
+       "top": 4957,
+       "hsl": {
+        "h": 217,
+        "s": 0.53,
+        "l": 0.13
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b5c3d9",
+       "share": 0.49
+      },
+      {
+       "color": "#f3f6fc",
+       "share": 0.45
+      },
+      {
+       "color": "#a7ceff",
+       "share": 0.04
+      },
+      {
+       "color": "#06132a",
+       "share": 0.03
+      }
+     ],
+     "button": {
+      "bg": "#a7ceff",
+      "hsl": {
+       "h": 213,
+       "s": 1,
+       "l": 0.83
+      },
+      "fg": "#06132a"
+     },
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 5,
+     "inHero": 3,
+     "radius": 8,
+     "height": 54,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Saltar al contenido",
+      "Menú",
+      "Explorar los escudos"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 0,
+     "hairlineSamples": [],
+     "outlinedBoxes": 0,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 18,
+     "boxRadius": 12,
+     "squareMedia": 0,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": [
+      {
+       "count": 4,
+       "iconTopped": false,
+       "rounded": true,
+       "top": 4074
+      }
+     ]
+    },
+    "heroMedia": [],
+    "nav": {
+     "links": 1,
+     "fixed": true,
+     "height": 80,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "manrope",
+     "manrope fallback",
+     "barlow"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 390,
+     "h": 844
+    },
+    "pageH": 5576,
+    "margins": {
+     "left": 20,
+     "right": 20
+    },
+    "sections": [
+     {
+      "sel": "section#inicio.hero.page-width",
+      "tag": "section",
+      "top": 80,
+      "height": 650,
+      "words": 30,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Champions",
+       "size": 62,
+       "tag": "h1"
+      },
+      "left": 20,
+      "right": 22,
+      "textLeft": 20,
+      "textRight": 38,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#escudos.gallery-section",
+      "tag": "section",
+      "top": 730,
+      "height": 2390,
+      "words": 102,
+      "media": 12,
+      "middle": 0,
+      "heading": {
+       "text": "Escudos para tu equipo",
+       "size": 40,
+       "tag": "h2"
+      },
+      "left": 20,
+      "right": 20,
+      "textLeft": 20,
+      "textRight": 31,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.section-intro",
+      "tag": "div",
+      "top": 3168,
+      "height": 145,
+      "words": 14,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 20,
+      "right": 62,
+      "textLeft": 20,
+      "textRight": 62,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "ol.competition-route",
+      "tag": "ol",
+      "top": 3349,
+      "height": 500,
+      "words": 43,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Eliminatorias",
+       "size": 32,
+       "tag": "h3"
+      },
+      "left": 48,
+      "right": 30,
+      "textLeft": 48,
+      "textRight": 30,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div#formato.format-detail",
+      "tag": "div",
+      "top": 3897,
+      "height": 700,
+      "words": 60,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "antes de jugar",
+       "size": 36,
+       "tag": "h3"
+      },
+      "left": 20,
+      "right": 28,
+      "textLeft": 20,
+      "textRight": 28,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "div.rule-questions",
+      "tag": "div",
+      "top": 4628,
+      "height": 280,
+      "words": 41,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 40,
+      "right": 61,
+      "textLeft": 40,
+      "textRight": 61,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section#comunidad.community-section",
+      "tag": "section",
+      "top": 4957,
+      "height": 417,
+      "words": 29,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Sigue el torneo",
+       "size": 40,
+       "tag": "h2"
+      },
+      "left": 20,
+      "right": 33,
+      "textLeft": 20,
+      "textRight": 33,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "footer.site-footer.page-width",
+      "tag": "footer",
+      "top": 5374,
+      "height": 202,
+      "words": 16,
+      "media": 0,
+      "middle": 0,
+      "heading": null,
+      "left": 20,
+      "right": 20,
+      "textLeft": 20,
+      "textRight": 20,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "CHAMPIONS FÚTBOL PROHIBIDO",
+      "size": 96,
+      "top": 104,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 20,
+      "n": 13
+     },
+     {
+      "x": 40,
+      "n": 3
+     }
+    ],
+    "leftBlocks": 16,
+    "bodySize": 18,
+    "stage": false,
+    "explains": true,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": null,
+   "consoleErrors": []
+  }
+ ],
+ "findings": [
+  {
+   "level": "FAIL",
+   "id": "eyebrow",
+   "width": 1440,
+   "message": "1 eyebrow/kicker label(s) above headings: \"Victoria: 3 puntos\" above \"Lo que debes saber antes de jugar\"",
+   "fix": "Delete them. If the label carried real information, fold it into the headline or the supporting sentence.",
+   "alsoAt": [
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "size-count",
+   "width": 1440,
+   "message": "11 different font sizes (14, 16, 18, 20, 21, 22, 32, 44, 60, 64, 96).",
+   "fix": "A page needs about five: display, heading, lead, body, small."
+  },
+  {
+   "level": "WARN",
+   "id": "no-footage",
+   "width": 1440,
+   "message": "No video anywhere on the page.",
+   "fix": "Look for one honest clip with scripts/assets.mjs --video (the place, the material, the process) and use it as a muted loop with a poster frame. Defend its absence only if no clip fits the subject."
+  },
+  {
+   "level": "WARN",
+   "id": "off-centre",
+   "width": 1440,
+   "message": "The margins differ: 80px on the left, 100px on the right, at 1440px.",
+   "fix": "Put the navigation and the content on one pair of margins; check for padding on one side only, a scrollbar gutter, or a header on another inset than the page."
+  }
+ ],
+ "images": [
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\desktop-fold.jpg",
+   "pages": [
+    "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\desktop-page-01.jpg",
+    "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\desktop-page-02.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\tablet-fold.jpg",
+   "pages": [
+    "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\tablet-page-01.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "mobile",
+   "width": 390,
+   "fold": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\mobile-fold.jpg",
+   "pages": [
+    "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\output\\playwright\\taste-review\\mobile-page-01.jpg"
+   ],
+   "film": []
+  }
+ ]
+}
