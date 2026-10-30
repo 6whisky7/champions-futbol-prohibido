@@ -49,7 +49,7 @@ Las ediciones usan `updated_at` como condición para evitar sobrescribir cambios
 - Trofeo: carga automática, cinco materiales, reset frontal, teclado, fallo de red con alternativa, ocultación fuera de pantalla y scroll táctil.
 - Simulación local Edge 390×844/DPR2, 1,6 Mbps, 150 ms, CPU ×4: LCP 1012 ms; 3D listo 11872 ms; 1940656 bytes al estar listo; una solicitud GLB automática. No es teléfono físico ni Lighthouse. El reporte JSON es la fuente exacta de la corrida.
 
-La prueba completa de correo → callback → sesión real del propietario → edición desde su navegador requiere que el propietario abra su enlace. No se ha suplantado su identidad ni se presenta la prueba SQL como una prueba de ese recorrido de navegador. Los eventos de producción se mantienen vacíos hasta que el propietario configure uno real.
+El propietario confirmó que entró al panel desde el enlace de su correo. La verificación remota confirmó cuenta de propietario verificada y sesión existente. No se ha suplantado su identidad. Creación/edición y aislamiento se probaron con fixtures SQL revertidos; no se presentan como pruebas automatizadas de edición desde el navegador del propietario. Los eventos de producción se mantienen vacíos hasta que el propietario configure uno real.
 
 Supabase Advisors no informa advertencias tras revocar EXECUTE al event-trigger. Conserva un aviso informativo de RLS sin políticas en `cfp_private.owner_config`: es deliberado para denegar todo acceso directo. [Explicación del aviso](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy).
 
