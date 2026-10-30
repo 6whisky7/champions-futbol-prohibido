@@ -1,4 +1,5 @@
 import { TrophyShowcase } from "@/components/trophy-showcase";
+import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { CrestGallery } from "@/components/crest-gallery";
 import { SiteHeader } from "@/components/site-header";
@@ -39,6 +40,7 @@ export default function Home() {
               <p className="hero-note">
                 Las inscripciones todavía no están disponibles.
               </p>
+              <Link className="plain-link" href="/eventos">Consultar eventos <ArrowRight aria-hidden="true" /></Link>
             </div>
           <TrophyShowcase />
         </section>

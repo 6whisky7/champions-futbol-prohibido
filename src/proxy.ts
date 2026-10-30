@@ -5,8 +5,8 @@ export async function proxy(request: NextRequest) {
   return updateSession(request);
 }
 
-// Reserved for the future auth/admin stage. The public landing and crest files
-// do not refresh sessions, call Supabase or redirect visitors to a login screen.
+// Refreshes Auth cookies on administrative routes. Every protected page and
+// action independently checks the verified user plus database owner permission.
 export const config = {
   matcher: ["/admin/:path*", "/auth/:path*"],
 };

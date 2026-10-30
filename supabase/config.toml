@@ -1,0 +1,5 @@
+# Only these remote Auth properties are managed by this repository.
+project_id = "champions-futbol-prohibido"
+[auth]
+site_url = "https://champions-futbol-prohibido.vercel.app"
+additional_redirect_urls = ["https://champions-futbol-prohibido.vercel.app/auth/callback"]

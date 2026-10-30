@@ -4,7 +4,10 @@
 - Antes de cambiar APIs de Next.js, consulta la documentación de la versión instalada en `node_modules/next/dist/docs/`. Verifica también las APIs actuales de Supabase.
 - Lee `docs/decisiones-del-torneo.md` antes de implementar reglas. Los cambios confirmados más recientes tienen prioridad. No conviertas sugerencias ni decisiones pendientes en reglas aprobadas.
 - Usa exclusivamente el proyecto de Supabase `cvenqmszdmhqaeokzbnz`. No operes sobre otros proyectos.
-- El rediseño autorizado se trabaja en una rama separada y puede desplegar una vista previa en Vercel. No incorporar a main antes de revisión. No se autorizan migraciones, cambios de esquema ni creación de usuarios.
+- La portada y el trofeo V03 están aprobados y publicados. La etapa actual autoriza eventos, acceso exclusivo del propietario, migraciones aditivas versionadas y publicación de cambios verificados. Trabaja en rama y PR antes de integrar main. Solo el proyecto indicado; preserva datos y prueba con fixtures transaccionales revertidos o un entorno aislado.
+- La autorización exige usuario verificado por Supabase Auth y `cfp_is_owner()` en cada lectura o mutación administrativa. RLS también protege eventos. No uses metadatos editables, claves privilegiadas en la aplicación ni accesos de prueba en producción. `CFP_OWNER_EMAIL` es solo de servidor y debe coincidir con la configuración privada de la base.
+- Las inscripciones siguen cerradas y bloqueadas en base de datos hasta implementar formulario, revisión y cupos concurrentes. No conviertas publicar un evento en abrir inscripciones.
+- El trofeo carga automáticamente al entrar en pantalla; imagen inicial y alternativa ante fallo, reset frontal, teclado, pan-y táctil y trabajo reducido fuera de pantalla. Actualiza la medición móvil si cambia su carga.
 - Consulta PRODUCT.md y DESIGN.md. Impeccable dirige el diseño; Taste es una segunda revisión y no sustituye el encargo ni la necesidad de lectura fácil. El estado de las siete skills está documentado en docs/skills.md.
 - Conserva los 48 PNG originales y `public/escudos/catalogo.json`. Ejecuta `npm run check:assets` después de cambiar las referencias.
 - Mantén las dependencias con versiones exactas y conserva `package-lock.json`. No subas `.env.local`, credenciales, `node_modules`, `.next` ni `.vercel`.

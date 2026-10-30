@@ -1,10 +1,10 @@
 # champions-futbol-prohibido
 
-Portada con el trofeo V03 aprobado, imagen inicial y visor 3D bajo demanda. Los 48 escudos y su galería se conservan. El organizador autorizó integrar el rediseño y publicar en producción mediante el PR #1. [Recursos, comportamiento y verificación del trofeo](docs/trofeo-v03.md).
+Portada con el trofeo V03 aprobado, imagen inicial y visor 3D automático al entrar en pantalla. Los 48 escudos y su galería se conservan. Incluye eventos públicos y administración del propietario, con inscripciones cerradas. [Estado actual y configuración](docs/administracion-eventos.md). El registro de la primera integración del trofeo está en [trofeo V03](docs/trofeo-v03.md).
 
 Base visual y técnica de **Champions Fútbol Prohibido**, el torneo de Fútbol Prohibido en Roblox. Incluye una portada en español, una galería con los 48 escudos originales y clientes de Supabase para navegador y servidor. Está preparada para importar este repositorio en Vercel.
 
-El rediseño completo se trabaja en `redesign/identidad-competicion`, para revisión antes de incorporarlo a `main`. Incluye identidad CFP, lectura fácil, navegación móvil y galería con búsqueda y filtros persistentes en la URL. El formulario de inscripción, el panel administrativo, los eventos, los resultados y las migraciones se desarrollarán en la siguiente etapa. La portada no consulta tablas ni necesita iniciar sesión.
+El rediseño y el trofeo V03 están publicados en `main`. La etapa actual incorpora el trofeo automático con iluminación de campeonato, acceso exclusivo del propietario y configuración/publicación de eventos. Las inscripciones, revisión de equipos, lista de espera y resultados corresponden al siguiente bloque. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
 
 - [Comparaciones antes/después](docs/comparaciones.md).
 - [Auditoría y problemas corregidos](docs/auditoria-visual.md).
@@ -57,7 +57,7 @@ Las variables `NEXT_PUBLIC_*` se incorporan al navegador durante la compilación
 | `npm run build`        | Genera la compilación de producción con Next.js.                                                                 |
 | `npm run start`        | Sirve localmente una compilación de producción ya creada.                                                        |
 
-Para reproducir la revisión visual, ejecuta `npm run build` y `npm run start -- --port 3100`; en otra terminal, `npm run check:ui`. En Windows se utiliza Edge. En otros equipos instala Chromium con `npx playwright install chromium`, o indica su ejecutable con `PLAYWRIGHT_EXECUTABLE_PATH`. La prueba usa únicamente la portada y recursos públicos; no consulta Supabase. Antes del desarrollo de base de datos hay que verificar la configuración del proyecto de destino. No ejecutes migraciones como parte del rediseño.
+Para reproducir la revisión visual, ejecuta `npm run build` y `npm run start -- --port 3100`; en otra terminal, `npm run check:ui`. En Windows se utiliza Edge. También puedes usar `UI_BASE_URL`. Las pruebas adicionales son `node scripts/verify-events.mjs`, `node scripts/verify-access.mjs` y `node scripts/verify-trophy.mjs` (por defecto puerto 3200). La prueba de acceso nunca solicita un correo al propietario. Las pruebas RLS de `supabase/tests/events_rls.sql` usan fixtures dentro de una transacción revertida. Aplica migraciones solo al proyecto confirmado, revisando primero su historial; no repitas las ya aplicadas.
 
 ## Proyecto de Supabase
 
@@ -76,10 +76,10 @@ Los clientes están preparados de esta forma:
 - `src/lib/supabase/client.ts`: `createBrowserClient` para componentes de cliente.
 - `src/lib/supabase/server.ts`: `createServerClient`, `await cookies()` y un cliente separado por petición. El módulo está protegido con `server-only`.
 - `src/lib/supabase/proxy.ts`: renovación de sesión con `getClaims()`, sincronización de cookies y propagación de los encabezados que impiden cachear sesiones.
-- `src/proxy.ts`: limita esa renovación a `/admin/:path*` y `/auth/:path*`, reservados para la siguiente etapa. La portada y los recursos públicos no ejecutan ese flujo.
+- `src/proxy.ts`: limita esa renovación a `/admin/:path*` y `/auth/:path*`. La portada y los recursos públicos no ejecutan ese flujo.
 - `src/lib/supabase/config.ts`: valida las variables al utilizar un cliente e impide apuntar a otro proyecto.
 
-El proxy **no implementa autorización administrativa**. Todavía no hay pantallas de acceso, usuarios administrativos, roles, tablas, políticas RLS, rutas de callback ni operaciones de inscripción. Al implementar esas funciones habrá que verificar permisos también en cada operación del servidor; la renovación de una sesión no concede acceso administrativo.
+El proxy solo renueva sesiones. `requireOwner()` verifica al usuario mediante Auth y consulta el permiso de propietario en cada página y acción protegidas. RLS valida en la base el correo confirmado contra `cfp_private.owner_config`. No se usan metadatos editables ni claves privilegiadas. Eventos publicados son públicos; borradores solo del propietario. Las inscripciones tienen una restricción SQL que impide abrirlas.
 
 ## Escudos y catálogo
 
@@ -101,7 +101,7 @@ Los identificadores 01–48 de los archivos corresponden a los diseños. **No as
 
 ## Importar en Vercel dentro de Whiskyideas
 
-El proyecto **ya existe** en Whiskyideas y está conectado a este repositorio. Producción usa `main`; el rediseño debe revisarse mediante una vista previa de su rama antes de integrar cambios. La vinculación local `.vercel` está ignorada. No crees otro proyecto ni otra base de datos.
+El proyecto **ya existe** en Whiskyideas y está conectado a este repositorio. Producción usa `main`. El rediseño y la etapa de eventos tienen autorización de publicación tras sus comprobaciones. La vinculación local `.vercel` está ignorada. No crees otro proyecto ni otra base de datos.
 
 1. Abre el panel de Vercel y selecciona el equipo **Whiskyideas**.
 2. Abre el proyecto existente `champions-futbol-prohibido`. En **Settings → Git**, confirma la conexión con `6whisky7/champions-futbol-prohibido`.
@@ -120,7 +120,7 @@ El proyecto **ya existe** en Whiskyideas y está conectado a este repositorio. P
    | Output Directory  | Valor automático de Next.js; no elegir `out` ni `dist` |
 
 4. En **Environment Variables**, comprueba `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` del proyecto `cvenqmszdmhqaeokzbnz`. Ambos nombres ya existían en Production; se configuraron con los valores proporcionados también para Preview y Development. No cambies sus nombres ni agregues claves administrativas.
-5. Abre el despliegue **Preview** de `redesign/identidad-competicion`, comprueba **Ready** y prueba la portada. Conserva `main` como rama de producción. La integración del rediseño se hará después de la revisión del organizador.
+5. Comprueba la vista previa de la rama, integra el PR revisado y confirma **Production / Ready**, el commit exacto y el dominio público. Configura además `CFP_OWNER_EMAIL` como variable exclusivamente de servidor, igual al correo privado configurado en la base. Los enlaces de Auth vuelven al callback de producción declarado en `supabase/config.toml`.
 
 Si modificas una variable `NEXT_PUBLIC_*` después de compilar, vuelve a desplegar para incorporarla al navegador.
 
@@ -132,10 +132,10 @@ Consulta [las decisiones del torneo](docs/decisiones-del-torneo.md). Las correcc
 
 Después de verificar la importación quedan pendientes:
 
-- Diseñar las tablas, las restricciones, las políticas RLS y las migraciones del proyecto correcto.
+- Ampliar el esquema de eventos con las tablas y restricciones de participación; eventos y permisos del propietario ya tienen migraciones y RLS.
 - Implementar la inscripción pública, sus validaciones en servidor y base de datos, vencimiento y lista de espera.
-- Implementar acceso y autorización del administrador, revisión de requisitos y protección de los usuarios de TikTok.
-- Configurar Site URL y las Redirect URLs de Supabase cuando existan el dominio final y las rutas reales de autenticación.
+- Implementar revisión de requisitos y protección de los usuarios de TikTok. El acceso del propietario ya está implementado; su primer acceso requiere verificar el enlace enviado a su correo.
+- Mantener las URLs de Auth si cambia el dominio. Site URL y callback de producción están configurados.
 - Desarrollar eventos, calendario, clasificación, sanciones, historial y eliminatorias.
 - Resolver los puntos del reglamento que siguen abiertos, incluida la repetición de escudos.
 
