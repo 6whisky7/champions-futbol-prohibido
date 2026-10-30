@@ -1,79 +1,239 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import {
+  useDeferredValue,
+  useRef,
+  useSyncExternalStore,
+  ViewTransition,
+} from "react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
 import type { Crest } from "@/lib/crests";
-import { ArrowIcon } from "./arrow-icon";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { NativeSelect, NativeSelectOption } from "./ui/native-select";
+import { Field, FieldGroup, FieldLabel } from "./ui/field";
+import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty";
 
 type Props = { crests: Crest[]; categories: string[]; featuredIds: string[] };
+const eventName = "crest-filters-change";
+const normalize = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+const getSnapshot = () => window.location.search;
+const getServerSnapshot = () => "";
+
+function subscribe(onChange: () => void) {
+  window.addEventListener("popstate", onChange);
+  window.addEventListener(eventName, onChange);
+  return () => {
+    window.removeEventListener("popstate", onChange);
+    window.removeEventListener(eventName, onChange);
+  };
+}
+
+function updateFilters(values: Record<string, string | null>, replace = false) {
+  const url = new URL(window.location.href);
+  Object.entries(values).forEach(([name, value]) =>
+    value ? url.searchParams.set(name, value) : url.searchParams.delete(name),
+  );
+  window.history[replace ? "replaceState" : "pushState"](null, "", url);
+  window.dispatchEvent(new Event(eventName));
+}
 
 export function CrestGallery({ crests, categories, featuredIds }: Props) {
-  const [category, setCategory] = useState("Todos");
-  const [expanded, setExpanded] = useState(false);
-  const filtered = category === "Todos" ? crests : crests.filter((crest) => crest.league === category);
-  const featured = featuredIds.flatMap((id) => {
-    const crest = crests.find((item) => item.id === id);
-    return crest ? [crest] : [];
-  });
-  const visible = category === "Todos" && !expanded ? featured : filtered;
+  const snapshot = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
+  const deferredSnapshot = useDeferredValue(snapshot);
+  const controls = new URLSearchParams(snapshot);
+  const results = new URLSearchParams(deferredSnapshot);
+  const selectedLeague = categories.includes(controls.get("liga") ?? "")
+    ? controls.get("liga")!
+    : "Todos";
+  const league = categories.includes(results.get("liga") ?? "")
+    ? results.get("liga")
+    : "Todos";
+  const search = controls.get("buscar") ?? "";
+  const query = normalize(results.get("buscar") ?? "");
+  const requestedLimit = Number(results.get("mostrar") ?? 12);
+  const limit = Number.isFinite(requestedLimit)
+    ? Math.max(12, Math.min(48, requestedLimit))
+    : 12;
+  const ordered = [
+    ...featuredIds.flatMap((id) => crests.filter((crest) => crest.id === id)),
+    ...crests.filter((crest) => !featuredIds.includes(crest.id)),
+  ];
+  const filtered = ordered.filter(
+    (crest) =>
+      (league === "Todos" || crest.league === league) &&
+      normalize(`${crest.club} ${crest.league} diseño ${crest.id}`).includes(
+        query,
+      ),
+  );
+  const visible = filtered.slice(0, limit);
+  const searchInput = useRef<HTMLInputElement>(null);
+  const hasFilters = selectedLeague !== "Todos" || search.length > 0;
 
-  function selectCategory(nextCategory: string) {
-    setCategory(nextCategory);
-    setExpanded(false);
+  function clearFilters() {
+    updateFilters({ liga: null, buscar: null, mostrar: null });
+    searchInput.current?.focus();
   }
 
   return (
-    <div>
-      <div className="gallery-filters" role="group" aria-label="Filtrar escudos por país o liga">
-        {["Todos", ...categories].map((item) => (
-          <button
-            key={item}
-            type="button"
-            aria-pressed={category === item}
-            onClick={() => selectCategory(item)}
-            className="filter-button"
+    <div className="gallery" id="filtros">
+      <FieldGroup className="gallery-controls">
+        <Field>
+          <FieldLabel htmlFor="crest-search">Buscar un escudo</FieldLabel>
+          <Input
+            ref={searchInput}
+            id="crest-search"
+            type="search"
+            name="buscar"
+            placeholder="Ejemplo: Saprissa o 45…"
+            autoComplete="off"
+            spellCheck={false}
+            value={search}
+            onChange={(event) =>
+              updateFilters(
+                { buscar: event.target.value || null, mostrar: null },
+                true,
+              )
+            }
+          />
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="crest-league">
+            País o liga de inspiración
+          </FieldLabel>
+          <NativeSelect
+            id="crest-league"
+            name="liga"
+            value={selectedLeague}
+            onChange={(event) =>
+              updateFilters({
+                liga:
+                  event.target.value === "Todos" ? null : event.target.value,
+                mostrar: null,
+              })
+            }
           >
-            {item}
-          </button>
-        ))}
-      </div>
-      <p className="gallery-count" aria-live="polite" aria-atomic="true">
-        {visible.length} de {crests.length} diseños · {category === "Todos" ? "Toda la colección" : category}
+            <NativeSelectOption value="Todos">
+              Todos los escudos
+            </NativeSelectOption>
+            {categories.map((item) => (
+              <NativeSelectOption key={item} value={item}>
+                {item}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+        </Field>
+        {hasFilters ? (
+          <Button
+            variant="ghost"
+            className="clear-filters"
+            onClick={clearFilters}
+          >
+            Limpiar filtros
+          </Button>
+        ) : null}
+      </FieldGroup>
+      <p
+        className="gallery-count"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        Mostrando{" "}
+        <strong>
+          {visible.length} de {filtered.length}
+        </strong>{" "}
+        escudos{league !== "Todos" ? ` · ${league}` : ""}
       </p>
-      <div id="crest-grid" className="crest-grid">
+      <div
+        id="crest-grid"
+        className="crest-grid"
+        aria-busy={snapshot !== deferredSnapshot}
+      >
         {visible.map((crest) => (
-          <figure className="crest-card" key={crest.id}>
-            <div className="crest-image">
-              <span className="crest-id">Diseño {crest.id}</span>
-              <Image
-                src={crest.src}
-                alt={`Escudo original inspirado en ${crest.club}`}
-                width={220}
-                height={220}
-                sizes="(max-width: 540px) 42vw, (max-width: 900px) 27vw, 200px"
-              />
-            </div>
-            <figcaption>
-              <span className="crest-league">{crest.league}</span>
-              <span className="crest-reference">{crest.club}</span>
-            </figcaption>
-          </figure>
+          <ViewTransition
+            key={crest.id}
+            default="none"
+            enter="crest-enter"
+            exit="crest-exit"
+            update="crest-move"
+          >
+            <a
+              href={crest.src}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="crest-link"
+              aria-label={`Abrir diseño ${crest.id}, inspirado en ${crest.club} (PNG, se abre en otra pestaña)`}
+            >
+              <figure className="crest-tile">
+                <div className="crest-art">
+                  <Image
+                    src={crest.src}
+                    alt={`Escudo ${crest.id} inspirado en ${crest.club}`}
+                    width={260}
+                    height={260}
+                    sizes="(max-width: 767px) 40vw, (max-width: 1023px) 26vw, 220px"
+                  />
+                </div>
+                <figcaption>
+                  <span className="crest-meta">
+                    Diseño {crest.id} <ArrowUpRight aria-hidden="true" />
+                  </span>
+                  <span className="crest-reference">{crest.club}</span>
+                  <span className="crest-league">{crest.league}</span>
+                </figcaption>
+              </figure>
+            </a>
+          </ViewTransition>
         ))}
       </div>
-      {category === "Todos" ? (
-        <div className="gallery-more">
-          <button
-            type="button"
-            className="button button-outline"
-            aria-expanded={expanded}
-            aria-controls="crest-grid"
-            onClick={() => setExpanded((previous) => !previous)}
-          >
-            {expanded ? "Ver una muestra" : "Ver los 48 escudos"}
-            <ArrowIcon />
-          </button>
-        </div>
+      {filtered.length === 0 ? (
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>No encontramos ese escudo</EmptyTitle>
+            <EmptyDescription>
+              Prueba con otro club o número de diseño.
+            </EmptyDescription>
+          </EmptyHeader>
+          <Button onClick={clearFilters}>Ver todos los escudos</Button>
+        </Empty>
       ) : null}
+      <ViewTransition default="none" update="crest-move">
+        <div className="gallery-more">
+          {visible.length < filtered.length ||
+          (limit > 12 && filtered.length > 0) ? (
+            <Button
+              variant="secondary"
+              aria-controls="crest-grid"
+              aria-disabled={visible.length >= filtered.length}
+              onClick={() => {
+                if (visible.length < filtered.length)
+                  updateFilters({ mostrar: String(limit + 12) });
+              }}
+            >
+              {visible.length >= filtered.length
+                ? "Colección completa"
+                : `Mostrar ${Math.min(12, filtered.length - limit)} más`}{" "}
+              <ArrowDown aria-hidden="true" data-icon="inline-end" />
+            </Button>
+          ) : null}
+          {limit > 12 ? (
+            <a href="#filtros" className="plain-link">
+              Volver a los filtros
+            </a>
+          ) : null}
+        </div>
+      </ViewTransition>
     </div>
   );
 }

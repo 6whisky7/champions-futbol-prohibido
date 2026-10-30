@@ -10,6 +10,12 @@ coverage/
 .env*
 !.env.example
 .vercel/
+.playwright-cli/
+.taste-skill/
+output/analyze/
+output/*.log
+.impeccable/review/
+.impeccable/cache/
 .netrc
 .npmrc.local
 credentials*.json
@@ -26,3 +32,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+.vercel
+.env*
+
+# Mantener la plantilla pública aunque herramientas locales añadan .env*
+!.env.example
+
+.impeccable/questions/
+output/playwright/taste-review/

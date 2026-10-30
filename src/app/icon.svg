@@ -1,1 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#081735"/><path d="M32 7 39 25 57 32 39 39 32 57 25 39 7 32 25 25Z" fill="#397cff"/><path d="m32 22 10 7-4 12H26l-4-12Z" fill="#eaf3ff"/><path d="m32 28 5 4-2 6h-6l-2-6Z" fill="#102b5a"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><path fill="#a7ceff" d="M8 4h48v40L32 60 8 44z"/><text x="32" y="35" text-anchor="middle" fill="#06132a" font-family="Arial,sans-serif" font-size="19" font-weight="800">CFP</text></svg>

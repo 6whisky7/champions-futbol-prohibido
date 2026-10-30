@@ -1,0 +1,110 @@
+[
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 169,
+    "snippet": "font-size: 20px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "20px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 223,
+    "snippet": "font-size: clamp(42px, 5.3vw, 64px) has fluid endpoint 42px off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "42px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 238,
+    "snippet": "font-size: 21px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "21px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 484,
+    "snippet": "font-size: 26px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "26px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 536,
+    "snippet": "font-size: clamp(32px, 3.2vw, 44px) has fluid endpoint 44px off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "44px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 705,
+    "snippet": "font-size: 48px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "48px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 781,
+    "snippet": "font-size: clamp(60px, 16vw, 88px) has fluid endpoint 88px off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "88px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 786,
+    "snippet": "font-size: clamp(36px, 9.5vw, 48px) has fluid endpoints 36px and 48px off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "36px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "C:\\Users\\XT\\Projects\\champions-futbol-prohibido\\src\\app\\globals.css",
+    "line": 894,
+    "snippet": "font-size: 36px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "36px"
+  }
+]
