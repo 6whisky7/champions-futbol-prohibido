@@ -6,7 +6,11 @@ export const dynamic = "force-dynamic";
 export default async function Applications({
   searchParams,
 }: {
-  searchParams: Promise<{ evento?: string }>;
+  searchParams: Promise<{
+    evento?: string;
+    vista?: string;
+    solicitud?: string;
+  }>;
 }) {
   const client = await requireOwner();
   const { data: events, error } = await client
@@ -14,28 +18,14 @@ export default async function Applications({
     .select("id,name,capacity,registration_status,roster_locked")
     .order("starts_at");
   if (error) throw new Error("No se pudieron cargar los eventos.");
-  const { evento } = await searchParams;
+  const { evento, vista, solicitud } = await searchParams;
   const event = events?.find((e) => e.id === evento) ?? events?.[0];
   const result = event
     ? await client.rpc("cfp_admin_applications", { e: event.id })
     : { data: [], error: null };
   if (result.error) throw new Error("No se pudieron cargar las solicitudes.");
   return (
-    <main className="management-page page-width">
-      <Link href="/admin">← Eventos</Link>
-      <h1>Centro de competición</h1>
-      <p>Revisa solicitudes, confirma al capitán y prepara tus equipos.</p>
-      <form className="event-form">
-        <label htmlFor="event-selector">Evento que estás administrando</label>
-        <select id="event-selector" name="evento" defaultValue={event?.id}>
-          {events?.map((e) => (
-            <option key={e.id} value={e.id}>
-              {e.name}
-            </option>
-          ))}
-        </select>
-        <button className="trophy-button">Consultar evento</button>
-      </form>
+    <main className="admin-requests">
       {event ? (
         <>
           <p>
@@ -46,7 +36,9 @@ export default async function Applications({
             Configurar evento y apertura →
           </Link>
           <ApplicationManager
-            key={event.id}
+            initialFilter={vista ?? "pending"}
+            initialSelected={solicitud}
+            key={event.id + (vista ?? "pending") + (solicitud ?? "")}
             eventId={event.id}
             capacity={event.capacity}
             locked={event.roster_locked}
