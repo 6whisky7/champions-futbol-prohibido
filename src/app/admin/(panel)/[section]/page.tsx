@@ -1,3 +1,5 @@
+import { KnockoutView } from "@/components/knockout-view";
+import type { Knockout } from "@/lib/knockout";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireOwner } from "@/lib/owner";
@@ -12,7 +14,11 @@ export default async function Competition({
 }) {
   const client = await requireOwner();
   const { section } = await params;
-  if (!["calendario", "resultados", "clasificacion"].includes(section))
+  if (
+    !["calendario", "resultados", "clasificacion", "eliminatorias"].includes(
+      section,
+    )
+  )
     notFound();
   const { data: events, error } = await client
     .from("cfp_events")
@@ -34,6 +40,17 @@ export default async function Competition({
         </Link>
       </main>
     );
+  const { data: ko, error: koError } = await client.rpc("cfp_knockout_read", {
+    e: event.id,
+    admin: true,
+  });
+  if (koError) throw new Error("No se pudo cargar el cuadro");
+  if (section === "eliminatorias")
+    return (
+      <main>
+        <KnockoutView eventId={event.id} data={ko as Knockout | null} admin />
+      </main>
+    );
   const { data, error: err } = await client.rpc("cfp_league_read", {
     e: event.id,
     admin: true,
@@ -53,6 +70,14 @@ export default async function Competition({
               : "calendar"
         }
       />
+      {section !== "clasificacion" && ko && (
+        <KnockoutView
+          eventId={event.id}
+          data={ko as Knockout}
+          admin
+          mode={section === "resultados" ? "results" : "bracket"}
+        />
+      )}
     </main>
   );
 }

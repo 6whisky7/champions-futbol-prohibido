@@ -1,6 +1,6 @@
 # Liguilla: sorteo, resultados y clasificación
 
-Esta etapa añade competición al panel CFP sin sustituir inscripciones, acceso del propietario, trofeo ni escudos. Solo utiliza Supabase `cvenqmszdmhqaeokzbnz`. No inicia eventos reales ni genera eliminatorias.
+Esta etapa añade competición al panel CFP sin sustituir inscripciones, acceso del propietario, trofeo ni escudos. Solo utiliza Supabase `cvenqmszdmhqaeokzbnz`. No inicia eventos reales. Este documento conserva el bloque de liguilla; la etapa posterior de [eliminatorias y campeón](eliminatorias.md) se genera explícitamente desde su clasificación cerrada.
 
 ## Preparación y calendario
 
@@ -32,7 +32,7 @@ Los empates todavía sin resolver conservan posición compartida y «Zona por re
 
 Una descalificación durante la liguilla sustituye efectivamente todos sus partidos por derrotas 0–3, o nulo si ambos están descalificados. Conserva los originales en auditoría. El sancionado queda al fondo, excluido, con −12 puntos finales fijos y 100 GC administrativos adicionales aplicados una sola vez. No se han añadido sanciones para conductas aún sin decisión.
 
-Cerrar exige encuentros resueltos y sorteos pendientes completados. La clasificación final queda conservada e inmutable para la siguiente etapa; no se construyen ni avanzan eliminatorias. Los casos abiertos del reglamento siguen en [decisiones del torneo](decisiones-del-torneo.md).
+Cerrar exige encuentros resueltos y sorteos pendientes completados. La clasificación final queda conservada e inmutable para la siguiente etapa; el cierre de liguilla no construye ni avanza eliminatorias automáticamente. Su revisión y confirmación se realizan por separado desde [Eliminatorias](eliminatorias.md). Los casos abiertos del reglamento siguen en [decisiones del torneo](decisiones-del-torneo.md).
 
 ## Base de datos y privacidad
 

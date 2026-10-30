@@ -4,8 +4,9 @@ Portada con el trofeo V03 aprobado, imagen inicial y visor 3D automático al ent
 
 Base visual y técnica de **Champions Fútbol Prohibido**, el torneo de Fútbol Prohibido en Roblox. Incluye una portada en español, una galería con los 48 escudos originales y clientes de Supabase para navegador y servidor. Está preparada para importar este repositorio en Vercel.
 
-El rediseño y el trofeo V03 están publicados en `main`. La administración utiliza un marco compartido con navegación y contexto de evento; `/admin` es el resumen operativo y `/admin/eventos` lista los eventos. Inscripción pública, revisión manual y lista de espera conservan sus operaciones y permisos. El siguiente bloque incorpora sorteo de rivales, calendario, resultados y clasificación de liguilla con cierre; las eliminatorias siguen pendientes. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
+El rediseño y el trofeo V03 están publicados en `main`. La administración utiliza un marco compartido con navegación y contexto de evento; `/admin` es el resumen operativo y `/admin/eventos` lista los eventos. Inscripción pública, revisión manual y lista de espera conservan sus operaciones y permisos. La competición incorpora sorteo de rivales, calendario, resultados y clasificación de liguilla con cierre. Las eliminatorias añaden cuadro fijo, revisión y confirmación, avance de ganadores y cierre del evento con campeón conservado por edición. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
 
+- [Eliminatorias, campeón y comprobación](docs/eliminatorias.md).
 - [Liguilla, resultados, desempates y comprobación](docs/liguilla.md).
 - [Panel administrativo, rutas y comprobación](docs/admin-panel.md).
 - [Comparaciones antes/después](docs/comparaciones.md).
@@ -137,7 +138,7 @@ Después de verificar la importación quedan pendientes:
 - Completar y registrar la verificación de cada entrega antes de publicar. El esquema de participación, las reservas, la revisión y la privacidad de TikTok ya tienen implementación y migraciones; consulta [su alcance y evidencia](docs/inscripciones.md).
 - El propietario ya confirmó el acceso real al panel mediante su enlace de correo.
 - Mantener las URLs de Auth si cambia el dominio. Site URL y callback de producción están configurados.
-- Desarrollar eliminatorias y resolver las sanciones todavía pendientes del reglamento. Sorteo, calendario, resultados, clasificación y descalificación durante la liguilla tienen implementación; consulta [su alcance](docs/liguilla.md).
+- Resolver las sanciones y casos administrativos todavía pendientes del reglamento. Liguilla, eliminatorias y cierre por campeón tienen implementación; consulta [liguilla](docs/liguilla.md) y [eliminatorias](docs/eliminatorias.md).
 - Resolver los puntos del reglamento que siguen abiertos. Escudos, cierre y promoción de espera ya tienen decisiones confirmadas.
 
 ## Documentación oficial utilizada

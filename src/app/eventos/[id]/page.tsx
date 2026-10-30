@@ -1,3 +1,5 @@
+import { ChampionPresentation } from "@/components/champion";
+import type { Knockout } from "@/lib/knockout";
 import Link from "next/link";
 import { ApplicationForm } from "@/components/application-form";
 import Image from "next/image";
@@ -47,12 +49,19 @@ export default async function PublicEvent({
     members: { roblox: string }[];
   };
   const publicTeams = (teams ?? []) as PublicTeam[];
+  const { data: ko, error: koError } = await client.rpc("cfp_knockout_read", {
+    e: id,
+    admin: false,
+  });
+  if (koError) throw new Error("No se pudo consultar el cierre del evento");
+  const champion = (ko as Knockout | null)?.champion;
   return (
     <>
       <SiteHeader />
       <main className="management-page page-width">
         <Link href="/eventos">← Todos los eventos</Link>
         <h1>{e.name}</h1>
+        {champion && <ChampionPresentation champion={champion} />}
         <p className="event-description">{e.description}</p>
         <dl className="event-facts">
           <div>
@@ -83,7 +92,12 @@ export default async function PublicEvent({
             </dd>
           </div>
         </dl>
-        <nav className="admin-tabs"><Link href={`/eventos/${id}/calendario`}>Calendario</Link><Link href={`/eventos/${id}/resultados`}>Resultados</Link><Link href={`/eventos/${id}/clasificacion`}>Clasificación</Link></nav>
+        <nav className="admin-tabs">
+          <Link href={`/eventos/${id}/eliminatorias`}>Eliminatorias</Link>
+          <Link href={`/eventos/${id}/calendario`}>Calendario</Link>
+          <Link href={`/eventos/${id}/resultados`}>Resultados</Link>
+          <Link href={`/eventos/${id}/clasificacion`}>Clasificación</Link>
+        </nav>
         <section>
           <h2>Equipos del evento</h2>
           <ul className="application-list">
