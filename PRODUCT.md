@@ -17,10 +17,10 @@ Explicar el torneo y permitir explorar sus 48 escudos originales. El organizador
 ## Capabilities and Constraints
 
 - Next.js App Router, TypeScript, Tailwind y versiones estables existentes.
-- Portada con trofeo V03 automático, galería con filtros, comunidad, 404, eventos públicos y administración exclusiva del propietario. La inscripción pública, revisión y lista de espera son el siguiente bloque.
+- Portada con trofeo V03 automático, galería con filtros, comunidad, 404, eventos públicos y administración exclusiva del propietario. Incluye inscripción pública sin cuentas, revisión manual y lista de espera con promoción administrativa.
 - Las reglas confirmadas están en `docs/decisiones-del-torneo.md`; prevalecen las correcciones recientes.
 - Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. Esta etapa autoriza migraciones aditivas versionadas, RLS, Auth del propietario y pruebas con datos controlados que no se conserven como registros reales.
-- Se autoriza publicar esta etapa verificada en main/Production. Las inscripciones permanecen bloqueadas.
+- Se autoriza publicar esta etapa verificada en main/Production. Los eventos permanecen cerrados por defecto; el propietario decide su apertura desde el panel. La entrega conserva cerradas las inscripciones reales.
 
 ## Brand Commitments
 

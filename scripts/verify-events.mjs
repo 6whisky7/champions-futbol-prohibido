@@ -11,8 +11,10 @@ for(const [format,f] of Object.entries(eventFormats)) {
 assert.throws(()=>parseEvent(form({capacity:'9'})));
 assert.throws(()=>parseEvent(form({format:'inventado'})));
 assert.throws(()=>parseEvent(form({registration_status:'open'})));
+assert.equal(parseEvent(form({status:'published',registration_status:'open'})).registration_status,'open');
+assert.throws(()=>parseEvent(form({review_hours:'0'})));
 assert.throws(()=>parseEvent(form({status:'open'})));
 assert.throws(()=>parseEvent(form({starts_at:'2027-02-30T20:00'})));
 assert.throws(()=>parseEvent(form({ends_at:'2026-01-01T20:00'})));
 assert.equal(parseEvent(form()).starts_at,'2027-01-02T02:00:00.000Z');
-console.log('PASS: cuatro formatos, mínimos, paridad, clasificación, fechas de Costa Rica y bloqueo de inscripciones.');
+console.log('PASS: cuatro formatos, mínimos, paridad, clasificación, fechas de Costa Rica y apertura exclusiva de publicados.');

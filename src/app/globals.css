@@ -319,6 +319,28 @@ div[id] {
 .event-form select { color-scheme: dark; }
 .event-form input { color-scheme: dark; }
 .event-form button { justify-self: start; }
+.application-form fieldset { border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: grid; gap: 12px; min-width: 0; }
+.application-form legend { font-size: 24px; font-weight: 700; padding-inline: 8px; }
+.application-form input[type="checkbox"] { width: 24px; min-height: 24px; margin-right: 12px; vertical-align: middle; }
+.member-fields { padding-block: 20px; border-bottom: 1px solid var(--border); }
+.member-fields h3 { font-size: 26px; margin-bottom: 12px; }
+.member-fields label { display: block; }
+.application-crest { object-fit: contain; }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin-block: 24px; }
+.admin-tabs [aria-pressed="true"] { background: var(--primary); color: var(--primary-foreground); }
+.application-stats { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 24px; padding-block: 32px; }
+.application-stats dd { font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.application-list { list-style: none; margin-block: 32px; padding: 0; }
+.application-list > li { display: flex; gap: 24px; padding-block: 24px; border-bottom: 1px solid var(--border); }
+.application-list > li > img { object-fit: contain; flex-shrink: 0; }
+.application-list h2 { font-size: 32px; margin: 0; }
+.application-list p { margin-block: 8px; }
+.application-detail { margin-top: 40px; padding: 28px; background: var(--surface); border-radius: 12px; overflow-wrap: anywhere; }
+.application-detail h2 { font-size: 40px; }
+.application-detail h3 { font-size: 28px; margin-top: 28px; }
+.application-detail p { margin-block: 16px; }
+.application-detail li { margin-block: 12px; }
+@media(max-width: 600px) { .application-form fieldset,.application-detail { padding: 16px; } .application-list > li { gap: 12px; } .application-list > li > img { width: 56px; height: 56px; } .application-stats { grid-template-columns: 1fr 1fr; } }
 .event-form p { color: var(--muted-foreground); }
 .event-form [role="alert"] { color: var(--destructive); }
 .registration-lock { padding: 20px; border: 1px solid var(--border); border-radius: 8px; margin-block: 24px; background: var(--surface); }
