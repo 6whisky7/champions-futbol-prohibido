@@ -11,9 +11,21 @@ export function TrophyShowcase() {
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
+    const stage = host.current?.parentElement;
+    if (!stage) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setActive(true);
+      if (viewer.current) viewer.current.hidden = !entry.isIntersecting;
+    }, { threshold: 0.05 });
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
     if (!active) return;
     let disposed = false;
-    const fail = () => { if (!disposed) setStatus("error"); };
+    let failed = false;
+    const fail = () => { failed = true; if (!disposed) setStatus("error"); };
     const timer = window.setTimeout(fail, 30000);
     import("@google/model-viewer").then(({ ModelViewerElement }) => {
       if (disposed) return;
@@ -24,8 +36,8 @@ export function TrophyShowcase() {
         src: "/trofeo/cfp-v03-web.glb", alt: "Trofeo Champions Fútbol Prohibido en 3D. Usa las flechas para girarlo.",
         "camera-controls": "", "disable-zoom": "", "disable-pan": "",
         "touch-action": "pan-y", "camera-orbit": "25deg 80deg auto",
-        "field-of-view": "30deg", "environment-image": "neutral", exposure: "0.8",
-        "interaction-prompt": "none", loading: "eager", tabindex: "0",
+        "field-of-view": "30deg", "environment-image": "/trofeo/championship-studio.hdr", exposure: "0.85",
+        "interaction-prompt": "none", loading: "eager", tabindex: "-1",
       };
       Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
       element.addEventListener("keydown", (event) => {
@@ -40,7 +52,7 @@ export function TrophyShowcase() {
       }, { capture: true });
       element.addEventListener("load", () => {
         window.clearTimeout(timer);
-        if (!disposed) setStatus("ready");
+        if (!disposed && !failed) { element.tabIndex = 0; setStatus("ready"); }
       }, { once: true });
       element.addEventListener("error", fail);
       host.current?.append(element);
@@ -53,14 +65,10 @@ export function TrophyShowcase() {
     };
   }, [active]);
 
-  function showImage() {
-    setActive(false);
-    setStatus("idle");
-  }
-
   return (
     <figure className="trophy-showcase" aria-label="Trofeo del campeonato">
       <div className="trophy-stage" data-status={status}>
+        <div className="trophy-light-beams" aria-hidden="true" />
         <Image className="trophy-poster" src="/trofeo/cfp-v03-poster.webp"
           alt="Trofeo dorado y negro de Champions Fútbol Prohibido, con balón y asas curvas"
           width={840} height={1120} sizes="(max-width: 767px) 90vw, 520px" preload />
@@ -68,19 +76,11 @@ export function TrophyShowcase() {
       </div>
       <figcaption>
         <div className="trophy-controls">
-          {!active || status === "error" ? (
-            <button className="trophy-button" type="button" disabled={status === "error"}
-              onClick={() => { setStatus("loading"); setActive(true); }}>Girar el trofeo</button>
-          ) : (
-            <>
-              <button className="trophy-button" type="button" disabled={status !== "ready"}
-                onClick={() => { if (viewer.current) { viewer.current.cameraOrbit = "25deg 80deg auto"; viewer.current.jumpCameraToGoal(); } }}>Vista inicial</button>
-              <button className="trophy-button" type="button" onClick={showImage}>Ver imagen</button>
-            </>
-          )}
+          <button className="trophy-button trophy-reset" type="button" disabled={status !== "ready"}
+            onClick={() => { if (viewer.current) { viewer.current.cameraOrbit = "0deg 90deg auto"; viewer.current.jumpCameraToGoal(); } }}>Vista frontal</button>
         </div>
         <p className="trophy-hint" role="status">
-          {status === "loading" ? "Preparando el trofeo…" : status === "error" ? "El 3D no está disponible. Puedes seguir viendo el trofeo en imagen." : status === "ready" ? "Arrastra a los lados o usa las flechas. Desliza hacia arriba para seguir leyendo." : "La copa que todos quieren levantar."}
+          {status === "error" ? "El 3D no está disponible. Puedes seguir viendo el trofeo en imagen." : status === "ready" ? "Arrastra a los lados o usa las flechas. Desliza hacia arriba para seguir leyendo." : "Preparando el trofeo…"}
         </p>
       </figcaption>
     </figure>

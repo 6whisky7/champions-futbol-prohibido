@@ -290,6 +290,14 @@ div[id] {
 }
 .trophy-showcase { margin: 0; min-width: 0; text-align: center; }
 .trophy-stage { position: relative; width: 100%; height: clamp(440px, 44vw, 600px); }
+.trophy-stage::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 55% 45%, #a8762528, transparent 57%), radial-gradient(ellipse at 80% 36%, #426aa52b, transparent 48%); pointer-events: none; }
+.trophy-stage::after { content: ""; position: absolute; width: 48%; height: 6%; left: 26%; bottom: 4%; background: radial-gradient(ellipse, #000c, transparent 70%); pointer-events: none; }
+.trophy-light-beams { position: absolute; inset: 0; pointer-events: none; background: conic-gradient(from 150deg at 12% 0%, transparent 0deg, #edbc6324 9deg, transparent 23deg), conic-gradient(from 168deg at 85% 0%, transparent 0deg, #ebc47420 13deg, transparent 28deg); mask-image: linear-gradient(#000b, #0007 65%, transparent); }
+.trophy-reset { background: transparent; border-color: transparent; color: var(--muted-foreground); }
+.trophy-reset:hover { color: var(--foreground); }
+.trophy-poster { position: relative; z-index: 1; }
+.trophy-viewer { z-index: 2; }
+.trophy-viewer model-viewer[hidden] { display: none; }
 .trophy-poster { width: 100%; height: 100%; object-fit: contain; }
 .trophy-viewer { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
 .trophy-viewer model-viewer { display: block; width: 100%; height: 100%; touch-action: pan-y; }
@@ -300,6 +308,29 @@ div[id] {
 .trophy-button:hover { border-color: var(--primary); }
 .trophy-button:disabled { opacity: .65; cursor: default; }
 .trophy-hint { margin: 12px auto 0; max-width: 40ch; min-height: 48px; color: var(--muted-foreground); font-size: 14px; }
+.management-page { padding-block: 48px 80px; min-height: 70vh; }
+.management-page h1 { font-size: clamp(44px, 5vw, 64px); margin-block: 24px; }
+.management-page > p { max-width: 65ch; margin-block: 20px; }
+.management-page a:not(.action-link) { text-decoration: underline; text-underline-offset: 5px; }
+.management-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.event-form { max-width: 720px; display: grid; gap: 12px; margin-top: 28px; }
+.event-form label { font-weight: 700; margin-top: 16px; }
+.event-form input:not([type="hidden"]), .event-form textarea, .event-form select { width: 100%; min-height: 52px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--foreground); font: inherit; }
+.event-form select { color-scheme: dark; }
+.event-form input { color-scheme: dark; }
+.event-form button { justify-self: start; }
+.event-form p { color: var(--muted-foreground); }
+.event-form [role="alert"] { color: var(--destructive); }
+.registration-lock { padding: 20px; border: 1px solid var(--border); border-radius: 8px; margin-block: 24px; background: var(--surface); }
+.registration-lock p { margin-bottom: 16px; }
+.event-list { list-style: none; padding: 0; margin-top: 40px; }
+.event-list li { padding-block: 28px; border-top: 1px solid var(--border); }
+.event-list h2 { font-size: 36px; margin-bottom: 12px; }
+.event-list p { margin-block: 12px; }
+.event-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+.event-facts { display: grid; gap: 24px; margin-block: 32px; }
+.event-facts dt { color: var(--muted-foreground); }
+.event-facts dd { margin: 4px 0 0; font-weight: 600; }
 @media (max-width: 767px) { .trophy-stage { height: 450px; } }
 .hero-collection {
   display: grid;

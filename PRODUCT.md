@@ -17,10 +17,10 @@ Explicar el torneo y permitir explorar sus 48 escudos originales. El organizador
 ## Capabilities and Constraints
 
 - Next.js App Router, TypeScript, Tailwind y versiones estables existentes.
-- Portada, galería con filtros, comunidad y 404. Inscripción y administración todavía no están disponibles.
+- Portada con trofeo V03 automático, galería con filtros, comunidad, 404, eventos públicos y administración exclusiva del propietario. La inscripción pública, revisión y lista de espera son el siguiente bloque.
 - Las reglas confirmadas están en `docs/decisiones-del-torneo.md`; prevalecen las correcciones recientes.
-- Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. Sin migraciones, cambios de esquema ni creación de usuarios en este encargo.
-- Rediseño en rama separada. Vista previa en Vercel cuando sea posible; no incorporar a main antes de revisión.
+- Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. Esta etapa autoriza migraciones aditivas versionadas, RLS, Auth del propietario y pruebas con datos controlados que no se conserven como registros reales.
+- Se autoriza publicar esta etapa verificada en main/Production. Las inscripciones permanecen bloqueadas.
 
 ## Brand Commitments
 
@@ -30,7 +30,7 @@ Nombre Champions Fútbol Prohibido; español directo. Competición de fútbol co
 
 Actualización aprobada: trofeo V03 completo, usado en portada mediante una copia comprimida y una imagen de su maestro. El organizador autoriza publicar el rediseño y esta integración en main cuando las comprobaciones sean correctas. Los recursos maestros se conservan fuera de public. La descripción anterior se mantiene como registro histórico.
 
-48 PNG transparentes y `public/escudos/catalogo.json`. Los originales se conservan sin modificar. No hay resultados ni equipos inscritos que puedan presentarse como datos reales. No se encontró trofeo en el repositorio ni en las carpetas de recursos examinadas.
+48 PNG transparentes y `public/escudos/catalogo.json`. Trofeo V03 aprobado, copia Draco de 1 631 132 bytes e imagen inicial. Los maestros se conservan fuera de public. No hay resultados ni equipos inscritos que puedan presentarse como datos reales.
 
 ## Product Principles
 

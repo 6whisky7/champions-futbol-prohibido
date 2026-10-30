@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 
 const links = [
+  ["/eventos", "Eventos"],
   ["/#torneo", "El torneo"],
   ["/#escudos", "Escudos"],
   ["/#formato", "Cómo se juega"],

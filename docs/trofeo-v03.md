@@ -1,5 +1,7 @@
 # Trofeo V03 en portada
 
+Registro histórico de la primera integración, que cargaba al pulsar un botón. La carga automática, iluminación y mediciones actuales están en [Administración y eventos](administracion-eventos.md). No reutilizar las cifras ni el comportamiento bajo demanda de este documento para describir la versión actual.
+
 V03 aprobada por el organizador. El maestro Blender, los renders originales y el ZIP permanecen fuera del repositorio, en `C:/Users/XT/Projects/champions-trofeo-output`. La web contiene solo copias derivadas.
 
 ## Recursos y apariencia

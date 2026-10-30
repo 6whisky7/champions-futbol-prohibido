@@ -16,7 +16,10 @@ try {
     await page.setViewportSize({ width, height: 1000 });
     await page.goto(base, { waitUntil: "networkidle" });
     await page.locator(".trophy-poster").evaluate(el => el.decode());
-    assert.equal(await page.locator("model-viewer").count(), 0);
+    await page.locator('.trophy-stage').scrollIntoViewIfNeeded();
+    await page.locator('.trophy-stage[data-status="ready"]').waitFor({ timeout: 60000 });
+    assert.equal(await page.getByRole('button', { name: 'Girar el trofeo' }).count(), 0);
+    await page.evaluate(() => window.scrollTo(0, 0));
     const layout = await page.evaluate(() => {
       const r = document.querySelector(".trophy-stage").getBoundingClientRect();
       return { width: window.innerWidth, scrollWidth: document.documentElement.scrollWidth, trophy: { x: r.x, width: r.width, height: r.height } };
@@ -26,9 +29,9 @@ try {
     results.layouts.push(layout);
     await page.screenshot({ path: `${out}/${width}-poster.png`, fullPage: true });
   }
-  assert.ok(!requests.some(url => url.endsWith(".glb")), "GLB must not load before activation");
+  assert.ok(requests.some(url => url.endsWith(".glb")), "GLB must load automatically when visible");
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.getByRole("button", { name: "Girar el trofeo" }).click();
+  await page.locator('model-viewer').scrollIntoViewIfNeeded();
   await page.locator('.trophy-stage[data-status="ready"]').waitFor({ timeout: 60000 });
   assert.equal(await page.locator("model-viewer").getAttribute("auto-rotate"), null);
   assert.equal(await page.locator("model-viewer").getAttribute("touch-action"), "pan-y");
@@ -39,25 +42,25 @@ try {
   await page.waitForTimeout(600);
   const after = await page.locator("model-viewer").evaluate(el => el.getCameraOrbit().theta);
   assert.notEqual(before, after);
-  await page.getByRole("button", { name: "Vista inicial" }).click();
+  await page.getByRole("button", { name: "Vista frontal" }).click();
   await page.waitForTimeout(300);
-  assert.ok(Math.abs(await page.locator("model-viewer").evaluate(el => el.getCameraOrbit().theta) - 25 * Math.PI / 180) < .01);
+  assert.ok(Math.abs(await page.locator("model-viewer").evaluate(el => el.getCameraOrbit().theta)) < .01);
   await page.screenshot({ path: `${out}/390-3d.png` });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.screenshot({ path: `${out}/1440-3d.png` });
-  await page.getByRole("button", { name: "Ver imagen" }).click();
-  assert.equal(await page.locator("model-viewer").count(), 0);
+  await page.evaluate(() => window.scrollTo(0, document.querySelector('#torneo').offsetTop));
+  await page.waitForFunction(() => document.querySelector('model-viewer').hidden);
   // Fresh context avoids model-viewer's in-memory GLB cache masking a network failure.
   const failed = await browser.newPage();
   await failed.route("**/*.glb", r => r.abort());
   await failed.goto(base);
-  await failed.getByRole("button", { name: "Girar el trofeo" }).click();
+  await failed.locator('.trophy-stage').scrollIntoViewIfNeeded();
   await failed.locator('.trophy-stage[data-status="error"]').waitFor({ timeout: 40000 });
   assert.equal(await failed.locator(".trophy-poster").evaluate(el => window.getComputedStyle(el).visibility), "visible");
   await failed.getByRole("link", { name: "Explorar los escudos", exact: true }).click();
   assert.ok(failed.url().includes("#escudos"));
   await failed.close();
-  results.interaction = "PASS: load, five materials, keyboard rotation, reset, image, reduced motion, failure fallback, navigation";
+  results.interaction = "PASS: automatic load, five materials, keyboard rotation, frontal reset, offscreen hidden, reduced motion, failure fallback, navigation";
   const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
   await mobile.addInitScript(() => {
     window.__lcp = 0;
@@ -71,9 +74,10 @@ try {
   await p.goto(base, { waitUntil: "networkidle" });
   results.simulatedMobile = await p.evaluate(() => ({ lcpMs: window.__lcp, domContentLoadedMs: window.performance.getEntriesByType("navigation")[0].domContentLoadedEventEnd, transferredBytes: window.performance.getEntriesByType("resource").reduce((n, e) => n + e.transferSize, 0), glbRequests: window.performance.getEntriesByType("resource").filter(e => e.name.endsWith(".glb")).length }));
   results.simulatedMobile.conditions = "Edge desktop; mobile 390x844/DPR2, 1.6 Mbps, 150ms RTT, CPU x4; cold context; NOT physical phone or Lighthouse";
-  assert.equal(results.simulatedMobile.glbRequests, 0);
-  await p.getByRole("button", { name: "Girar el trofeo" }).click();
+  assert.ok(results.simulatedMobile.glbRequests >= 1);
   await p.locator('.trophy-stage[data-status="ready"]').waitFor({ timeout: 60000 });
+  results.simulatedMobile.modelReadyMs = await p.evaluate(() => window.performance.now());
+  results.simulatedMobile.totalBytesAtReady = await p.evaluate(() => window.performance.getEntriesByType("resource").reduce((n, e) => n + e.transferSize, 0));
   await p.locator("model-viewer").scrollIntoViewIfNeeded();
   const y = await p.evaluate(() => window.scrollY);
   const bounds = await p.locator("model-viewer").boundingBox();

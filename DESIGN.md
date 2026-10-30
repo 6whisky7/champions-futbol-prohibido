@@ -132,7 +132,9 @@ components:
 
 ## Portada actual: trofeo V03 aprobado
 
-El encargo de integración reemplaza los tres banderines de la presentación principal por el trofeo V03. Título y explicación a la izquierda, trofeo completo a la derecha; una columna en móvil. Conserva los tokens y la galería. La imagen renderizada aparece primero; «Girar el trofeo» carga el visor, con reset, teclado, desplazamiento vertical táctil y alternativa de imagen. No hay giro automático. El oro pertenece al recurso aprobado; los controles conservan el acento azul. Las referencias a los tres banderines que siguen documentan el diseño anterior.
+Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático. Las referencias a los tres banderines que siguen documentan el diseño anterior.
+
+La administración y los eventos reutilizan Manrope, Barlow Condensed, superficies marinas y controles amplios con etiquetas visibles. Formularios de una columna, estados breves y fechas expresadas en hora de Costa Rica. «Publicado» e «Inscripciones cerradas» son estados separados. Un borrador nunca se anuncia como evento público.
 
 ## Overview
 

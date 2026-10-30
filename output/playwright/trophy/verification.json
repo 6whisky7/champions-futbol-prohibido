@@ -31,13 +31,15 @@
     }
   ],
   "simulatedMobile": {
-    "lcpMs": 992,
-    "domContentLoadedMs": 600.3000000007451,
-    "transferredBytes": 306081,
-    "glbRequests": 0,
-    "conditions": "Edge desktop; mobile 390x844/DPR2, 1.6 Mbps, 150ms RTT, CPU x4; cold context; NOT physical phone or Lighthouse"
+    "lcpMs": 1012,
+    "domContentLoadedMs": 615.8999999985099,
+    "transferredBytes": 1940656,
+    "glbRequests": 1,
+    "conditions": "Edge desktop; mobile 390x844/DPR2, 1.6 Mbps, 150ms RTT, CPU x4; cold context; NOT physical phone or Lighthouse",
+    "modelReadyMs": 11872,
+    "totalBytesAtReady": 1940656
   },
-  "interaction": "PASS: load, five materials, keyboard rotation, reset, image, reduced motion, failure fallback, navigation",
+  "interaction": "PASS: automatic load, five materials, keyboard rotation, frontal reset, offscreen hidden, reduced motion, failure fallback, navigation",
   "touchScroll": "PASS",
   "status": "PASS"
 }

@@ -28,6 +28,7 @@ export default defineConfig([
         process: "readonly",
         console: "readonly",
         Buffer: "readonly",
+        FormData: "readonly",
         URL: "readonly",
         window: "readonly",
         document: "readonly",

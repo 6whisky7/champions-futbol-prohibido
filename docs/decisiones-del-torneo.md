@@ -2,7 +2,7 @@
 
 Acuerdos confirmados por el organizador el 29 de octubre de 2026. Este archivo conserva las reglas acordadas para su implementación futura. Las correcciones más recientes tienen prioridad sobre versiones anteriores del Word. Las propuestas del asistente que no fueron aceptadas no constituyen reglas.
 
-La aplicación de esta etapa es una portada con galería. Este documento no significa que la gestión del torneo ya esté implementada.
+La etapa actual implementa configuración y publicación de eventos y acceso del propietario. Inscripción, aprobación, sorteo, partidos y clasificación todavía no están implementados. Este documento fija las reglas para esos bloques futuros.
 
 ## Partidos y plantillas
 
