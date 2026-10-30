@@ -60,7 +60,7 @@ async function loadedCapture(width, name = `after-${width}`) {
       (image) =>
         image.complete &&
         image.naturalWidth > 0 &&
-        Math.abs(image.width - image.height) < 2,
+        (image.classList.contains("trophy-poster") || Math.abs(image.width - image.height) < 2),
     ),
     title: document.querySelector("h1").textContent.trim(),
     controls: Array.from(document.querySelectorAll("button,input,select"))
@@ -247,7 +247,7 @@ try {
   await page.emulateMedia({ reducedMotion: "reduce" });
   assert.equal(
     await page
-      .locator(".hero-pennant")
+      .locator(".trophy-poster")
       .first()
       .evaluate((element) => window.getComputedStyle(element).animationName),
     "none",

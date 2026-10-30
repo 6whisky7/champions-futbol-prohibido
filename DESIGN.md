@@ -130,6 +130,10 @@ components:
 
 # Design System: Champions Fútbol Prohibido
 
+## Portada actual: trofeo V03 aprobado
+
+El encargo de integración reemplaza los tres banderines de la presentación principal por el trofeo V03. Título y explicación a la izquierda, trofeo completo a la derecha; una columna en móvil. Conserva los tokens y la galería. La imagen renderizada aparece primero; «Girar el trofeo» carga el visor, con reset, teclado, desplazamiento vertical táctil y alternativa de imagen. No hay giro automático. El oro pertenece al recurso aprobado; los controles conservan el acento azul. Las referencias a los tres banderines que siguen documentan el diseño anterior.
+
 ## Overview
 
 **Creative North Star: "Banderines de competición"**

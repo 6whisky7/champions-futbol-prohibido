@@ -28,6 +28,8 @@ Nombre Champions Fútbol Prohibido; español directo. Competición de fútbol co
 
 ## Evidence on Hand
 
+Actualización aprobada: trofeo V03 completo, usado en portada mediante una copia comprimida y una imagen de su maestro. El organizador autoriza publicar el rediseño y esta integración en main cuando las comprobaciones sean correctas. Los recursos maestros se conservan fuera de public. La descripción anterior se mantiene como registro histórico.
+
 48 PNG transparentes y `public/escudos/catalogo.json`. Los originales se conservan sin modificar. No hay resultados ni equipos inscritos que puedan presentarse como datos reales. No se encontró trofeo en el repositorio ni en las carpetas de recursos examinadas.
 
 ## Product Principles

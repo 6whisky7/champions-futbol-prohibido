@@ -200,19 +200,25 @@ div[id] {
 }
 .hero {
   padding-block: 42px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
 }
 .hero h1 {
   font-size: 96px;
-  display: flex;
+  display: block;
   align-items: center;
   gap: 32px;
   text-transform: uppercase;
   letter-spacing: -0.02em;
 }
 .hero h1 > span:first-child {
+  display: block;
   font-size: clamp(64px, 8vw, 96px);
 }
 .hero h1 > span:last-child {
+  display: block;
   max-width: 380px;
   font-size: clamp(42px, 5.3vw, 64px);
   color: var(--primary);
@@ -228,6 +234,7 @@ div[id] {
   max-width: 450px;
 }
 .hero-description {
+  margin-top: 24px;
   font-size: 21px;
   line-height: 1.65;
 }
@@ -281,6 +288,19 @@ div[id] {
   color: var(--muted-foreground);
   font-size: 16px;
 }
+.trophy-showcase { margin: 0; min-width: 0; text-align: center; }
+.trophy-stage { position: relative; width: 100%; height: clamp(440px, 44vw, 600px); }
+.trophy-poster { width: 100%; height: 100%; object-fit: contain; }
+.trophy-viewer { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+.trophy-viewer model-viewer { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+.trophy-stage[data-status="ready"] .trophy-viewer { opacity: 1; pointer-events: auto; }
+.trophy-stage[data-status="ready"] .trophy-poster { visibility: hidden; }
+.trophy-controls { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.trophy-button { min-height: 48px; padding: 10px 18px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--foreground); font-size: 16px; cursor: pointer; }
+.trophy-button:hover { border-color: var(--primary); }
+.trophy-button:disabled { opacity: .65; cursor: default; }
+.trophy-hint { margin: 12px auto 0; max-width: 40ch; min-height: 48px; color: var(--muted-foreground); font-size: 14px; }
+@media (max-width: 767px) { .trophy-stage { height: 450px; } }
 .hero-collection {
   display: grid;
   grid-template-columns: 1fr 1.25fr 1fr;
@@ -750,6 +770,8 @@ div[id] {
   }
   .hero {
     padding-block: 24px 44px;
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
   .hero h1 {
     display: block;

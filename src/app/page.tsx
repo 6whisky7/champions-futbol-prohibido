@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { TrophyShowcase } from "@/components/trophy-showcase";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { CrestGallery } from "@/components/crest-gallery";
 import { SiteHeader } from "@/components/site-header";
@@ -7,11 +7,7 @@ import {
   crestCategories,
   crests,
   featuredCrestIds,
-  getCrest,
 } from "@/lib/crests";
-
-const heroCrests = ["41", "45", "36"].map(getCrest);
-
 export default function Home() {
   return (
     <>
@@ -25,12 +21,11 @@ export default function Home() {
           id="inicio"
           aria-labelledby="hero-title"
         >
-          <h1 id="hero-title">
-            <span>Champions</span>
-            <span> Fútbol Prohibido</span>
-          </h1>
-          <div className="hero-body">
-            <div className="hero-copy">
+          <div className="hero-copy">
+            <h1 id="hero-title">
+              <span>Champions</span>
+              <span> Fútbol Prohibido</span>
+            </h1>
               <p className="hero-description">
                 Torneo de Fútbol Prohibido en Roblox. Tres jugadores por equipo,
                 de la liguilla a la final.
@@ -45,25 +40,7 @@ export default function Home() {
                 Las inscripciones todavía no están disponibles.
               </p>
             </div>
-            <div
-              className="hero-collection"
-              aria-label="Tres diseños de la colección de escudos"
-            >
-              {heroCrests.map((crest, index) => (
-                <div className="hero-pennant" key={crest.id}>
-                  <Image
-                    src={crest.src}
-                    alt={`Diseño inspirado en ${crest.club}`}
-                    width={320}
-                    height={320}
-                    sizes="(max-width: 767px) 28vw, (max-width: 1024px) 20vw, 230px"
-                    preload={index === 1}
-                    loading={index === 1 ? undefined : "eager"}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+          <TrophyShowcase />
         </section>
 
         <section

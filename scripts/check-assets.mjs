@@ -26,3 +26,16 @@ for (const crest of catalog.escudos) {
 }
 assert.deepEqual(counts, expectedCounts, "Debe conservarse la selección de clubes y su reparto aprobado.");
 console.log("Escudos: 48/48 PNG RGBA de 1254 × 1254; catálogo, rutas y reparto correctos.");
+
+const trophy = await readFile(path.join(root, "public/trofeo/cfp-v03-web.glb"));
+assert.equal(trophy.subarray(0, 4).toString(), "glTF");
+assert.equal(trophy.readUInt32LE(8), trophy.length);
+const model = JSON.parse(trophy.subarray(20, 20 + trophy.readUInt32LE(12)).toString());
+assert.equal(model.materials.length, 5);
+assert.equal(model.animations?.length ?? 0, 0);
+assert.ok(model.meshes.every(mesh => mesh.primitives.every(primitive => primitive.material !== undefined)));
+assert.ok(model.extensionsRequired.includes("KHR_draco_mesh_compression"));
+for (const file of await readdir(path.join(root, "public"), { recursive: true })) {
+  assert.ok(!/\.(blend|blend1|zip)$/i.test(file), `Maestro o ZIP público: ${file}`);
+}
+console.log(`Trofeo V03: ${trophy.length} bytes; cinco materiales, Draco y cero animaciones; maestros fuera de public.`);

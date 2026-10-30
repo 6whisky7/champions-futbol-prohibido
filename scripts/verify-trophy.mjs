@@ -1,0 +1,93 @@
+import { chromium } from "playwright";
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+const base = process.env.UI_BASE_URL || "http://127.0.0.1:3200";
+const out = "output/playwright/trophy";
+await fs.mkdir(out, { recursive: true });
+const browser = await chromium.launch({ executablePath: "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe", headless: true });
+const errors = [];
+const results = { base, errors, layouts: [], simulatedMobile: {} };
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  page.on("pageerror", e => errors.push(e.message));
+  const requests = [];
+  page.on("request", r => requests.push(r.url()));
+  for (const width of [1440, 390, 360]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto(base, { waitUntil: "networkidle" });
+    await page.locator(".trophy-poster").evaluate(el => el.decode());
+    assert.equal(await page.locator("model-viewer").count(), 0);
+    const layout = await page.evaluate(() => {
+      const r = document.querySelector(".trophy-stage").getBoundingClientRect();
+      return { width: window.innerWidth, scrollWidth: document.documentElement.scrollWidth, trophy: { x: r.x, width: r.width, height: r.height } };
+    });
+    assert.ok(layout.scrollWidth <= width);
+    assert.ok(layout.trophy.x >= 0 && layout.trophy.x + layout.trophy.width <= width);
+    results.layouts.push(layout);
+    await page.screenshot({ path: `${out}/${width}-poster.png`, fullPage: true });
+  }
+  assert.ok(!requests.some(url => url.endsWith(".glb")), "GLB must not load before activation");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.getByRole("button", { name: "Girar el trofeo" }).click();
+  await page.locator('.trophy-stage[data-status="ready"]').waitFor({ timeout: 60000 });
+  assert.equal(await page.locator("model-viewer").getAttribute("auto-rotate"), null);
+  assert.equal(await page.locator("model-viewer").getAttribute("touch-action"), "pan-y");
+  assert.equal(await page.locator("model-viewer").evaluate(el => el.model.materials.length), 5);
+  await page.locator("model-viewer").focus();
+  const before = await page.locator("model-viewer").evaluate(el => el.getCameraOrbit().theta);
+  await page.keyboard.press("ArrowRight");
+  await page.waitForTimeout(600);
+  const after = await page.locator("model-viewer").evaluate(el => el.getCameraOrbit().theta);
+  assert.notEqual(before, after);
+  await page.getByRole("button", { name: "Vista inicial" }).click();
+  await page.waitForTimeout(300);
+  assert.ok(Math.abs(await page.locator("model-viewer").evaluate(el => el.getCameraOrbit().theta) - 25 * Math.PI / 180) < .01);
+  await page.screenshot({ path: `${out}/390-3d.png` });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.screenshot({ path: `${out}/1440-3d.png` });
+  await page.getByRole("button", { name: "Ver imagen" }).click();
+  assert.equal(await page.locator("model-viewer").count(), 0);
+  // Fresh context avoids model-viewer's in-memory GLB cache masking a network failure.
+  const failed = await browser.newPage();
+  await failed.route("**/*.glb", r => r.abort());
+  await failed.goto(base);
+  await failed.getByRole("button", { name: "Girar el trofeo" }).click();
+  await failed.locator('.trophy-stage[data-status="error"]').waitFor({ timeout: 40000 });
+  assert.equal(await failed.locator(".trophy-poster").evaluate(el => window.getComputedStyle(el).visibility), "visible");
+  await failed.getByRole("link", { name: "Explorar los escudos", exact: true }).click();
+  assert.ok(failed.url().includes("#escudos"));
+  await failed.close();
+  results.interaction = "PASS: load, five materials, keyboard rotation, reset, image, reduced motion, failure fallback, navigation";
+  const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+  await mobile.addInitScript(() => {
+    window.__lcp = 0;
+    new window.PerformanceObserver(list => { window.__lcp = list.getEntries().at(-1).startTime; }).observe({ type: "largest-contentful-paint", buffered: true });
+  });
+  const p = await mobile.newPage();
+  const cdp = await mobile.newCDPSession(p);
+  await cdp.send("Network.enable");
+  await cdp.send("Network.emulateNetworkConditions", { offline: false, latency: 150, downloadThroughput: 1.6 * 1024 * 1024 / 8, uploadThroughput: 750 * 1024 / 8 });
+  await cdp.send("Emulation.setCPUThrottlingRate", { rate: 4 });
+  await p.goto(base, { waitUntil: "networkidle" });
+  results.simulatedMobile = await p.evaluate(() => ({ lcpMs: window.__lcp, domContentLoadedMs: window.performance.getEntriesByType("navigation")[0].domContentLoadedEventEnd, transferredBytes: window.performance.getEntriesByType("resource").reduce((n, e) => n + e.transferSize, 0), glbRequests: window.performance.getEntriesByType("resource").filter(e => e.name.endsWith(".glb")).length }));
+  results.simulatedMobile.conditions = "Edge desktop; mobile 390x844/DPR2, 1.6 Mbps, 150ms RTT, CPU x4; cold context; NOT physical phone or Lighthouse";
+  assert.equal(results.simulatedMobile.glbRequests, 0);
+  await p.getByRole("button", { name: "Girar el trofeo" }).click();
+  await p.locator('.trophy-stage[data-status="ready"]').waitFor({ timeout: 60000 });
+  await p.locator("model-viewer").scrollIntoViewIfNeeded();
+  const y = await p.evaluate(() => window.scrollY);
+  const bounds = await p.locator("model-viewer").boundingBox();
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: 200, y: Math.min(650, bounds.y + 300) }] });
+  for (let i=1;i<=6;i++) await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: 200, y: Math.min(650, bounds.y + 300) - i*35 }] });
+  await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await p.waitForTimeout(400);
+  assert.ok(await p.evaluate(() => window.scrollY) > y, "Vertical touch should scroll page");
+  results.touchScroll = "PASS";
+  await mobile.close();
+  assert.deepEqual(errors, []);
+  results.status = "PASS";
+} finally {
+  await fs.writeFile(`${out}/verification.json`, JSON.stringify(results, null, 2));
+  console.log(JSON.stringify(results, null, 2));
+  await browser.close();
+}

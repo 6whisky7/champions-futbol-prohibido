@@ -5,7 +5,8 @@ import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores([".next/**", "node_modules/**", "out/**", "next-env.d.ts"]),
+  // Draco decoder files are unmodified third-party distributions.
+  globalIgnores([".next/**", "node_modules/**", "out/**", "next-env.d.ts", "public/trofeo/draco/**"]),
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

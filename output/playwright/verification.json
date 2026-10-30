@@ -1,5 +1,5 @@
 {
-  "base": "http://127.0.0.1:3100",
+  "base": "http://127.0.0.1:3200",
   "engine": "Chromium / Edge",
   "widths": [
     {
@@ -11,6 +11,10 @@
         {
           "tag": "BUTTON",
           "height": 52.390625
+        },
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
         },
         {
           "tag": "INPUT",
@@ -38,6 +42,10 @@
           "height": 52.390625
         },
         {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
           "tag": "INPUT",
           "height": 52
         },
@@ -58,6 +66,10 @@
       "images": true,
       "title": "Champions Fútbol Prohibido",
       "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
         {
           "tag": "INPUT",
           "height": 52
@@ -80,6 +92,10 @@
       "title": "Champions Fútbol Prohibido",
       "controls": [
         {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
           "tag": "INPUT",
           "height": 52
         },
@@ -100,6 +116,10 @@
       "images": true,
       "title": "Champions Fútbol Prohibido",
       "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
         {
           "tag": "INPUT",
           "height": 52

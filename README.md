@@ -1,5 +1,7 @@
 # champions-futbol-prohibido
 
+Portada con el trofeo V03 aprobado, imagen inicial y visor 3D bajo demanda. Los 48 escudos y su galería se conservan. El organizador autorizó integrar el rediseño y publicar en producción mediante el PR #1. [Recursos, comportamiento y verificación del trofeo](docs/trofeo-v03.md).
+
 Base visual y técnica de **Champions Fútbol Prohibido**, el torneo de Fútbol Prohibido en Roblox. Incluye una portada en español, una galería con los 48 escudos originales y clientes de Supabase para navegador y servidor. Está preparada para importar este repositorio en Vercel.
 
 El rediseño completo se trabaja en `redesign/identidad-competicion`, para revisión antes de incorporarlo a `main`. Incluye identidad CFP, lectura fácil, navegación móvil y galería con búsqueda y filtros persistentes en la URL. El formulario de inscripción, el panel administrativo, los eventos, los resultados y las migraciones se desarrollarán en la siguiente etapa. La portada no consulta tablas ni necesita iniciar sesión.
