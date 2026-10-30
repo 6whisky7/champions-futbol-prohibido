@@ -2,7 +2,7 @@
 
 Acuerdos confirmados por el organizador el 29 de octubre de 2026. Este archivo conserva las reglas acordadas para su implementación futura. Las correcciones más recientes tienen prioridad sobre versiones anteriores del Word. Las propuestas del asistente que no fueron aceptadas no constituyen reglas.
 
-La etapa actual incorpora configuración de eventos, acceso del propietario, inscripción pública, revisión de equipos y lista de espera. La nueva etapa incorpora sorteo conjunto, calendario, resultados y clasificación de liguilla; las eliminatorias siguen pendientes. Las decisiones nuevas sobre reservas, cierre y promoción sustituyen las dudas anteriores de este documento.
+La etapa actual incorpora configuración de eventos, acceso del propietario, inscripción pública, revisión de equipos y lista de espera. La competición incorpora sorteo conjunto, calendario, resultados y clasificación de liguilla, eliminatorias completas y cierre por campeón. Las decisiones nuevas sobre reservas, cierre y promoción sustituyen las dudas anteriores de este documento.
 
 ## Partidos y plantillas
 
@@ -45,7 +45,7 @@ Primero se ordena por puntos.
 4. Si la minitabla separa subgrupos, se resuelve cada subgrupo por separado, conservando las posiciones que ya quedaron separadas. Si quedan dos, se considera su duelo directo.
 5. Si los duelos directos no resuelven el empate restante: diferencia de gol general, goles a favor generales y sorteo.
 6. El sorteo solo reparte las posiciones que continúan empatadas. Es una acción explícita, registrada y persistente, disponible tras resolver todos los encuentros; no cambia al recargar. Un cambio de resultado o una descalificación invalida los sorteos actuales y conserva su historial.
-7. El cierre exige encuentros resueltos y desempates finales completos; conserva la clasificación de referencia sin generar ni avanzar eliminatorias.
+7. El cierre exige encuentros resueltos y desempates finales completos; conserva la clasificación de referencia sin generar ni avanzar eliminatorias automáticamente. Solo el propietario prepara y confirma el cuadro posterior.
 
 DG equivale a GF menos GC. Un partido nulo añade un PJ y un PN, sin añadir PG, PP ni goles.
 
@@ -54,7 +54,10 @@ DG equivale a GF menos GC. Un partido nulo añade un PJ y un PN, sin añadir PG,
 - Todas las eliminatorias son a partido único.
 - Se conserva el cuadro con primero y tercero en una mitad y segundo y cuarto en la otra. Primero y segundo solo pueden encontrarse en la final.
 - En cuartos: 1.º–8.º y 3.º–6.º a un lado; 2.º–7.º y 4.º–5.º al otro.
-- En octavos se empieza con 1.º–16.º, 2.º–15.º y así sucesivamente. En dieciseisavos clásicos, con 1.º–32.º. La ruta posterior sigue el cuadro fijo acordado.
+- En octavos, de arriba abajo: izquierda 1.º–16.º, 8.º–9.º, 3.º–14.º y 6.º–11.º; derecha 2.º–15.º, 7.º–10.º, 4.º–13.º y 5.º–12.º. Los ganadores contiguos se enfrentan en la siguiente ronda.
+- En dieciseisavos clásicos se amplía ese recorrido con los cruces complementarios de 33 (1.º–32.º y sucesivos), de modo que si avanzan los mejores el cuadro desemboca en los cuartos acordados. No se reordena entre rondas.
+- Generar exige liguilla cerrada, clasificación final conservada, desempates resueltos y suficientes equipos habilitados. Se revisa antes de confirmar; no se inventan sustitutos ni pases libres para completar plazas.
+- Una corrección que cambie al ganador se bloquea si alteraría participantes de un encuentro posterior ya disputado. Debe retirarse explícitamente la dependencia, con historial, antes de corregir su origen. Las estadísticas de liguilla no cambian.
 - Está permitido repetir en eliminatorias un rival de la liguilla.
 - En Champions con repesca, 1.º–8.º pasan directamente a octavos; 9.º–24.º juegan repesca; desde 25.º quedan eliminados.
 
@@ -92,7 +95,8 @@ Se permite una reprogramación, también en repesca y final. Tras los cinco minu
 - Si solo uno está listo, ese equipo gana 3–0.
 - Si ninguno está listo, avanza el mejor clasificado de la liguilla que siga habilitado. Debe registrarse como pase administrativo por clasificación, indicando ambas ausencias.
 - **En la final, esa misma regla declara campeón al mejor clasificado de la liguilla que siga habilitado.** Esta decisión ya está confirmada; no se aplica una excepción que deje el torneo sin campeón por esa doble ausencia.
-- Un descalificado no puede avanzar ni ganar por posición. Una caída general se trata como repetición, no como incomparecencia.
+- Un descalificado no puede avanzar ni ganar por posición. El pase por clasificación no inventa marcador ni goles. Una caída general se trata como repetición y no consume la reprogramación por doble ausencia.
+- Se registra el intento y cada decisión; retirar un resultado no concede otra reprogramación por doble ausencia. Si no existe ganador habilitado, la resolución permanece pendiente de decisión administrativa.
 
 ## Inscripción, requisitos y listado público
 
@@ -135,6 +139,12 @@ Se permite una reprogramación, también en repesca y final. Tras los cinco minu
 - Si un cruce eliminatorio pierde a ambos participantes por descalificación, el siguiente rival habilitado avanza sin jugar; no se vuelve a sortear el calendario.
 
 Se incluirán reglas para trampas, suplantación y acuerdos para regalar resultados, con revisión de pruebas y decisión administrativa. Sus sanciones todavía no están definidas: no se deben inventar sanciones automáticas. El abandono total sí tiene ya la derrota por 4–0.
+
+## Campeón por evento
+
+- Cuando la final tiene ganador habilitado, el propietario revisa y confirma el cierre del evento. El campeón, el subcampeón cuando exista y la resolución de la final quedan conservados por edición.
+- La presentación reutiliza el trofeo V03 y muestra escudo, nombre, evento y plantilla oficial de Roblox; no publica TikTok ni notas privadas. No añade premios ni reconocimientos no acordados.
+- El cierre es inmutable en esta etapa. Las infracciones descubiertas después de liguilla o final siguen sujetas a decisiones pendientes; no se cambia retrospectivamente la clasificación cerrada ni se inventa campeón.
 
 ## Número opcional y escudos
 

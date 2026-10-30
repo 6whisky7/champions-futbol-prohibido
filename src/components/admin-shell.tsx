@@ -22,6 +22,7 @@ const sections = [
   { label: "Calendario", path: "/admin/calendario", icon: CalendarDays },
   { label: "Resultados", path: "/admin/resultados", icon: ListOrdered },
   { label: "Clasificación", path: "/admin/clasificacion", icon: Users },
+  { label: "Eliminatorias", path: "/admin/eliminatorias", icon: ListOrdered },
   { label: "Eventos", path: "/admin/eventos", icon: CalendarDays },
   {
     label: "Solicitudes",
@@ -65,7 +66,9 @@ export function AdminShell({
   const view = params.get("vista") ?? "pending";
   const current =
     sections.find((s) => s.path === path && (!s.view || s.view === view)) ??
-    (path === "/admin/solicitudes" ? sections[5] : sections[4]);
+    (path === "/admin/solicitudes"
+      ? sections.find((s) => s.label === "Solicitudes")!
+      : sections.find((s) => s.label === "Eventos")!);
   const title = path.endsWith("/nuevo")
     ? "Crear evento"
     : path.startsWith("/admin/eventos/")
@@ -187,8 +190,11 @@ export function AdminShell({
                         "/admin/calendario",
                         "/admin/resultados",
                         "/admin/clasificacion",
+                        "/admin/eliminatorias",
                       ].includes(path)
-                    ? "Rivales, resultados oficiales y posiciones de la liguilla."
+                    ? path === "/admin/eliminatorias"
+                      ? "Cuadro fijo, avance de ganadores y cierre del evento."
+                      : "Rivales, resultados oficiales y posiciones de la liguilla."
                     : "Revisa las plantillas y resuelve cada solicitud con sus requisitos."}
             </p>
           </div>

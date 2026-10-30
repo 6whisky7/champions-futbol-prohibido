@@ -1,0 +1,41 @@
+begin;
+insert into auth.users(id,email,email_confirmed_at,is_anonymous) values('11111111-1111-4111-8111-111111111111','league-fixture@example.invalid',now(),false);
+update cfp_private.owner_config set email='league-fixture@example.invalid';
+insert into public.cfp_events(id,name,starts_at,capacity,format,status,registration_status,roster_locked) values('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','Doce equipos · fixture revertido',now(),12,'quarters','published','closed',true);
+insert into cfp_private.applications(event_id,request_key,payload,state) select 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',gen_random_uuid(),jsonb_build_object('name','Equipo '||i,'crest',lpad(i::text,2,'0'),'captain','0','members',jsonb_build_array(jsonb_build_object('roblox','fixture_'||i,'tiktok','PRIVATE_'||i))),'approved' from generate_series(1,12)i;
+set local role anon;
+do $$begin if public.cfp_league_read('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',false) is not null then raise exception 'Premature public league';end if;begin perform public.cfp_league_preview('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');raise exception 'Anon draw allowed';exception when insufficient_privilege then null;end;end$$;
+set local role authenticated;
+select set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
+select public.cfp_league_preview('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+set local role anon;
+do $$begin if public.cfp_league_read('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',null) is not null then raise exception 'NULL admin leaked preview';end if;end$$;
+set local role authenticated;
+do $$declare e uuid='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';s jsonb;m jsonb;rev int=1;k text;begin
+ s=public.cfp_league_read(e,true);if jsonb_array_length(s->'matches')<>24 then raise exception 'Expected24';end if;
+ begin perform public.cfp_league_action(e,'confirm','{"reason":"NULL version"}',null);raise exception 'NULL version allowed';exception when raise_exception then if sqlerrm='NULL version allowed' then raise;end if;end;
+ perform public.cfp_league_action(e,'confirm','{"reason":"Calendario comprobado"}',0);
+ for m in select value from jsonb_array_elements(s->'matches') loop perform public.cfp_league_action(e,'match',jsonb_build_object('id',m->>'id','kind','sport','hg',5,'ag',2,'reason','Resultado de prueba'),rev);rev=rev+1;end loop;
+ s=public.cfp_league_read(e,true);for k in select distinct v->>'tie_key' from jsonb_array_elements(s->'table')v where (v->>'tie_pending')::boolean loop perform public.cfp_league_action(e,'lot',jsonb_build_object('key',k,'reason','Sorteo de prueba explícito'),rev);rev=rev+1;end loop;
+ perform public.cfp_league_action(e,'close','{"reason":"Cierre controlado"}',rev);
+ if public.cfp_league_read(e,false)::text like '%PRIVATE_%' then raise exception 'Private TikTok leaked';end if;
+ if public.cfp_league_read(e,false)->>'state'<>'closed' then raise exception 'Closure failed';end if;
+end$$;
+
+
+select public.cfp_knockout_preview('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');
+set local role anon;
+do $$begin if public.cfp_knockout_read('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',null) is not null then raise exception 'Private preview leaked';end if;begin perform public.cfp_knockout_preview('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa');raise exception 'Anon draw allowed';exception when insufficient_privilege then null;end;end$$;
+set local role authenticated;
+do $$declare e uuid='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';s jsonb;m jsonb;rev int=1;old_table jsonb;begin
+ old_table=public.cfp_league_read(e,true)->'table';
+ perform public.cfp_knockout_action(e,'confirm','{"reason":"Confirmación aislada"}',0);
+ s=public.cfp_knockout_read(e,true);if jsonb_array_length(s->'matches')<>7 then raise exception 'Expected7 KO';end if;
+ for m in select value from jsonb_array_elements(s->'matches') loop perform public.cfp_knockout_action(e,'match',jsonb_build_object('id',m->>'id','kind','sport','hg',5,'ag',2,'reason','Partido aislado'),rev);rev=rev+1;end loop;
+ perform public.cfp_knockout_action(e,'close','{"reason":"Campeón de prueba"}',rev);
+ s=public.cfp_knockout_read(e,false);if s->>'state'<>'finished' then raise exception 'Champion not saved';end if;
+ if s::text like '%PRIVATE_%' then raise exception 'Private identity leaked';end if;
+ if public.cfp_league_read(e,true)->'table'<>old_table then raise exception 'Knockout changed league';end if;
+end$$;
+reset role;
+rollback;

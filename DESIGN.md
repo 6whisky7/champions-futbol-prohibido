@@ -238,6 +238,12 @@ El banderín CFP usa `polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)`; mide 46 
 
 ## Components
 
+### Eliminatorias y campeón
+
+El cuadro amplía el marco CFP sin nuevos tokens. En escritorio presenta columnas por ronda, tarjetas alineadas verticalmente y enlaces escritos al partido de destino; el recorrido puede desplazarse dentro de su región. En móvil muestra una ronda mediante selector nativo, con detalle accesible por botón y foco. Escudo, nombre, marcador, ganador, intento y estado conservan texto legible; los pases administrativos sin goles se distinguen de resultados deportivos. Las decisiones e historial privados utilizan los formularios y superficies existentes.
+
+La presentación del campeón usa la imagen inicial compartida del trofeo V03, sin copiar modelos por evento. Trofeo y datos forman dos columnas en escritorio y una en móvil; muestra edición, escudo, campeón, resolución de la final, subcampeón cuando exista y plantilla Roblox. No añade premios ni efectos ajenos a la identidad.
+
 ### Liguilla y clasificación
 
 Calendario, Resultados y Clasificación reutilizan el marco CFP y sus superficies marinas, sin nuevos tokens. Cada jornada muestra escudo, equipo, marcador, orden, estado y fecha de Costa Rica. Las filas se apilan en móvil y las acciones permanecen fuera de cualquier desplazamiento horizontal. La tabla de estadísticas conserva alineación numérica y puede desplazarse dentro de una región con nombre y acceso por teclado; no desplaza la página completa. Las abreviaturas se explican bajo la tabla. Los empates sin resolver muestran «=» y «Zona por resolver»; las zonas siguen siendo provisionales hasta el cierre.
