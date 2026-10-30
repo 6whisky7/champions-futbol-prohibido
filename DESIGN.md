@@ -238,6 +238,10 @@ El banderín CFP usa `polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)`; mide 46 
 
 ## Components
 
+### Liguilla y clasificación
+
+Calendario, Resultados y Clasificación reutilizan el marco CFP y sus superficies marinas, sin nuevos tokens. Cada jornada muestra escudo, equipo, marcador, orden, estado y fecha de Costa Rica. Las filas se apilan en móvil y las acciones permanecen fuera de cualquier desplazamiento horizontal. La tabla de estadísticas conserva alineación numérica y puede desplazarse dentro de una región con nombre y acceso por teclado; no desplaza la página completa. Las abreviaturas se explican bajo la tabla. Los empates sin resolver muestran «=» y «Zona por resolver»; las zonas siguen siendo provisionales hasta el cierre.
+
 ### Marco administrativo
 
 `AdminShell` comparte identidad CFP, cinco destinos con iconos Lucide, sección actual mediante `aria-current`, selector del evento, acceso a la web y cierre de sesión. Reutiliza Button de shadcn/Base UI para el menú y cierre. Las superficies separan configuración, tareas y actividad; no hay gráficas ornamentales. Los estados vacíos conservan el marco y ofrecen una siguiente acción concreta. Aprobar es la acción primaria; rechazar usa el color destructivo; las acciones deshabilitadas reducen opacidad y explican los requisitos que faltan. Los enlaces a solicitudes desde el resumen llevan al detalle seleccionado.

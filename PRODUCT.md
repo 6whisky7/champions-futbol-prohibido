@@ -18,9 +18,10 @@ Explicar el torneo, explorar sus 48 escudos originales y permitir al propietario
 
 - Next.js App Router, TypeScript, Tailwind y versiones estables existentes.
 - Portada con trofeo V03 automático, galería con filtros, comunidad, 404, eventos públicos y administración exclusiva del propietario. Incluye inscripción pública sin cuentas, revisión manual y lista de espera con promoción administrativa.
-- La administración comparte navegación, selector de evento y cabecera: Resumen, Eventos, Solicitudes, Equipos y Lista de espera. El resumen utiliza datos reales, próximos vencimientos en seis horas y cinco acciones recientes; sin eventos conserva su marco y ofrece crear el primer borrador.
+- La administración comparte navegación, selector de evento y cabecera: Resumen, Eventos, Solicitudes, Equipos, Lista de espera, Calendario, Resultados y Clasificación. El resumen utiliza datos reales, próximos vencimientos en seis horas y cinco acciones recientes; sin eventos conserva su marco y ofrece crear el primer borrador.
+- La competición incorpora revisión/confirmación del sorteo, jornadas públicas, resultados oficiales, desempates persistentes, descalificación y cierre de clasificación. No genera eliminatorias ni inicia eventos automáticamente.
 - Las reglas confirmadas están en `docs/decisiones-del-torneo.md`; prevalecen las correcciones recientes.
-- Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. El esquema, RLS y Auth existentes se conservan; esta revisión visual evita migraciones innecesarias y usa datos controlados en un entorno aislado.
+- Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. El esquema, RLS y Auth existentes se conservan; la liguilla añade migraciones versionadas, protección de transiciones e historial. Las pruebas usan datos aislados o transacciones revertidas.
 - Se autoriza publicar esta etapa verificada en main/Production. Los eventos permanecen cerrados por defecto; el propietario decide su apertura desde el panel. La entrega conserva cerradas las inscripciones reales.
 
 ## Brand Commitments

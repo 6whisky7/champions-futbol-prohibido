@@ -2,7 +2,7 @@
 
 Acuerdos confirmados por el organizador el 29 de octubre de 2026. Este archivo conserva las reglas acordadas para su implementación futura. Las correcciones más recientes tienen prioridad sobre versiones anteriores del Word. Las propuestas del asistente que no fueron aceptadas no constituyen reglas.
 
-La etapa actual incorpora configuración de eventos, acceso del propietario, inscripción pública, revisión de equipos y lista de espera. Sorteo, partidos y clasificación continúan pendientes. Las decisiones nuevas sobre reservas, cierre y promoción sustituyen las dudas anteriores de este documento.
+La etapa actual incorpora configuración de eventos, acceso del propietario, inscripción pública, revisión de equipos y lista de espera. La nueva etapa incorpora sorteo conjunto, calendario, resultados y clasificación de liguilla; las eliminatorias siguen pendientes. Las decisiones nuevas sobre reservas, cierre y promoción sustituyen las dudas anteriores de este documento.
 
 ## Partidos y plantillas
 
@@ -31,6 +31,7 @@ La liguilla es reducida: misma cantidad de partidos por equipo y rivales distint
 - Puede comenzarse con menos equipos que el cupo máximo si se cumplen esas condiciones.
 - Si no se elimina a nadie en liguilla, deben continuar todos: ocho, dieciséis o treinta y dos en el formato clásico, o veinticuatro con repesca.
 - Se mantiene el sorteo sin bombos ni ajustes por nivel. Se acepta que los calendarios puedan tener distinta dificultad por suerte.
+- El calendario se revisa antes de confirmarlo. Mientras sea una revisión puede regenerarse explícitamente, con historial; al confirmarlo quedan fijados participantes, rivales y jornadas.
 - El calendario queda fijo al comenzar. Las bajas posteriores se resuelven administrativamente y no cambian los rivales sorteados.
 - Ejemplo confirmado: doce equipos, cuatro partidos por equipo, veinticuatro encuentros de liguilla, ocho clasificados a cuartos y siete partidos eliminatorios; treinta y uno en total.
 
@@ -43,7 +44,8 @@ Primero se ordena por puntos.
 3. Entre tres o más empatados se usa una minitabla de victorias entre los implicados únicamente si todos se enfrentaron entre sí. Si falta algún duelo, se pasa a las estadísticas generales.
 4. Si la minitabla separa subgrupos, se resuelve cada subgrupo por separado, conservando las posiciones que ya quedaron separadas. Si quedan dos, se considera su duelo directo.
 5. Si los duelos directos no resuelven el empate restante: diferencia de gol general, goles a favor generales y sorteo.
-6. El sorteo solo reparte las posiciones que continúan empatadas.
+6. El sorteo solo reparte las posiciones que continúan empatadas. Es una acción explícita, registrada y persistente, disponible tras resolver todos los encuentros; no cambia al recargar. Un cambio de resultado o una descalificación invalida los sorteos actuales y conserva su historial.
+7. El cierre exige encuentros resueltos y desempates finales completos; conserva la clasificación de referencia sin generar ni avanzar eliminatorias.
 
 DG equivale a GF menos GC. Un partido nulo añade un PJ y un PN, sin añadir PG, PP ni goles.
 
@@ -112,7 +114,7 @@ Se permite una reprogramación, también en repesca y final. Tras los cinco minu
 - Si vence sin completarse, se liberan plaza y usuarios. Al alcanzar el cupo se dejan de aceptar solicitudes activas.
 - Se limitarán los envíos repetidos. El administrador puede rechazar solicitudes falsas y corregir inscripciones hechas sin permiso después de revisar el caso.
 - La lista de espera no reserva plazas, nombres, jugadores ni escudos. La promoción es manual: el administrador elige y se vuelven a comprobar datos, cupo, duplicados y escudo. Si todo es válido, pasa a pendiente con una reserva nueva y el plazo de revisión configurado (inicialmente 48 horas).
-- Cerrar inscripciones impide nuevos envíos, pero conserva el plazo restante de las pendientes. Para promover después del cierre hay que reabrir. El futuro sorteo esperará a que todas las pendientes estén resueltas.
+- Cerrar inscripciones impide nuevos envíos, pero conserva el plazo restante de las pendientes. Para promover después del cierre hay que reabrir. El sorteo espera a que no quede ninguna pendiente dentro de plazo. La confirmación fija participantes y formato; impide reabrir inscripciones y no incluye automáticamente a la espera.
 - Cupos y duplicados se comprueban al guardar de forma atómica en la base de datos, también para solicitudes simultáneas.
 - Antes de corregir una inscripción se verifica quién solicita el cambio. Se protegen el acceso administrativo y los datos privados.
 
