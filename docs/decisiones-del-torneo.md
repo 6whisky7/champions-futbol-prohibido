@@ -2,7 +2,7 @@
 
 Acuerdos confirmados por el organizador el 29 de octubre de 2026. Este archivo conserva las reglas acordadas para su implementación futura. Las correcciones más recientes tienen prioridad sobre versiones anteriores del Word. Las propuestas del asistente que no fueron aceptadas no constituyen reglas.
 
-La etapa actual implementa configuración y publicación de eventos y acceso del propietario. Inscripción, aprobación, sorteo, partidos y clasificación todavía no están implementados. Este documento fija las reglas para esos bloques futuros.
+La etapa actual incorpora configuración de eventos, acceso del propietario, inscripción pública, revisión de equipos y lista de espera. Sorteo, partidos y clasificación continúan pendientes. Las decisiones nuevas sobre reservas, cierre y promoción sustituyen las dudas anteriores de este documento.
 
 ## Partidos y plantillas
 
@@ -107,12 +107,13 @@ Se permite una reprogramación, también en repesca y final. Tras los cinco minu
 
 ## Cupos, vencimiento y solicitudes falsas
 
-- Las solicitudes pendientes y aprobadas ocupan cupo. Rechazadas o vencidas liberan plaza y usuarios reservados.
+- Las solicitudes pendientes y aprobadas ocupan cupo y reservan nombre, escudo y usuarios. Rechazadas o vencidas liberan todas esas reservas.
 - El plazo inicial es **48 horas desde el envío de la solicitud** para completar la confirmación del capitán y la aprobación. Debe ser configurable por el administrador.
 - Si vence sin completarse, se liberan plaza y usuarios. Al alcanzar el cupo se dejan de aceptar solicitudes activas.
 - Se limitarán los envíos repetidos. El administrador puede rechazar solicitudes falsas y corregir inscripciones hechas sin permiso después de revisar el caso.
-- Habrá lista de espera que no reserva plazas ni usuarios. Su promoción y la coordinación de su plazo siguen pendientes de definir.
-- Cupos y duplicados se comprobarán al guardar, tanto en servidor como en base de datos, también para solicitudes simultáneas.
+- La lista de espera no reserva plazas, nombres, jugadores ni escudos. La promoción es manual: el administrador elige y se vuelven a comprobar datos, cupo, duplicados y escudo. Si todo es válido, pasa a pendiente con una reserva nueva y el plazo de revisión configurado (inicialmente 48 horas).
+- Cerrar inscripciones impide nuevos envíos, pero conserva el plazo restante de las pendientes. Para promover después del cierre hay que reabrir. El futuro sorteo esperará a que todas las pendientes estén resueltas.
+- Cupos y duplicados se comprueban al guardar de forma atómica en la base de datos, también para solicitudes simultáneas.
 - Antes de corregir una inscripción se verifica quién solicita el cambio. Se protegen el acceso administrativo y los datos privados.
 
 ## Doble participación y descalificación
@@ -140,16 +141,14 @@ Se incluirán reglas para trampas, suplantación y acuerdos para regalar resulta
 - No afecta puntos, sorteos, clasificación ni desempates.
 - Los 48 escudos originales son individuales, sin nombres y con fondo transparente. El orden de referencias no constituye una clasificación de clubes.
 - Se conserva exactamente la selección de clubes de `public/escudos/catalogo.json`: cinco por Inglaterra, Italia, España, Alemania, Francia, Brasil, México y Argentina; cuatro de MLS y cuatro de Costa Rica.
-- **Sigue pendiente decidir si un mismo escudo puede ser elegido por varios equipos.** No debe asumirse exclusividad ni repetición permitida.
+- Un escudo solo pertenece a una solicitud activa dentro del mismo evento. Se reserva al guardar correctamente una pendiente, no al seleccionarlo en la galería. El aprobado lo conserva; rechazo o vencimiento lo libera. Puede usarse de nuevo en otro evento.
 
 ## Decisiones que siguen abiertas
 
 - Plazos de convocatoria, solicitudes de posposición y cierre de reclamaciones.
-- Coordinación de las 48 horas con el cierre de inscripciones y el sorteo; orden de promoción y plazo de la lista de espera.
 - Cómo distinguir una desconexión temporal de todos los jugadores del abandono total; espera para volver y caso en que ambos abandonan sin caída general.
 - Sanciones concretas para trampas, suplantación y acuerdos para regalar resultados.
 - Consecuencias si una infracción se descubre después de la liguilla o después de la final, y casos sin finalistas habilitados.
 - Procedimiento para completar un número par de aprobados si al cerrar las solicitudes queda impar.
-- Posibilidad de repetir escudo entre equipos.
 
 Estas cuestiones permanecen abiertas. La llegada tardía del tercer titular y el campeonato por segunda doble ausencia en la final **ya están resueltos** y no pertenecen a esta lista.

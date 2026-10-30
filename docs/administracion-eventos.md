@@ -1,5 +1,7 @@
 # Administración y eventos
 
+La etapa de participación amplía este registro inicial. Para el comportamiento actual de apertura, reservas, revisión, cierre y lista de espera, consulta [Inscripciones](inscripciones.md). Las referencias al bloqueo provisional y al próximo bloque de participación que siguen documentan la entrega anterior; quedaron sustituidas por las migraciones de inscripción. La confirmación del acceso real del propietario sigue vigente.
+
 ## Estado de esta etapa
 
 Trofeo V03 con carga automática visible, escenario e iluminación HDR propios, imagen inicial/alternativa y control frontal. Páginas `/eventos` y `/eventos/[id]`; acceso del propietario en `/admin/acceso`, panel `/admin` y creación/edición en `/admin/eventos`.

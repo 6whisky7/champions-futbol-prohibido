@@ -1,10 +1,10 @@
 # champions-futbol-prohibido
 
-Portada con el trofeo V03 aprobado, imagen inicial y visor 3D automático al entrar en pantalla. Los 48 escudos y su galería se conservan. Incluye eventos públicos y administración del propietario, con inscripciones cerradas. [Estado actual y configuración](docs/administracion-eventos.md). El registro de la primera integración del trofeo está en [trofeo V03](docs/trofeo-v03.md).
+Portada con el trofeo V03 aprobado, imagen inicial y visor 3D automático al entrar en pantalla. Los 48 escudos y su galería se conservan. Incluye eventos públicos, inscripción sin cuentas y administración del propietario para revisar solicitudes, equipos y lista de espera. Los eventos reales se conservan cerrados hasta que el propietario los abra. [Inscripciones, reservas y privacidad](docs/inscripciones.md). [Estado actual y configuración](docs/administracion-eventos.md). El registro de la primera integración del trofeo está en [trofeo V03](docs/trofeo-v03.md).
 
 Base visual y técnica de **Champions Fútbol Prohibido**, el torneo de Fútbol Prohibido en Roblox. Incluye una portada en español, una galería con los 48 escudos originales y clientes de Supabase para navegador y servidor. Está preparada para importar este repositorio en Vercel.
 
-El rediseño y el trofeo V03 están publicados en `main`. La etapa actual incorpora el trofeo automático con iluminación de campeonato, acceso exclusivo del propietario y configuración/publicación de eventos. Las inscripciones, revisión de equipos, lista de espera y resultados corresponden al siguiente bloque. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
+El rediseño y el trofeo V03 están publicados en `main`. La etapa actual incorpora el trofeo automático con iluminación de campeonato, acceso exclusivo del propietario y configuración/publicación de eventos. La etapa de participación añade inscripción pública, revisión manual y lista de espera. Sorteo y resultados siguen pendientes. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
 
 - [Comparaciones antes/después](docs/comparaciones.md).
 - [Auditoría y problemas corregidos](docs/auditoria-visual.md).
@@ -79,7 +79,7 @@ Los clientes están preparados de esta forma:
 - `src/proxy.ts`: limita esa renovación a `/admin/:path*` y `/auth/:path*`. La portada y los recursos públicos no ejecutan ese flujo.
 - `src/lib/supabase/config.ts`: valida las variables al utilizar un cliente e impide apuntar a otro proyecto.
 
-El proxy solo renueva sesiones. `requireOwner()` verifica al usuario mediante Auth y consulta el permiso de propietario en cada página y acción protegidas. RLS valida en la base el correo confirmado contra `cfp_private.owner_config`. No se usan metadatos editables ni claves privilegiadas. Eventos publicados son públicos; borradores solo del propietario. Las inscripciones tienen una restricción SQL que impide abrirlas.
+El proxy solo renueva sesiones. `requireOwner()` verifica al usuario mediante Auth y consulta el permiso de propietario en cada página y acción protegidas. RLS valida en la base el correo confirmado contra `cfp_private.owner_config`. No se usan metadatos editables ni claves privilegiadas. Eventos publicados son públicos; borradores solo del propietario. Solo el propietario puede abrir inscripciones de un evento publicado. Las reservas tienen controles SQL atómicos; solicitudes e historial permanecen en el esquema privado.
 
 ## Escudos y catálogo
 
@@ -97,7 +97,7 @@ Los nombres del campo `file` del catálogo coinciden con los archivos. Las rutas
 
 `src/lib/crests.ts` transforma el catálogo en los campos de presentación de la galería. La muestra inicial incluye los cuatro diseños de Costa Rica. Se puede buscar por club o número, filtrar por país o liga y mostrar 12 más hasta llegar a los 48. `liga`, `buscar` y `mostrar` se conservan en la URL. Cada escudo permite abrir su PNG original. El ZIP original no se incorpora al repositorio y permanece en la carpeta de recursos del organizador.
 
-Los identificadores 01–48 de los archivos corresponden a los diseños. **No asignan un número al equipo del torneo.** El número opcional del equipo sigue siendo una elección independiente del 01 al 99 y puede repetirse. La política para repetir escudos entre equipos sigue pendiente.
+Los identificadores 01–48 de los archivos corresponden a los diseños. **No asignan un número al equipo del torneo.** El número opcional del equipo sigue siendo una elección independiente del 01 al 99 y puede repetirse. El escudo es exclusivo entre solicitudes activas del mismo evento y puede reutilizarse en otros eventos. Se reserva al guardar una solicitud pendiente, no al seleccionarlo.
 
 ## Importar en Vercel dentro de Whiskyideas
 
@@ -132,12 +132,11 @@ Consulta [las decisiones del torneo](docs/decisiones-del-torneo.md). Las correcc
 
 Después de verificar la importación quedan pendientes:
 
-- Ampliar el esquema de eventos con las tablas y restricciones de participación; eventos y permisos del propietario ya tienen migraciones y RLS.
-- Implementar la inscripción pública, sus validaciones en servidor y base de datos, vencimiento y lista de espera.
-- Implementar revisión de requisitos y protección de los usuarios de TikTok. El acceso del propietario ya está implementado; su primer acceso requiere verificar el enlace enviado a su correo.
+- Completar y registrar la verificación de cada entrega antes de publicar. El esquema de participación, las reservas, la revisión y la privacidad de TikTok ya tienen implementación y migraciones; consulta [su alcance y evidencia](docs/inscripciones.md).
+- El propietario ya confirmó el acceso real al panel mediante su enlace de correo.
 - Mantener las URLs de Auth si cambia el dominio. Site URL y callback de producción están configurados.
-- Desarrollar eventos, calendario, clasificación, sanciones, historial y eliminatorias.
-- Resolver los puntos del reglamento que siguen abiertos, incluida la repetición de escudos.
+- Desarrollar sorteo, calendario, clasificación, sanciones de competición y eliminatorias. El historial de revisión de solicitudes ya está implementado.
+- Resolver los puntos del reglamento que siguen abiertos. Escudos, cierre y promoción de espera ya tienen decisiones confirmadas.
 
 ## Documentación oficial utilizada
 

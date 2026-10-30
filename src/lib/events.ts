@@ -8,9 +8,9 @@ export type EventFormat = keyof typeof eventFormats;
 export interface TournamentEvent {
   id: string; name: string; description: string; starts_at: string; ends_at: string | null;
   capacity: number; format: EventFormat; eliminate_after_league: boolean;
-  status: "draft" | "published"; registration_status: "closed"; updated_at: string;
+  status: "draft" | "published"; registration_status: "closed" | "open"; review_hours: number; updated_at: string;
 }
-export const eventColumns = "id,name,description,starts_at,ends_at,capacity,format,eliminate_after_league,status,registration_status,updated_at";
+export const eventColumns = "id,name,description,starts_at,ends_at,capacity,format,eliminate_after_league,status,registration_status,review_hours,updated_at";
 export function eventDate(date: string) {
   return new Intl.DateTimeFormat("es-CR", { timeZone: "America/Costa_Rica", dateStyle: "long", timeStyle: "short" }).format(new Date(date));
 }
@@ -39,6 +39,9 @@ export function parseEvent(form: FormData) {
   if (ends_at && ends_at < starts_at) throw new Error("El final debe ser posterior al inicio.");
   const status = text("status");
   if (!["draft", "published"].includes(status)) throw new Error("Estado de publicación inválido.");
-  if (text("registration_status") && text("registration_status") !== "closed") throw new Error("Las inscripciones todavía no se pueden abrir.");
-  return { name, description, capacity, format, eliminate_after_league: eliminate, starts_at, ends_at, status, registration_status: "closed" as const };
+  const registration_status=text("registration_status")||"closed";
+  if (!["closed","open"].includes(registration_status) || (registration_status==="open" && status!=="published")) throw new Error("Solo un evento publicado puede abrir inscripciones.");
+  const review_hours=Number(text("review_hours")||48);
+  if (!Number.isInteger(review_hours)||review_hours<1||review_hours>720) throw new Error("Plazo de revisión: entre 1 y 720 horas.");
+  return { name, description, capacity, format, eliminate_after_league: eliminate, starts_at, ends_at, status, registration_status, review_hours };
 }

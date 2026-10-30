@@ -38,7 +38,7 @@ export default function Home() {
                 Conocer el torneo <ArrowRight aria-hidden="true" />
               </a>
               <p className="hero-note">
-                Las inscripciones todavía no están disponibles.
+                Consulta los eventos y el estado de sus inscripciones.
               </p>
               <Link className="plain-link" href="/eventos">Consultar eventos <ArrowRight aria-hidden="true" /></Link>
             </div>

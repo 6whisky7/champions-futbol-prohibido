@@ -5,7 +5,7 @@ const base=process.env.UI_BASE_URL||'http://127.0.0.1:3200';
 const browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
 const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
 try {
-  for(const path of ['/admin','/admin/eventos/nuevo','/admin/eventos/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa']) {
+  for(const path of ['/admin','/admin/solicitudes','/admin/eventos/nuevo','/admin/eventos/aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa']) {
     await page.goto(base+path);assert.ok(page.url().endsWith('/admin/acceso'));await page.getByRole('heading',{name:'Acceso del propietario'}).waitFor();
   }
   await page.getByLabel('Correo del propietario').fill('cfp-outsider@example.invalid');
@@ -18,5 +18,5 @@ try {
   assert.deepEqual(errors,[]);
   await fs.mkdir('output/playwright/events',{recursive:true});
   await page.goto(base+'/admin/acceso');await page.screenshot({path:'output/playwright/events/access.png'});
-  console.log('PASS: admin/new/edit sin sesión, rechazo correo ajeno, eventos vacíos, detalle privado 404, callback inválido. Login real del propietario pendiente de verificar el enlace en su correo.');
+  console.log('PASS: admin/new/edit sin sesión, rechazo correo ajeno, eventos vacíos, detalle privado 404, callback inválido. La sesión real del propietario fue confirmada manualmente en producción; no se suplanta en esta prueba.');
 }finally{await browser.close();}

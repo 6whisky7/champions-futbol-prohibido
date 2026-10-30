@@ -18,7 +18,7 @@ do $$ begin
   begin
     update public.cfp_events set registration_status='open' where id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
     raise exception 'Registration opened';
-  exception when check_violation then null; end;
+  exception when raise_exception then if sqlerrm='Registration opened' then raise;end if; end;
   begin
     update public.cfp_events set capacity=10,eliminate_after_league=false where id='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
     raise exception 'No-elimination capacity bypass';

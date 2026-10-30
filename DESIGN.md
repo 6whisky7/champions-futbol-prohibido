@@ -134,6 +134,8 @@ components:
 
 Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático. Las referencias a los tres banderines que siguen documentan el diseño anterior.
 
+La inscripción y la revisión amplían el sistema existente sin cambiar sus tokens. El formulario usa bloques con leyendas para identidad, plantilla y requisitos; el resumen precede al envío. El centro administrativo conserva el selector de evento, pestañas de gestión y estados escritos junto a los escudos. Los indicadores de plazas forman cuatro columnas en escritorio y dos en móvil; el detalle y el historial usan la misma superficie marina.
+
 La administración y los eventos reutilizan Manrope, Barlow Condensed, superficies marinas y controles amplios con etiquetas visibles. Formularios de una columna, estados breves y fechas expresadas en hora de Costa Rica. «Publicado» e «Inscripciones cerradas» son estados separados. Un borrador nunca se anuncia como evento público.
 
 ## Overview
@@ -181,7 +183,7 @@ Una familia azul oscura sostiene el contenido; el acento claro señala acciones 
 - **Azul de borde** (`border`): contorno de campos y barra de desplazamiento.
 - **Azul de foco** (`ring`): contorno visible del teclado; comparte valor con `primary`. Sustituye el valor provisional anterior.
 
-`destructive` existe para estados `aria-invalid` y la variante destructiva de la librería; la portada no presenta validación ni acciones destructivas.
+`destructive` existe para estados `aria-invalid`, errores de formulario y la variante destructiva de la librería; la portada no presenta acciones destructivas.
 
 **The Dark Continuity Rule.** La interfaz conserva el fondo oscuro entre secciones; la jerarquía se establece con superficie, espacio y texto, sin alternar a un tema claro.
 

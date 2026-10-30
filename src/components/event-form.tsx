@@ -16,8 +16,8 @@ export function EventForm({ event }: { event?: TournamentEvent }) {
     <label htmlFor="eliminate_after_league">Al terminar la liguilla</label><select id="eliminate_after_league" name="eliminate_after_league" defaultValue={event?.eliminate_after_league === false ? "no" : "yes"}><option value="yes">Clasifican los mejores; puede haber eliminados</option><option value="no">Continúan todos los equipos</option></select>
     <p>Cuartos: 4 rivales y 8 clasificados. Octavos: 6 y 16. Dieciseisavos: 8 y 32. Repesca: 8 rivales y 24 que continúan (8 directos y 16 a repesca). Sin eliminación, el cupo debe coincidir con los que continúan.</p>
     <label htmlFor="status">Visibilidad</label><select id="status" name="status" defaultValue={event?.status ?? "draft"}><option value="draft">Borrador privado</option><option value="published">Publicado</option></select>
-    <fieldset className="registration-lock"><legend>Inscripciones cerradas</legend><p>La apertura está bloqueada hasta implementar el formulario, la revisión de equipos y el control de cupos. Publicar un evento solo permite consultar su información.</p><button className="trophy-button" type="button" disabled>Abrir inscripciones (pendiente)</button></fieldset>
-    <input type="hidden" name="registration_status" value="closed" />
+    <label htmlFor="review_hours">Plazo para confirmar y revisar (horas)</label><input id="review_hours" name="review_hours" type="number" min={1} max={720} required defaultValue={event?.review_hours??48}/>
+    <label htmlFor="registration_status">Inscripciones</label><select id="registration_status" name="registration_status" defaultValue={event?.registration_status??"closed"}><option value="closed">Cerradas</option><option value="open">Abiertas (solo con evento publicado)</option></select><p>Cerrar impide nuevos envíos y promociones. Las solicitudes pendientes conservan su vencimiento. Cambiar el plazo afecta únicamente las reservas nuevas.</p>
     <p role="alert">{state.message}</p><button className="action-link" disabled={pending}>{pending ? "Guardando…" : "Guardar evento"}</button>
   </form>;
 }
