@@ -13,6 +13,8 @@ colors:
   border: "#607899"
   ring: "#a7ceff"
   destructive: "#ffb3b3"
+  status-pending: "#f2ce83"
+  status-approved: "#9cd9c0"
 typography:
   display:
     fontFamily: "Barlow Condensed, sans-serif"
@@ -51,6 +53,7 @@ typography:
     fontWeight: 700
     lineHeight: 1.65
 rounded:
+  status: "6px"
   lg: "8px"
   xl: "12px"
 spacing:
@@ -134,7 +137,7 @@ components:
 
 Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático. Las referencias a los tres banderines que siguen documentan el diseño anterior.
 
-La inscripción y la revisión amplían el sistema existente sin cambiar sus tokens. El formulario usa bloques con leyendas para identidad, plantilla y requisitos; el resumen precede al envío. El centro administrativo conserva el selector de evento, pestañas de gestión y estados escritos junto a los escudos. Los indicadores de plazas forman cuatro columnas en escritorio y dos en móvil; el detalle y el historial usan la misma superficie marina.
+La inscripción conserva bloques con leyendas y resumen antes del envío. La administración tiene un marco común con navegación lateral, contexto del evento y cabecera. Resumen, Eventos, Solicitudes, Equipos y Lista de espera comparten el mismo lenguaje visual; el acceso permanece fuera del marco autenticado. El detalle agrupa Equipo, Jugadores, Requisitos e Historial. Los colores de estado se aplican a los datos y acompañan siempre un texto.
 
 La administración y los eventos reutilizan Manrope, Barlow Condensed, superficies marinas y controles amplios con etiquetas visibles. Formularios de una columna, estados breves y fechas expresadas en hora de Costa Rica. «Publicado» e «Inscripciones cerradas» son estados separados. Un borrador nunca se anuncia como evento público.
 
@@ -164,6 +167,8 @@ Este registro conserva la decisión que originó la portada. La secuencia y el p
 - **FORM:** banderines de clubes, asignación de Impeccable `cd70daf9`, índice 5 de siete sistemas del fútbol. Geometría de banderín en marca y portada; retícula en colección; conectores de avance en el recorrido; búsqueda y selector con URL persistente. El azul medianoche y la lectura fácil fijados por el usuario prevalecen sobre paletas o efectos ajenos.
 
 ## Colors
+
+En administración, pendiente usa `status-pending` dorado y aprobado `status-approved` verde claro; rechazado y vencido reutilizan `destructive`. Espera conserva el color auxiliar. Todos llevan un nombre de estado, de modo que el color no sea la única señal. Son extensiones de datos sobre las superficies marinas existentes.
 
 Una familia azul oscura sostiene el contenido; el acento claro señala acciones y foco. Los valores normativos del frontmatter proceden de `src/app/globals.css`.
 
@@ -209,6 +214,8 @@ Una familia azul oscura sostiene el contenido; el acento claro señala acciones 
 
 ## Layout
 
+La administración usa una columna lateral de 248 px y contenido flexible con margen de 40 px, reducido a 24 px hasta 1100 px. Bajo 760 px la navegación se convierte en menú desplegable; Escape cierra y devuelve el foco. El selector conserva `evento` en la URL. El resumen muestra cinco contadores en escritorio, tres hasta 1100 px y dos en móvil; tareas y actividad forman dos zonas, apiladas hasta 1100 px. Listas y acciones se adaptan sin tablas de desplazamiento horizontal. Los títulos del marco miden 44 px y 36 px en móvil; lectura principal de 18 px.
+
 El contenedor compartido tiene máximo de 1280 px y ancho `calc(100% - 96px)`. Bajo 1024 px deja 32 px por lado; bajo 768 px deja 20 px. La cabecera adherida arriba mide al menos 92 px en escritorio y 80 px en móvil. Las anclas reservan 108 px; `scroll-padding-top` pasa a 100 px en móvil mientras las secciones conservan `scroll-margin-top: 108px`.
 
 La colección usa cuatro columnas con separación de 36 px entre filas y 24 px entre columnas; bajo 1024 px usa tres; bajo 768 px usa dos con separación de 28 × 16 px. Los controles pasan de tres posiciones horizontales a dos columnas, y luego a una. Limpiar filtros solo aparece cuando hay una selección.
@@ -230,6 +237,10 @@ Controles, reglas y preguntas usan esquinas suaves (`lg`, 8 px); soportes y enla
 El banderín CFP usa `polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)`; mide 46 × 54 px en escritorio y 36 × 44 px en móvil. Los soportes de portada sitúan la punta desde el 85 % de altura en una capa independiente detrás de los PNG. Las flechas del recorrido son trazos CSS; los iconos de acciones son SVG.
 
 ## Components
+
+### Marco administrativo
+
+`AdminShell` comparte identidad CFP, cinco destinos con iconos Lucide, sección actual mediante `aria-current`, selector del evento, acceso a la web y cierre de sesión. Reutiliza Button de shadcn/Base UI para el menú y cierre. Las superficies separan configuración, tareas y actividad; no hay gráficas ornamentales. Los estados vacíos conservan el marco y ofrecen una siguiente acción concreta. Aprobar es la acción primaria; rechazar usa el color destructivo; las acciones deshabilitadas reducen opacidad y explican los requisitos que faltan. Los enlaces a solicitudes desde el resumen llevan al detalle seleccionado.
 
 ### Buttons
 

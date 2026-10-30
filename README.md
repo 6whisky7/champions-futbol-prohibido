@@ -4,8 +4,9 @@ Portada con el trofeo V03 aprobado, imagen inicial y visor 3D automático al ent
 
 Base visual y técnica de **Champions Fútbol Prohibido**, el torneo de Fútbol Prohibido en Roblox. Incluye una portada en español, una galería con los 48 escudos originales y clientes de Supabase para navegador y servidor. Está preparada para importar este repositorio en Vercel.
 
-El rediseño y el trofeo V03 están publicados en `main`. La etapa actual incorpora el trofeo automático con iluminación de campeonato, acceso exclusivo del propietario y configuración/publicación de eventos. La etapa de participación añade inscripción pública, revisión manual y lista de espera. Sorteo y resultados siguen pendientes. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
+El rediseño y el trofeo V03 están publicados en `main`. La administración utiliza un marco compartido con navegación y contexto de evento; `/admin` es el resumen operativo y `/admin/eventos` lista los eventos. Inscripción pública, revisión manual y lista de espera conservan sus operaciones y permisos. Sorteo y resultados siguen pendientes. La portada y la galería no necesitan cuentas. [Administración, seguridad y puesta en marcha](docs/administracion-eventos.md).
 
+- [Panel administrativo, rutas y comprobación](docs/admin-panel.md).
 - [Comparaciones antes/después](docs/comparaciones.md).
 - [Auditoría y problemas corregidos](docs/auditoria-visual.md).
 - [Skills utilizadas y compatibilidad](docs/skills.md).

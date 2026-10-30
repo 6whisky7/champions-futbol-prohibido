@@ -31,17 +31,21 @@ export function ApplicationManager({
   capacity,
   open,
   locked,
+  initialFilter = "pending",
+  initialSelected,
 }: {
   items: Application[];
   eventId: string;
   capacity: number;
   open: boolean;
   locked: boolean;
+  initialFilter?: string;
+  initialSelected?: string;
 }) {
   const [now] = useState(() => Date.now());
-  const [filter, setFilter] = useState("pending"),
+  const [filter, setFilter] = useState(initialFilter),
     [search, setSearch] = useState(""),
-    [selected, setSelected] = useState<string | null>(null),
+    [selected, setSelected] = useState<string | null>(initialSelected ?? null),
     [reason, setReason] = useState(""),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
@@ -84,24 +88,7 @@ export function ApplicationManager({
           <dd>{approved}</dd>
         </div>
       </dl>
-      <nav className="admin-tabs" aria-label="Gestión de participantes">
-        {[
-          ["", "Resumen"],
-          ["pending", "Solicitudes"],
-          ["approved", "Equipos"],
-          ["waiting", "Lista de espera"],
-        ].map(([v, label]) => (
-          <button
-            key={label}
-            className="trophy-button"
-            aria-pressed={filter === v}
-            onClick={() => setFilter(v)}
-          >
-            {label}
-          </button>
-        ))}
-      </nav>
-      <div className="event-form">
+      <div className="event-form admin-filters">
         <label htmlFor="application-search">Buscar equipo o capitán</label>
         <input
           id="application-search"
@@ -122,7 +109,7 @@ export function ApplicationManager({
           ))}
         </select>
       </div>
-      <ul className="application-list">
+      <ul className="application-list admin-request-list">
         {items
           .filter(
             (a) =>
@@ -142,7 +129,10 @@ export function ApplicationManager({
               <div>
                 <h2>{a.payload.name}</h2>
                 <p>
-                  {stateLabels[a.state]} · Capitán:{" "}
+                  <span className="admin-state" data-state={a.state}>
+                    {stateLabels[a.state]}
+                  </span>{" "}
+                  · Capitán:{" "}
                   {a.payload.members[Number(a.payload.captain)]?.roblox}
                 </p>
                 {a.expires_at && a.state === "pending" && (
@@ -161,6 +151,15 @@ export function ApplicationManager({
                   className="trophy-button"
                   onClick={() => {
                     setSelected(a.id);
+                    requestAnimationFrame(() => {
+                      document.getElementById("detail-title")?.focus();
+                      document
+                        .getElementById("application-detail")
+                        ?.scrollIntoView({
+                          behavior: "instant",
+                          block: "start",
+                        });
+                    });
                     setReason("");
                     setMessage("");
                     setEditing(false);
@@ -172,14 +171,28 @@ export function ApplicationManager({
             </li>
           ))}
       </ul>
-      {!items.length && <p>No hay solicitudes en este evento.</p>}
+      {!items.filter(
+        (a) =>
+          (!filter || a.state === filter) &&
+          `${a.payload.name} ${a.payload.members[Number(a.payload.captain)]?.roblox}`
+            .toLowerCase()
+            .includes(search.toLowerCase()),
+      ).length && (
+        <div className="admin-empty compact">
+          <h2>No hay solicitudes para esta vista</h2>
+          <p>Cambia el estado o la búsqueda para consultar otros equipos.</p>
+        </div>
+      )}
       {a && (
-        <section className="application-detail">
-          <h2>Revisar {a.payload.name}</h2>
+        <section className="application-detail" id="application-detail">
+          <h2 id="detail-title" tabIndex={-1}>
+            Equipo · {a.payload.name}
+          </h2>
           <p>
             {stateLabels[a.state]} · Referencia {a.id}
           </p>
-          <ul>
+          <h3>Jugadores</h3>
+          <ul className="admin-roster">
             {a.payload.members.map((m, i) => (
               <li key={i}>
                 <strong>{m.roblox}</strong> · TikTok: {m.tiktok} ·{" "}
@@ -188,6 +201,13 @@ export function ApplicationManager({
               </li>
             ))}
           </ul>
+          <h3>Requisitos</h3>
+          {a.state === "pending" && (
+            <p className="admin-note">
+              Para aprobar: confirma al capitán, revisa los requisitos de toda
+              la plantilla y añade el motivo de la decisión.
+            </p>
+          )}
           <p>
             Capitán:{" "}
             {a.captain_confirmed
@@ -258,6 +278,7 @@ export function ApplicationManager({
                 <button
                   className="trophy-button"
                   disabled={busy || reason.trim().length < 3}
+                  data-action="reject"
                   onClick={() => void act("reject")}
                 >
                   Rechazar y liberar reservas
