@@ -19,6 +19,9 @@ import { signOut } from "@/app/admin/actions";
 import type { TournamentEvent } from "@/lib/events";
 const sections = [
   { label: "Resumen", path: "/admin", icon: LayoutDashboard },
+  { label: "Calendario", path: "/admin/calendario", icon: CalendarDays },
+  { label: "Resultados", path: "/admin/resultados", icon: ListOrdered },
+  { label: "Clasificación", path: "/admin/clasificacion", icon: Users },
   { label: "Eventos", path: "/admin/eventos", icon: CalendarDays },
   {
     label: "Solicitudes",
@@ -62,7 +65,7 @@ export function AdminShell({
   const view = params.get("vista") ?? "pending";
   const current =
     sections.find((s) => s.path === path && (!s.view || s.view === view)) ??
-    (path === "/admin/solicitudes" ? sections[2] : sections[1]);
+    (path === "/admin/solicitudes" ? sections[5] : sections[4]);
   const title = path.endsWith("/nuevo")
     ? "Crear evento"
     : path.startsWith("/admin/eventos/")
@@ -180,7 +183,13 @@ export function AdminShell({
                 ? "El estado de tu competición y lo que necesita atención."
                 : path.startsWith("/admin/eventos")
                   ? "Fechas, formato y apertura. Publicar y abrir son decisiones distintas."
-                  : "Revisa las plantillas y resuelve cada solicitud con sus requisitos."}
+                  : [
+                        "/admin/calendario",
+                        "/admin/resultados",
+                        "/admin/clasificacion",
+                      ].includes(path)
+                    ? "Rivales, resultados oficiales y posiciones de la liguilla."
+                    : "Revisa las plantillas y resuelve cada solicitud con sus requisitos."}
             </p>
           </div>
           {!path.endsWith("/nuevo") && (

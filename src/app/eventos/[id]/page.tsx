@@ -83,6 +83,7 @@ export default async function PublicEvent({
             </dd>
           </div>
         </dl>
+        <nav className="admin-tabs"><Link href={`/eventos/${id}/calendario`}>Calendario</Link><Link href={`/eventos/${id}/resultados`}>Resultados</Link><Link href={`/eventos/${id}/clasificacion`}>Clasificación</Link></nav>
         <section>
           <h2>Equipos del evento</h2>
           <ul className="application-list">
