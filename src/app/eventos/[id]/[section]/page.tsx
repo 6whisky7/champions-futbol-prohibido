@@ -65,6 +65,14 @@ export default async function PublicCompetition({
             ),
           )}
         </nav>
+        <div className="admin-tabs">
+          <Link href={`/eventos/${id}/exportar`}>
+            Exportar tabla y resultados
+          </Link>
+          <Link href={`/eventos/${id}/revelacion`}>
+            Revelación del calendario guardado
+          </Link>
+        </div>
         {section === "eliminatorias" ? (
           <KnockoutView eventId={id} data={ko as Knockout | null} />
         ) : (

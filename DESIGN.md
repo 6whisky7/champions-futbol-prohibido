@@ -325,3 +325,7 @@ Con `prefers-reduced-motion: reduce`, el desplazamiento pasa a `auto` y se desac
 ### Consulta pública ampliada
 
 Próximo partido antes de los datos de edición, equipos con plantilla Roblox y resultados en listas adaptables. Las zonas usan azul claro para directo y violeta moderado para repesca, siempre con etiqueta y carácter provisional. El cuadro resalta la ruta con texto, borde y superficie, conservando selector de ronda y exploración horizontal opcional en móvil. Las tarjetas de resultado usan Barlow, escudos propios y fondo medianoche, con formato vertical y OG; las resoluciones administrativas se identifican expresamente. Sin animaciones ornamentales.
+
+## Herramientas LIVE
+
+Marcadores grandes y controles de goles de 48 px; textos de 18 px. La espera es una zona separada con convocatoria explícita. Resultado oficial, permisos y clip son formularios distintos con motivo y confirmación. Anclas internas permiten saltar entre las zonas en móvil; casillas no heredan el ancho de los campos de texto. OBS usa un marco limpio y etiquetas provisional/oficial, sin controles privados. Revelación respeta movimiento reducido. Exportación ofrece páginas de diez filas para mantener lectura.

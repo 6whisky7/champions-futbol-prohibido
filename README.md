@@ -166,3 +166,7 @@ La recepción pública requiere `CFP_SUBMISSION_HMAC_KEY` exclusivamente de serv
 [Alcance y pruebas del bloque público](docs/mejoras-bloque-3.md): próximo partido/ICS, páginas de equipo y partido, clasificación por zonas, seguimiento del cuadro, tarjetas PNG y OG, `/campeones` y `/como-se-juega`. Solo utilizan eventos publicados. Las descargas de calendario no se sincronizan automáticamente.
 
 El panel incorpora [orientación y revisión por integrante](docs/mejoras-bloque-4a.md), con contadores privados autorizados y explicación de los criterios de desempate guardados.
+
+### LIVE y ayudantes por evento
+
+[Guía de LIVE, OBS, exportaciones y permisos](docs/mejoras-bloque-4b.md). El propietario entra en `/admin/live`; ayudantes ya registrados/verificados, en `/live/acceso`. No hay invitaciones automáticas ni registro público. La asignación y revocación se hacen por evento desde LIVE. Solo el propietario guarda resultados oficiales. Las migraciones versionadas no abren eventos. Para ensayos aislados usa `CFP_TEST_DIR` y los scripts `verify-live.mjs`, `verify-live-concurrency.mjs` y `verify-live-browser.mjs`; requieren el harness local externo, nunca credenciales de producción.
