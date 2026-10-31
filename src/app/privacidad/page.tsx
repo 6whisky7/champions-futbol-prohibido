@@ -13,9 +13,9 @@ export default function Privacy() {
         <h1>Privacidad y contacto</h1>
         <p>
           Responsable indicado por el organizador: <strong>Whisky</strong>. Esta
-          página explica el funcionamiento del torneo. El aviso definitivo y las
-          condiciones sobre conservación y menores siguen pendientes; no se
-          habilita su aceptación como si estuvieran aprobados.
+          página explica el funcionamiento y las decisiones aprobadas. El aviso
+          definitivo y el procedimiento de autorización todavía no están
+          activos. Las inscripciones reales permanecen cerradas.
         </p>
         <section>
           <h2>Qué datos usamos</h2>
@@ -80,25 +80,31 @@ export default function Privacy() {
         <section>
           <h2>Conservación y eliminación</h2>
           <p>
-            El plazo de conservación de solicitudes, datos de contacto,
-            historial y resultados aún debe ser definido por Whisky. No se
-            presenta un plazo inventado ni una eliminación automática que
-            todavía no existe. Puedes solicitar revisión o retirada por los
-            contactos anteriores.
+            Whisky aprobó provisionalmente retirar los datos privados de
+            solicitudes rechazadas después de 30 días y los datos internos de
+            cada edición después de 90 días desde su finalización. El historial
+            deportivo público se conservaría mientras la competición permanezca
+            publicada. Estos plazos requieren revisión legal y un procedimiento
+            seguro que contemple incidencias, auditoría y copias de seguridad.
+            Todavía no hay borrado automático ni se han eliminado registros.
           </p>
         </section>
         <section>
           <h2>Participación de menores</h2>
           <p>
-            La edad mínima, el procedimiento para menores y las autorizaciones
-            necesarias están pendientes de definición. No se presume que una
-            casilla del capitán pruebe el consentimiento de toda la plantilla o
-            de responsables legales.
+            CFP no establece una edad mínima propia. Se deben respetar la ley y
+            las condiciones de Roblox y TikTok. Whisky aprobó permitir menores
+            con autorización verificable de su responsable legal; el
+            procedimiento está en preparación y no está habilitado.
           </p>
           <p>
-            Antes de abrir inscripciones reales se debe completar este aviso y
-            confirmar esas condiciones. No se solicitan fechas de nacimiento
-            completas ni copias de documentos como solución provisional.
+            La confirmación individual de los integrantes todavía está en
+            revisión. Una declaración del capitán no acredita su consentimiento
+            ni la autorización de sus responsables legales. Antes de abrir se
+            debe completar esa verificación y el aviso, incluida la
+            identificación legal del responsable. No se solicitan fechas de
+            nacimiento completas ni documentos de identidad como solución
+            provisional.
           </p>
         </section>
         <details>

@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "auth": "visitor without account; local fixture transport and PostgreSQL, independent demo HMAC key",
+  "waiting": true,
+  "noProduction": true
+}

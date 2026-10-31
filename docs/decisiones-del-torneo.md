@@ -1,6 +1,6 @@
 # Decisiones de Champions Fútbol Prohibido
 
-Acuerdos confirmados por el organizador el 29 de octubre de 2026. Este archivo conserva las reglas acordadas para su implementación futura. Las correcciones más recientes tienen prioridad sobre versiones anteriores del Word. Las propuestas del asistente que no fueron aceptadas no constituyen reglas.
+Acuerdos confirmados por el organizador, actualizados al 31 de octubre de 2026. Este archivo conserva las reglas vigentes y distingue los procedimientos todavía por aprobar. Las correcciones más recientes tienen prioridad sobre versiones anteriores del Word. Las propuestas del asistente que no fueron aceptadas no constituyen reglas.
 
 La etapa actual incorpora configuración de eventos, acceso del propietario, inscripción pública, revisión de equipos y lista de espera. La competición incorpora sorteo conjunto, calendario, resultados y clasificación de liguilla, eliminatorias completas y cierre por campeón. Las decisiones nuevas sobre reservas, cierre y promoción sustituyen las dudas anteriores de este documento.
 
@@ -100,7 +100,7 @@ Se permite una reprogramación, también en repesca y final. Tras los cinco minu
 
 ## Inscripción, requisitos y listado público
 
-- Inscripción pública sin cuenta ni inicio de sesión. El capitán registra al equipo completo; no se exige confirmación individual de los demás integrantes.
+- Inscripción pública sin cuenta ni inicio de sesión. El capitán organiza la inscripción. El procedimiento de confirmación individual de los integrantes está nuevamente en revisión por decisión del 31 de octubre; no se presume que la declaración del capitán sustituya su autorización. La apertura sigue bloqueada hasta definir e implementar ese recorrido.
 - Se recoge nombre del equipo, usuarios de Roblox y TikTok de los tres titulares y del suplente opcional. El capitán se elige entre los titulares.
 - Cada capitán solo puede tener una inscripción activa por evento.
 - Los usuarios de Roblox y TikTok no pueden repetirse en una plantilla ni entre equipos activos, incluido el suplente. El control ignora mayúsculas, espacios y el `@` inicial.
@@ -155,7 +155,20 @@ Se incluirán reglas para trampas, suplantación y acuerdos para regalar resulta
 - Se conserva exactamente la selección de clubes de `public/escudos/catalogo.json`: cinco por Inglaterra, Italia, España, Alemania, Francia, Brasil, México y Argentina; cuatro de MLS y cuatro de Costa Rica.
 - Un escudo solo pertenece a una solicitud activa dentro del mismo evento. Se reserva al guardar correctamente una pendiente, no al seleccionarlo en la galería. El aprobado lo conserva; rechazo o vencimiento lo libera. Puede usarse de nuevo en otro evento.
 
-## Decisiones que siguen abiertas
+## Participación y privacidad confirmadas el 31 de octubre
+
+- CFP no establece una edad mínima propia; se deben respetar las restricciones legales y las condiciones de Roblox y TikTok.
+- Se aprueba permitir menores con autorización verificable de su responsable legal. El procedimiento concreto debe validarse legal y técnicamente antes de activarse. No se solicitan documentos o fechas de nacimiento completas por defecto.
+- Responsable público: Whisky. Contacto principal por mensaje directo a @whiskyzc cuando esté disponible; alternativa isaacarias053@gmail.com. Falta completar la identificación legal y el medio de notificación apropiado.
+- Son públicos equipo, escudo, usuarios Roblox necesarios, plantilla autorizada, resultados, clasificaciones, calendarios, enfrentamientos, historial deportivo y campeones. TikTok de solicitudes, notas, historial interno y autorizaciones de menores son privados.
+- Plazos de conservación aprobados provisionalmente, sujetos a revisión legal: privados de rechazadas, 30 días; internos de una edición, 90 días desde su finalización; historial deportivo mientras permanezca publicada. No se ha activado eliminación automática ni se han borrado registros. Deben revisarse incidencias, auditoría, dependencias y backups.
+- La confirmación individual y la acreditación del responsable legal siguen siendo propuestas de procedimiento, no aceptaciones ficticias. La lectura del capitán solo acredita su propia aceptación.
+- TikTok restringe algunas funciones por edad: adaptar sus requisitos al recorrido de menores exige una decisión adicional. No se añade una excepción automática a seguimiento o grupo ni se obliga a infringir condiciones de plataforma.
+- Turnstile queda descartado. Se mantienen límites persistentes, validación de servidor, idempotencia, permisos mínimos y reservas atómicas.
+
+La propuesta concreta y las comprobaciones oficiales están en [Privacidad y autorización](privacidad-propuesta.md). Estas decisiones no abren inscripciones reales ni inauguran el torneo.
+
+## Decisiones deportivas que siguen abiertas
 
 - Plazos de convocatoria, solicitudes de posposición y cierre de reclamaciones.
 - Cómo distinguir una desconexión temporal de todos los jugadores del abandono total; espera para volver y caso en que ambos abandonan sin caída general.

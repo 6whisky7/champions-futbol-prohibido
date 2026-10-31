@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "auth": "simulated locally; real PostgreSQL; OBS failure responses controlled in browser",
+  "steps": [
+    "inactive privacy blocks advertised availability, event action and submission even if existing event says open",
+    "restored test-only policy re-enables available fixture without changing event",
+    "OBS503 preserves labeled last data, recovers, and404 removes former public score",
+    "LIVE native browser zoom200, no overflow, keyboard focus and mobile menu Escape"
+  ],
+  "metrics": {
+    "dpr": 2,
+    "width": 708,
+    "scroll": 708
+  },
+  "errors": []
+}

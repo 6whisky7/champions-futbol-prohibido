@@ -170,3 +170,7 @@ El panel incorpora [orientación y revisión por integrante](docs/mejoras-bloque
 ### LIVE y ayudantes por evento
 
 [Guía de LIVE, OBS, exportaciones y permisos](docs/mejoras-bloque-4b.md). El propietario entra en `/admin/live`; ayudantes ya registrados/verificados, en `/live/acceso`. No hay invitaciones automáticas ni registro público. La asignación y revocación se hacen por evento desde LIVE. Solo el propietario guarda resultados oficiales. Las migraciones versionadas no abren eventos. Para ensayos aislados usa `CFP_TEST_DIR` y los scripts `verify-live.mjs`, `verify-live-concurrency.mjs` y `verify-live-browser.mjs`; requieren el harness local externo, nunca credenciales de producción.
+
+### Revisión personal antes del primer torneo
+
+[Informe final y pruebas](docs/mejoras-bloque-5.md), [guía desde creación hasta campeón](docs/primer-evento.md), [demostración local recuperable](docs/demostracion.md) y [propuesta de privacidad/autorizaciones](docs/privacidad-propuesta.md). Las nuevas decisiones del propietario están incorporadas, sin activar el procedimiento pendiente. La política inactiva bloquea abrir y anunciar participación; no se automatizaron eliminaciones. El Word actualizado está en `docs/archivos`, fuera de recursos públicos. `verify-final.mjs` requiere el mismo harness externo aislado y prueba disponibilidad, fallos OBS y zoom 200 %; no contiene credenciales ni un acceso de producción.

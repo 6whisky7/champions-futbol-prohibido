@@ -1,6 +1,6 @@
 # Revisión integral previa al primer evento real
 
-Fecha de revisión: **30 de octubre de 2026**, Costa Rica. [Guía breve con capturas](primer-evento.md).
+Revisión original: **30 de octubre de 2026**, Costa Rica. Actualización del 31 de octubre: [cierre de mejoras y pruebas nuevas](mejoras-bloque-5.md). [Demostración personal](demostracion.md). [Guía breve con capturas](primer-evento.md).
 
 ## Resultado
 

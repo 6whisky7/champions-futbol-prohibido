@@ -10,14 +10,21 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import {
-  eventDate,
-  eventFormats,
-} from "@/lib/events";
+import { eventDate, eventFormats } from "@/lib/events";
 export const dynamic = "force-dynamic";
-export async function generateMetadata({params}:{params:Promise<{id:string}>}) {
-  const {id}=await params,d=await publicCompetition(id);
-  return {title:d ? `${d.event.name} | Champions Fútbol Prohibido` : "Evento no disponible",description:d?.event.description};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params,
+    d = await publicCompetition(id);
+  return {
+    title: d
+      ? `${d.event.name} | Champions Fútbol Prohibido`
+      : "Evento no disponible",
+    description: d?.event.description,
+  };
 }
 export default async function PublicEvent({
   params,
@@ -27,11 +34,17 @@ export default async function PublicEvent({
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const client = await createClient();
-  const d=await publicCompetition(id);
-  if(!d)notFound();
-  const e=d.event,format=eventFormats[e.format],publicTeams=d.teams,champion=d.knockout?.champion;
-  const {data:privacy,error:privacyError}=await client.rpc("cfp_registration_status");
-  const privacyVersion=!privacyError && privacy?.enabled ? privacy.version as string : null;
+  const d = await publicCompetition(id);
+  if (!d) notFound();
+  const e = d.event,
+    format = eventFormats[e.format],
+    publicTeams = d.teams,
+    champion = d.knockout?.champion;
+  const { data: privacy, error: privacyError } = await client.rpc(
+    "cfp_registration_status",
+  );
+  const privacyVersion =
+    !privacyError && privacy?.enabled ? (privacy.version as string) : null;
   return (
     <>
       <SiteHeader />
@@ -40,7 +53,7 @@ export default async function PublicEvent({
         <h1>{e.name}</h1>
         {champion && <ChampionPresentation champion={champion} />}
         <p className="event-description">{e.description}</p>
-        <NextMatch eventId={id} match={nextPublicMatch(d.matches)}/>
+        <NextMatch eventId={id} match={nextPublicMatch(d.matches)} />
         <dl className="event-facts">
           <div>
             <dt>Inicio · hora de Costa Rica</dt>
@@ -89,7 +102,9 @@ export default async function PublicEvent({
                 />
                 <div>
                   <h3>
-                    <Link href={`/eventos/${id}/equipos/${t.id}`}>{t.name}</Link>
+                    <Link href={`/eventos/${id}/equipos/${t.id}`}>
+                      {t.name}
+                    </Link>
                     {t.number ? ` · Nº ${t.number}` : ""}
                   </h3>
                   <p>
@@ -115,8 +130,20 @@ export default async function PublicEvent({
         </section>
         {e.registration_status === "open" ? (
           <section id="inscripcion">
-            <h2>{publicTeams.length >= e.capacity ? "Apúntate a la lista de espera" : "Inscribe a tu equipo"}</h2>
-            {publicTeams.length >= e.capacity && <p>El cupo está lleno. La espera no reserva plaza, escudo ni jugadores. El propietario decide las promociones y vuelve a comprobar los datos.</p>}
+            <h2>
+              {!privacyVersion
+                ? "Inscripciones no disponibles"
+                : publicTeams.length >= e.capacity
+                  ? "Apúntate a la lista de espera"
+                  : "Inscribe a tu equipo"}
+            </h2>
+            {publicTeams.length >= e.capacity && (
+              <p>
+                El cupo está lleno. La espera no reserva plaza, escudo ni
+                jugadores. El propietario decide las promociones y vuelve a
+                comprobar los datos.
+              </p>
+            )}
             <p>
               Plazo de confirmación y revisión: {e.review_hours} horas. Los
               usuarios de TikTok son privados del administrador.

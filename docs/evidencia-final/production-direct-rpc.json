@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "transport": "Real anonymous HTTPS Supabase PostgREST, publishable key only, no auth fixture",
+  "checks": [
+    {
+      "rpc": "cfp_live_public",
+      "status": 200
+    },
+    {
+      "rpc": "cfp_my_live_events",
+      "status": 401
+    },
+    {
+      "rpc": "cfp_live_save",
+      "status": 401
+    },
+    {
+      "rpc": "cfp_live_helper",
+      "status": 401
+    }
+  ],
+  "policy": {
+    "enabled": false,
+    "version": null
+  },
+  "limits": "Authenticated owner/helper via real Auth is still pending in isolated environment"
+}
