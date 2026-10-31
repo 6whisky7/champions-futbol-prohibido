@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { PublicMatch } from "@/lib/public-matches";
-export function NextMatch({ eventId, match }: { eventId: string; match: PublicMatch | null }) {
+export function NextMatch({ eventId, match, compact=false }: { eventId: string; match: PublicMatch | null; compact?:boolean }) {
   const [clock, setClock] = useState<{ now: number; local: string } | null>(null);
   useEffect(() => {
     if (!match?.scheduled_at) return;
@@ -12,7 +12,7 @@ export function NextMatch({ eventId, match }: { eventId: string; match: PublicMa
   }, [match?.scheduled_at]);
   const seconds = clock && match?.scheduled_at ? Math.max(0, Math.ceil((Date.parse(match.scheduled_at) - clock.now) / 1000)) : null;
   const countdown = seconds === null ? "Preparando cuenta regresiva…" : seconds === 0 ? "Hora prevista alcanzada. Espera la convocatoria del organizador." : `${Math.floor(seconds / 86400)} d · ${String(Math.floor(seconds / 3600) % 24).padStart(2,"0")} h · ${String(Math.floor(seconds / 60) % 60).padStart(2,"0")} min · ${String(seconds % 60).padStart(2,"0")} s`;
-  return <section className="admin-surface next-match"><p className="eyebrow">Próximo partido programado</p>
+  return <section className={compact?'next-match next-match-compact':'admin-surface next-match'}><p className="next-match-label">Próximo partido programado</p>
     {match?.scheduled_at ? <><h2>{match.homeName} <span>contra</span> {match.awayName}</h2><p>{match.phase}</p>
       <p><strong>Costa Rica:</strong> <time dateTime={match.scheduled_at}>{new Date(Date.parse(match.scheduled_at)-6*3600000).toISOString().slice(0,16).replace("T"," · ")}</time> (UTC−6)</p>
       <p>{clock ? `En tu zona: ${clock.local}` : "Tu hora local aparecerá al cargar la página."}</p><p className="match-countdown" aria-live="off">{countdown}</p>

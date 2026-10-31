@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { CrestGallery } from "@/components/crest-gallery";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { NowStrip } from '@/components/now-strip';
 import {
   crestCategories,
   crests,
@@ -38,6 +39,7 @@ export default function Home() {
           <TrophyShowcase />
         </section>
 
+        <NowStrip/>
         <section
           className="gallery-section"
           id="escudos"

@@ -14,6 +14,7 @@ import { Input } from "./ui/input";
 import { NativeSelect, NativeSelectOption } from "./ui/native-select";
 import { Field, FieldGroup, FieldLabel } from "./ui/field";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "./ui/empty";
+import { CrestDetail } from "./crest-detail";
 
 type Props = { crests: Crest[]; categories: string[]; featuredIds: string[] };
 const eventName = "crest-filters-change";
@@ -78,6 +79,8 @@ export function CrestGallery({ crests, categories, featuredIds }: Props) {
   );
   const visible = filtered.slice(0, limit);
   const searchInput = useRef<HTMLInputElement>(null);
+  const detailTrigger = useRef<HTMLElement | null>(null);
+  const chosen = crests.find((c) => c.id === controls.get("escudo"));
   const hasFilters = selectedLeague !== "Todos" || search.length > 0;
 
   function clearFilters() {
@@ -168,12 +171,14 @@ export function CrestGallery({ crests, categories, featuredIds }: Props) {
             exit="crest-exit"
             update="crest-move"
           >
-            <a
-              href={crest.src}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={(e) => {
+                detailTrigger.current = e.currentTarget;
+                updateFilters({ escudo: crest.id });
+              }}
               className="crest-link"
-              aria-label={`Abrir diseño ${crest.id}, inspirado en ${crest.club} (PNG, se abre en otra pestaña)`}
+              aria-label={`Ver diseño ${crest.id}, inspirado en ${crest.club}`}
             >
               <figure className="crest-tile">
                 <div className="crest-art">
@@ -193,7 +198,7 @@ export function CrestGallery({ crests, categories, featuredIds }: Props) {
                   <span className="crest-league">{crest.league}</span>
                 </figcaption>
               </figure>
-            </a>
+            </button>
           </ViewTransition>
         ))}
       </div>
@@ -234,6 +239,13 @@ export function CrestGallery({ crests, categories, featuredIds }: Props) {
           ) : null}
         </div>
       </ViewTransition>
+      <CrestDetail
+        crest={chosen}
+        eventId={controls.get("evento") ?? ""}
+        changeEvent={(id) => updateFilters({ evento: id || null }, true)}
+        close={() => updateFilters({ escudo: null }, true)}
+        returnFocus={detailTrigger}
+      />
     </div>
   );
 }

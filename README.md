@@ -174,3 +174,7 @@ El panel incorpora [orientación y revisión por integrante](docs/mejoras-bloque
 ### Revisión personal antes del primer torneo
 
 [Informe final y pruebas](docs/mejoras-bloque-5.md), [guía desde creación hasta campeón](docs/primer-evento.md), [demostración local recuperable](docs/demostracion.md) y [propuesta de privacidad/autorizaciones](docs/privacidad-propuesta.md). Las nuevas decisiones del propietario están incorporadas, sin activar el procedimiento pendiente. La política inactiva bloquea abrir y anunciar participación; no se automatizaron eliminaciones. El Word actualizado está en `docs/archivos`, fuera de recursos públicos. `verify-final.mjs` requiere el mismo harness externo aislado y prueba disponibilidad, fallos OBS y zoom 200 %; no contiene credenciales ni un acceso de producción.
+
+### Pulido de la guía visual
+
+[Estado de cada mejora aprobada](docs/pulido-visual-estado.md). Primer bloque: navegación activa, franja Ahora y detalle de escudos con disponibilidad pública. Se conserva el trofeo y no se abren inscripciones reales. La galería preserva búsqueda, filtros, historial y selección en URL.

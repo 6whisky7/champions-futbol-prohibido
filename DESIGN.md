@@ -15,6 +15,8 @@ colors:
   destructive: "#ffb3b3"
   status-pending: "#f2ce83"
   status-approved: "#9cd9c0"
+  achievement: "#edcb83"
+  warning: "#f2ce83"
 typography:
   display:
     fontFamily: "Barlow Condensed, sans-serif"
@@ -224,7 +226,7 @@ Portada y reglas usan dos columnas `0.85fr 1.15fr`, separadas 64 px, después 32
 
 ## Elevation & Depth
 
-La profundidad proviene de capas de color, sin sombras ambientales, resplandores ni desenfoque. Los PNG conservan transparencia y silueta completa. Las sombras de las primitivas son anillos funcionales de estado.
+La profundidad proviene de capas de color. Se permite un resplandor moderado alrededor del trofeo y luz azul/cian/violeta tenue; los controles conservan superficies sólidas y contraste. Los PNG conservan transparencia y silueta completa. Las sombras de las primitivas son anillos funcionales de estado.
 
 El foco global usa contorno sólido de 3 px y separación de 5 px. Botones, campos y selector añaden un anillo de 3 px al 50 % del color de foco; `aria-invalid` dispone de un anillo destructivo al 20 %. No son elevación de tarjetas.
 
@@ -329,3 +331,7 @@ Próximo partido antes de los datos de edición, equipos con plantilla Roblox y 
 ## Herramientas LIVE
 
 Marcadores grandes y controles de goles de 48 px; textos de 18 px. La espera es una zona separada con convocatoria explícita. Resultado oficial, permisos y clip son formularios distintos con motivo y confirmación. Anclas internas permiten saltar entre las zonas en móvil; casillas no heredan el ancho de los campos de texto. OBS usa un marco limpio y etiquetas provisional/oficial, sin controles privados. Revelación respeta movimiento reducido. Exportación ofrece páginas de diez filas para mantener lectura.
+
+## Ajustes aprobados de la guía visual
+
+El dorado señala trofeo, campeón, finalista, ganador del partido y clasificados, con texto que identifica cada caso. No se usa como acento general de acciones. La presentación del trofeo admite su resplandor moderado conservando la iluminación V03 aprobada. Texturas de cancha o banderín muy tenues y luz azul/cian/violeta discreta pueden dar contexto; no se añaden estrellas decorativas genéricas ni emblemas UEFA. La navegación pública marca página o sección con texto/indicador y aria-current. Ventanas de escudo con foco protegido, cierre Escape y devolución al control de origen. Consultar disponibilidad nunca reserva.
