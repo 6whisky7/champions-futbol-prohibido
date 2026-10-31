@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { classificationZone } from "@/lib/public-matches";
+import { tieExplanation } from "@/lib/league/tie-explanation";
+import { CompetitionAuditChanges } from "@/components/competition-audit-changes";
 import { getCrest } from "@/lib/crests";
 import { localDate } from "@/lib/events";
 import { leagueAction } from "@/app/admin/league-actions";
@@ -186,9 +188,7 @@ export function LeagueView({
                       {name(r.id)}
                       <span className={`zone-label zone-${classificationZone(r,data).key}`}>{classificationZone(r,data).label}</span>
                       <small>
-                        {r.dq
-                          ? "Excluido · −12 puntos fijos y +100 GC administrativos"
-                          : (r.tie_reason ?? "Puntos")}
+                        {tieExplanation(r,teams)}
                         {r.tie_pending ? " · Zona por resolver" : ""}
                         {!r.dq && !r.tie_pending && r.position <= data.qualified
                           ? data.format === "repechage" && r.position > 8
@@ -442,6 +442,7 @@ export function LeagueView({
       {admin && (
         <details className="admin-surface">
           <summary>Historial privado de la competición</summary>
+          <p>Volver a sortear solo está disponible en revisión previa. Las correcciones conservan la auditoría y no reorganizan un calendario confirmado.</p>
           <ul>
             {data.history?.map((h, i) => (
               <li key={i}>
@@ -456,6 +457,8 @@ export function LeagueView({
                   close: "Cierre de liguilla",
                 }[h.action] ?? h.action}{" "}
                 · {h.reason}
+                <CompetitionAuditChanges before={h.before_value} after={h.after_value} teams={teams}/>
+                {h.actor&&<details><summary>Quién realizó la acción</summary><p>Usuario verificado: {h.actor}</p></details>}
                 <details>
                   <summary>Valores anteriores y nuevos</summary>
                   <pre className="league-audit">

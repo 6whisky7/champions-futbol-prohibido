@@ -66,3 +66,5 @@ Las carreras y regresiones también se versionan como `scripts/registration-conc
 ## Ingreso protegido y aviso versionado
 
 La RPC antigua ya no es una entrada pública. El formulario utiliza el servidor firmante y límites persistentes; consulta [el bloque 2](mejoras-bloque-2.md). Turnstile fue retirado por el propietario. La aceptación y apertura permanecen bloqueadas en producción hasta confirmar el aviso, conservación y menores. Esto sustituye la descripción anterior de apertura ya disponible sin esa condición.
+
+La revisión incorpora [desglose por integrante y auditoría](mejoras-bloque-4a.md). El contador representa comprobaciones, no jugadores; capitán es un control adicional. Aprobaciones nuevas exigen todos los requisitos en la base. La revisión global manual anterior se conserva como declaración completa del propietario; las aprobaciones históricas no se reescriben.

@@ -13,14 +13,18 @@ export type Application = {
   expires_at: string | null;
   captain_confirmed: boolean;
   requirements_checked: boolean;
+  member_checks?: {follow:boolean;group:boolean;friend:boolean}[];
   accepted_privacy_version?: string | null;
   accepted_privacy_at?: string | null;
   history: {
     at: string;
+    actor?: string | null;
     action: string;
     reason: string;
     before_payload?: ApplicationPayload;
     after_payload?: ApplicationPayload;
+    before_checks?: {follow:boolean;group:boolean;friend:boolean}[];
+    after_checks?: {follow:boolean;group:boolean;friend:boolean}[];
   }[];
 };
 export const stateLabels: Record<string, string> = {

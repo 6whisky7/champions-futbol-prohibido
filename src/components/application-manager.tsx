@@ -5,10 +5,12 @@ import { ApplicationForm } from "./application-form";
 import Image from "next/image";
 import { crests } from "@/lib/crests";
 import { type Application, stateLabels } from "@/lib/applications";
-import { reviewApplication } from "@/app/admin/solicitudes/actions";
+import { reviewApplication, setRequirement } from "@/app/admin/solicitudes/actions";
+import { RequirementChecks } from "@/components/requirement-checks";
 const actionLabels: Record<string, string> = {
   confirm: "Capitán confirmado",
   requirements: "Requisitos revisados",
+  requirement: "Comprobación de integrante",
   approve: "Equipo aprobado",
   reject: "Solicitud rechazada",
   correct: "Datos corregidos",
@@ -233,6 +235,7 @@ export function ApplicationManager({
               onChange={(e) => setReason(e.target.value)}
             />
           </div>
+          <RequirementChecks application={a} disabled={busy||reason.trim().length<3} save={(i,k,checked)=>{setBusy(true);void setRequirement(a.id,i,k,checked,reason).then(setMessage).catch(()=>setMessage("No se pudo guardar. Reintenta.")).finally(()=>{setBusy(false);router.refresh();});}}/>
           <p>Rechazar libera la plaza, el nombre, los jugadores y el escudo.</p>
           <div className="admin-tabs">
             {a.state === "pending" && (
@@ -257,7 +260,7 @@ export function ApplicationManager({
                     busy ||
                     reason.trim().length < 3 ||
                     !a.captain_confirmed ||
-                    !a.requirements_checked
+                    !a.requirements_checked || a.member_checks?.length!==a.payload.members.length || !a.member_checks.every(m=>m.follow&&m.group&&m.friend)
                   }
                   onClick={() => void act("approve")}
                 >
@@ -331,6 +334,8 @@ export function ApplicationManager({
               <li key={i}>
                 {formatTime(h.at)} · {actionLabels[h.action] ?? h.action} ·{" "}
                 {h.reason}
+                {h.actor&&<details><summary>Quién realizó la acción</summary><p>Identificador del usuario verificado: {h.actor}</p></details>}
+                {((h.after_checks?.length??0)>0||(h.before_checks?.length??0)>0)&&<details><summary>Comprobaciones anteriores y nuevas</summary>{h.action==="correct"?<p>La corrección reinició la confirmación y los requisitos. Consulta las plantillas anterior y nueva.</p>:<ul>{(h.after_checks??[]).flatMap((m,index)=>(["follow","group","friend"] as const).filter(key=>h.before_checks?.[index]?.[key]!==m[key]).map(key=><li key={index+key}>{h.after_payload?.members[index]?.roblox??`Integrante ${index+1}`} · {key==="follow"?"Seguimiento":key==="group"?"La Chapizza":"Amistad Roblox"}: {h.before_checks?.[index]?.[key]?"revisado":"pendiente"} → {m[key]?"revisado":"pendiente"}</li>))}</ul>}</details>}
                 {h.before_payload && (
                   <details>
                     <summary>Consultar datos anteriores y nuevos</summary>
