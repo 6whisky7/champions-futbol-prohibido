@@ -21,7 +21,7 @@ Explicar el torneo, explorar sus 48 escudos originales y permitir al propietario
 - La administración comparte navegación, selector de evento y cabecera: Resumen, Eventos, Solicitudes, Equipos, Lista de espera, Calendario, Resultados, Clasificación y Eliminatorias. El resumen utiliza datos reales, próximos vencimientos en seis horas y cinco acciones recientes; sin eventos conserva su marco y ofrece crear el primer borrador.
 - La competición incorpora revisión/confirmación del sorteo, jornadas públicas, resultados oficiales, desempates persistentes, descalificación y cierre de clasificación. Las eliminatorias parten de la clasificación final cerrada, se revisan y confirman explícitamente y conservan sus destinos; el propietario confirma el campeón y el cierre por evento. No inicia competiciones automáticamente.
 - Las reglas confirmadas están en `docs/decisiones-del-torneo.md`; prevalecen las correcciones recientes.
-- Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. El esquema, RLS y Auth existentes se conservan; liguilla y eliminatorias añaden migraciones versionadas, protección de transiciones e historial. Las pruebas usan datos aislados o transacciones revertidas.
+- Supabase exclusivo: `cvenqmszdmhqaeokzbnz`. El esquema, RLS y Auth existentes se conservan; liguilla y eliminatorias tienen migraciones versionadas, protección de transiciones e historial. Las pruebas usan datos aislados o transacciones revertidas.
 - Se autoriza publicar esta etapa verificada en main/Production. Los eventos permanecen cerrados por defecto; el propietario decide su apertura desde el panel. La entrega conserva cerradas las inscripciones reales.
 
 ## Brand Commitments
@@ -30,7 +30,7 @@ Nombre Champions Fútbol Prohibido; español directo. Competición de fútbol co
 
 ## Evidence on Hand
 
-Actualización aprobada: trofeo V03 completo, usado en portada mediante una copia comprimida y una imagen de su maestro. El organizador autoriza publicar el rediseño y esta integración en main cuando las comprobaciones sean correctas. Los recursos maestros se conservan fuera de public. La descripción anterior se mantiene como registro histórico.
+Actualización aprobada: trofeo V03 completo, usado en portada mediante una copia comprimida y una imagen de su maestro. El organizador autoriza publicar el rediseño y esta integración en main cuando las comprobaciones sean correctas. Los recursos maestros se conservan fuera de public. La revisión integral conserva el diseño y corrige errores de integración; su evidencia y límites están en `docs/revision-integral.md`.
 
 48 PNG transparentes y `public/escudos/catalogo.json`. Trofeo V03 aprobado, copia Draco de 1 631 132 bytes e imagen inicial. Los maestros se conservan fuera de public. No hay resultados ni equipos inscritos que puedan presentarse como datos reales.
 

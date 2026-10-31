@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "checks": {
+    "typescript": "PASS",
+    "eslint": "PASS, zero warnings",
+    "assets": "48/48 PNG; trophy 1631132 bytes, 5 materials",
+    "build": "PASS Next16.4.3 production build",
+    "local_registration_regressions": "PASS",
+    "local_knockout_rules": "PASS",
+    "local_concurrency": "PASS duplicate retry, same crest, last seat; separate event",
+    "confirmation_retries": "PASS existing 24+7 identifiers unchanged",
+    "remote_sql": [
+      "events_rls.sql PASS rollback",
+      "registration.sql PASS rollback",
+      "knockout.sql PASS rollback includes league"
+    ],
+    "remote_private_rls": "9/9 enabled; no direct anon/authenticated SELECT",
+    "remote_demo_records": "0 events, applications, leagues, knockouts"
+  },
+  "limits": [
+    "Browser Auth and REST transport simulated locally",
+    "No isolated real Supabase Auth environment",
+    "No physical phone test",
+    "Independent reviewers unavailable; inline review"
+  ]
+}

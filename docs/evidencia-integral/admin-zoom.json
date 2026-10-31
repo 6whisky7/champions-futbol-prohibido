@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "method": "native Edge zoom 200% in isolated profile",
+  "metrics": {
+    "dpr": 2,
+    "width": 708,
+    "scrollWidth": 708,
+    "cssZoom": "1"
+  }
+}

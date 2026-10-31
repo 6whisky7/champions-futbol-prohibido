@@ -1,0 +1,96 @@
+{
+  "auth": "local simulated Auth/transport; real PostgreSQL roles",
+  "checks": [
+    "new event calendar empty readiness loads without error",
+    "public network failure preserves all typed data; retry same page",
+    "second event accepts same crest/name/player without changing first champion",
+    "admin10/public5 routes 1440px: no overflow/errors; admin Axe0; selection preserved; public privacy",
+    "admin10/public5 routes 390px: no overflow/errors; admin Axe0; selection preserved; public privacy",
+    "mobile round selector and detail focus"
+  ],
+  "screens": [
+    {
+      "width": 1440,
+      "route": "/admin?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/eventos/7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/eventos/nuevo"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/solicitudes?evento=7b03254a-a126-4897-9287-fac59630cd44&vista=pending"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/solicitudes?evento=7b03254a-a126-4897-9287-fac59630cd44&vista=approved"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/solicitudes?evento=7b03254a-a126-4897-9287-fac59630cd44&vista=waiting"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/calendario?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/resultados?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/clasificacion?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 1440,
+      "route": "/admin/eliminatorias?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 390,
+      "route": "/admin?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 390,
+      "route": "/admin/eventos/7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 390,
+      "route": "/admin/eventos/nuevo"
+    },
+    {
+      "width": 390,
+      "route": "/admin/solicitudes?evento=7b03254a-a126-4897-9287-fac59630cd44&vista=pending"
+    },
+    {
+      "width": 390,
+      "route": "/admin/solicitudes?evento=7b03254a-a126-4897-9287-fac59630cd44&vista=approved"
+    },
+    {
+      "width": 390,
+      "route": "/admin/solicitudes?evento=7b03254a-a126-4897-9287-fac59630cd44&vista=waiting"
+    },
+    {
+      "width": 390,
+      "route": "/admin/calendario?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 390,
+      "route": "/admin/resultados?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 390,
+      "route": "/admin/clasificacion?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    },
+    {
+      "width": 390,
+      "route": "/admin/eliminatorias?evento=7b03254a-a126-4897-9287-fac59630cd44"
+    }
+  ],
+  "errors": [],
+  "secondary": "241d9a3c-8205-4210-a01c-67ca18591854",
+  "status": "PASS"
+}

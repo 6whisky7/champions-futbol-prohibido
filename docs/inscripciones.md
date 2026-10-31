@@ -19,7 +19,7 @@ El número opcional puede repetirse. Un escudo puede reutilizarse en otro evento
 
 El plazo inicial es de 48 horas; `review_hours` admite 1–720 y afecta reservas nuevas. Cerrar impide nuevos envíos y promociones; las pendientes conservan sus vencimientos y pueden resolverse. Promover requiere evento publicado y abierto, vuelve a validar todos los conflictos y crea una nueva reserva con el plazo configurado. El administrador elige manualmente la solicitud; no existe prioridad automática de espera.
 
-El primer cierre fija las plantillas mediante `roster_locked`; reabrir para promociones no habilita corregirlas. Antes del cierre, una corrección vuelve a comprobar la disponibilidad y reinicia la confirmación/revisión; si el equipo estaba aprobado pasa a pendiente. El futuro sorteo deberá esperar a que se resuelvan todas las pendientes. Sorteo y calendario no se implementan en este bloque.
+El primer cierre fija las plantillas mediante `roster_locked`; reabrir para promociones no habilita corregirlas. Antes del cierre, una corrección vuelve a comprobar la disponibilidad y reinicia la confirmación/revisión; si el equipo estaba aprobado pasa a pendiente. El sorteo exige resolver todas las pendientes. Su revisión y confirmación están implementadas en [Liguilla](liguilla.md).
 
 ## Validación y concurrencia
 

@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "auth": "local simulated",
+  "checks": [
+    "network abort preserves name/date",
+    "successful retry redirects to saved event",
+    "no page errors"
+  ]
+}
