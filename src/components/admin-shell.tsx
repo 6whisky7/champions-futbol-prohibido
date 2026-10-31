@@ -16,6 +16,9 @@ import {
   Radio,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PhaseBar } from "./phase-bar";
+import { Badge } from "./ui/badge";
+import type { PhaseState } from "@/lib/event-phase";
 import { signOut } from "@/app/admin/actions";
 import type { TournamentEvent } from "@/lib/events";
 const sections = [
@@ -100,21 +103,35 @@ export function AdminShell({
   const [counts, setCounts] = useState<{
     evento: string;
     values: Record<string, number>;
+    phase: PhaseState;
   } | null>(null);
   useEffect(() => {
     if (!event) return;
-    const controller = new AbortController();
-    fetch(`/api/admin/contadores?evento=${event.id}`, {
-      signal: controller.signal,
-      cache: "no-store",
-    })
-      .then(async (r) => {
-        if (!r.ok) throw Error("Counts unavailable");
-        const values = await r.json();
-        setCounts({ evento: values.evento, values });
+    let controller: AbortController;
+    const load = () => {
+      controller?.abort();
+      controller = new AbortController();
+      const requestController = controller;
+      fetch(`/api/admin/contadores?evento=${event.id}`, {
+        signal: controller.signal,
+        cache: "no-store",
       })
-      .catch(() => {});
-    return () => controller.abort();
+        .then(async (r) => {
+          if (!r.ok) throw Error();
+          return r.json();
+        })
+        .then((values) => {
+          if (!requestController.signal.aborted)
+            setCounts({ evento: values.evento, values, phase: values.phase });
+        })
+        .catch(() => {});
+    };
+    load();
+    window.addEventListener("cfp-admin-refresh", load);
+    return () => {
+      controller?.abort();
+      window.removeEventListener("cfp-admin-refresh", load);
+    };
   }, [event]);
   const view = params.get("vista") ?? "pending";
   const current =
@@ -195,7 +212,7 @@ export function AdminShell({
                     >
                       <s.icon size={21} />
                       <span>{s.label}</span>
-                      {s.counter && counts?.evento === event?.id && (
+                      {s.counter && counts && event && counts.evento === event.id && (
                         <span className="admin-nav-count">
                           <span className="sr-only">
                             {s.counter === "results"
@@ -236,6 +253,7 @@ export function AdminShell({
             onChange={(e) => {
               const q = new URLSearchParams(params);
               q.set("evento", e.target.value);
+              ["partido", "jornada", "solicitud"].forEach((k) => q.delete(k));
               router.push(
                 (path.startsWith("/admin/eventos/") ? "/admin/eventos" : path) +
                   "?" +
@@ -251,13 +269,20 @@ export function AdminShell({
             ))}
           </select>
           {event && (
-            <span className="admin-status">
-              {event.status === "draft" ? "Borrador" : "Publicado"} ·
-              Inscripciones{" "}
-              {event.registration_status === "open" ? "abiertas" : "cerradas"}
-            </span>
+            <div className="event-status-chips">
+              <Badge variant="outline">
+                {event.status === "draft" ? "Borrador" : "Publicado"}
+              </Badge>
+              <Badge variant="outline">
+                Inscripciones{" "}
+                {event.registration_status === "open" ? "abiertas" : "cerradas"}
+              </Badge>
+            </div>
           )}
         </section>
+        {counts?.evento === event?.id && counts?.phase && (
+          <PhaseBar phase={counts.phase} />
+        )}
         <header className="admin-page-heading">
           <div>
             <h1>{title}</h1>
@@ -281,14 +306,46 @@ export function AdminShell({
                     : "Revisa las plantillas y resuelve cada solicitud con sus requisitos."}
             </p>
           </div>
-          {path === "/admin/live" && event ? (
-            <Link className="action-link" href={href("/admin/resultados")}>
-              <ListOrdered size={20} /> Resultados oficiales
+          {path === "/admin/eventos" ? (
+            <Link className="action-link" href="/admin/eventos/nuevo">
+              <Plus size={20} />
+              Crear evento
             </Link>
           ) : (
+            event &&
+            path !== "/admin" &&
             !path.endsWith("/nuevo") && (
-              <Link className="action-link" href="/admin/eventos/nuevo">
-                <Plus size={20} /> Crear evento
+              <Link
+                className="action-link"
+                href={
+                  path === "/admin/live"
+                    ? href("/admin/resultados")
+                    : path === "/admin/calendario"
+                      ? "#league-calendar"
+                      : path === "/admin/clasificacion"
+                        ? "#league-table"
+                        : path === "/admin/eliminatorias"
+                          ? "#ko-final"
+                          : path === "/admin/resultados"
+                            ? href("/admin/live")
+                            : path === "/admin/solicitudes"
+                              ? "#application-list"
+                              : href("/admin/eventos")
+                }
+              >
+                {path === "/admin/live"
+                  ? "Resultados oficiales"
+                  : path === "/admin/calendario"
+                    ? "Ver jornada"
+                    : path === "/admin/clasificacion"
+                      ? "Ver clasificación"
+                      : path === "/admin/eliminatorias"
+                        ? "Ir a la final"
+                        : path === "/admin/resultados"
+                          ? "Abrir LIVE"
+                          : path === "/admin/solicitudes"
+                            ? "Consultar equipos"
+                            : "Ver eventos"}
               </Link>
             )
           )}

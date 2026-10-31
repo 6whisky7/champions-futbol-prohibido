@@ -54,7 +54,7 @@ export default async function PublicEvent({
       <main className="management-page page-width">
         <Link href="/eventos">← Todos los eventos</Link>
         <h1>{e.name}</h1>
-        {champion && <ChampionPresentation champion={champion} />}
+        {champion && <ChampionPresentation champion={champion} eventId={id} matches={d.knockout?.matches} teams={d.knockout?.teams}/>}
         <p className="event-description">{e.description}</p>
         <NextMatch eventId={id} match={nextPublicMatch(d.matches)} />
         <dl className="event-facts">

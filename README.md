@@ -159,7 +159,7 @@ Consulta el [plan y decisiones pendientes](docs/plan-mejoras.md) y la [comparaci
 - [Clientes y sesiones SSR de Supabase](https://supabase.com/docs/guides/auth/server-side/creating-a-client).
 - [Importar un repositorio Git en Vercel](https://vercel.com/docs/git).
 
-La recepción pública requiere `CFP_SUBMISSION_HMAC_KEY` exclusivamente de servidor, coincidente con la configuración privada de ingreso. Ya está instalada en Production/Preview. `.env.example` contiene solo su nombre vacío. El aviso permanece inactivo hasta definir conservación y participación de menores; ninguna inscripción real se abre con esta entrega.
+La recepción pública requiere `CFP_SUBMISSION_HMAC_KEY` exclusivamente de servidor, coincidente con la configuración privada de ingreso. Ya está instalada en Production/Preview. `.env.example` contiene solo su nombre vacío. El aviso permanece inactivo hasta validar el procedimiento de autorizaciones y confirmación individual, completar la identificación y revisar los plazos provisionales; ninguna inscripción real se abre con esta entrega.
 
 ## Consulta pública y compartir
 
@@ -177,4 +177,4 @@ El panel incorpora [orientación y revisión por integrante](docs/mejoras-bloque
 
 ### Pulido de la guía visual
 
-[Estado de cada mejora aprobada](docs/pulido-visual-estado.md). Primer bloque: navegación activa, franja Ahora y detalle de escudos con disponibilidad pública. Se conserva el trofeo y no se abren inscripciones reales. La galería preserva búsqueda, filtros, historial y selección en URL.
+[Estado de cada mejora aprobada](docs/pulido-visual-estado.md). Primer bloque (PR #15): navegación activa, franja Ahora y detalle de escudos con disponibilidad pública. [Segundo bloque y evidencia](docs/pulido-competicion.md): jornadas, horarios con revisión, clasificación V/D/N, cuadro conectado, campeón y administración. [Pendientes externos](docs/pendientes-externos.md) separados de la entrega visual. Se conserva el trofeo y no se abren inscripciones reales. La galería preserva búsqueda, filtros, historial y selección en URL.

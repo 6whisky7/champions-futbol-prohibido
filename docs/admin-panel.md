@@ -25,3 +25,11 @@ Antes de publicar se ejecutan TypeScript, ESLint, assets y build. Después del P
 ## Orientación y comprobaciones individuales
 
 [Siguiente paso, menú agrupado, contadores y revisión por integrante](mejoras-bloque-4a.md) amplían este panel. Las aprobaciones antiguas no cambian y no se habilita una excepción a requisitos. El alcance de LIVE/ayudantes se documenta en su entrega posterior.
+
+## Pulido de orientación y lectura
+
+Barra Borrador → Publicado → Abiertas → Cerradas → Calendario → Liguilla → Eliminatorias → Campeón. Se deriva del estado actual con contexto de revisiones y reaperturas; no se presenta como registro histórico de fechas. La API privada de contadores conserva getUser y cfp_is_owner e incluye únicamente metadatos del evento autorizado.
+
+«Crear evento» es acción principal de Eventos. Las otras pantallas enlazan a su tarea contextual. Ocupación suma pendientes y aprobados; espera no reserva. El vencimiento orientativo se actualiza en pantalla, pero la base decide expiración y reservas. Tres titulares y suplente separado, sin posiciones impuestas. Contador de jugadores completos separado del número de comprobaciones y de la confirmación del capitán; no hay excepción de aprobación.
+
+El guardado solo anuncia éxito tras la respuesta de servidor. Los fallos conservan campos y motivos. Una confirmación nueva no muestra el éxito de una operación anterior. Historial y correcciones siguen usando las operaciones auditadas existentes.

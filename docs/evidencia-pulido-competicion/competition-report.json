@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "auth": "Local simulated Auth/REST; real PostgreSQL, permissions and Next server actions. Not real Supabase Auth/PostgREST.",
+  "steps": [
+    "calendar round, progress, URL and editor survive reload 1440",
+    "calendar round, progress, URL and editor survive reload 390",
+    "standings V/D/N, signed DG, blocked closure above table and sticky mobile team",
+    "four formats: every connector matches persisted sources, destination focus and final review after bracket",
+    "administrative champion, final crests, three rounds, public roster and actual 1080×1920 PNG",
+    "200% equivalent CSS viewport, keyboard and reduced motion",
+    "GET and redesign leave baseline event states, league results and knockout data byte-for-byte unchanged",
+    "round schedule: partial failure names saved matches, stale review blocks, fields survive; reviewed retry changes dates only",
+    "owner-only counters and screens: anonymous 401, helper 403/redirect (local simulated Auth)",
+    "phase derives draft, published closed, reopened locked and review states without invented history",
+    "disqualified team remains excluded in the isolated table"
+  ],
+  "errors": [],
+  "batch": "68ebfee6-1390-4962-b7e2-140ca36c3c54",
+  "baselineHash": "5c71626b774e803236754f92ff0d4732525b7b9c773eb413a17be76cf4eb5d0b"
+}

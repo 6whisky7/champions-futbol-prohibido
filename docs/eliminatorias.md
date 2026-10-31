@@ -59,3 +59,9 @@ Las pruebas locales se versionan en `scripts/knockout-fixture.mjs`, `verify-knoc
 Los scripts y capturas del entorno aislado de esta máquina están en `C:/Users/XT/Projects/cfp-registration-tests/`, bajo `ko-*` y `ko-review`. El fixture remoto versionado es `supabase/tests/knockout.sql`. El zoom nativo de Edge al 200 % pasó en perfil aislado: DPR 2, ancho y scrollWidth 708 px, CSS zoom 1; selector y detalle operativos. Tras integrar el PR se comprueban el commit, Production Ready y las rutas reales sin sesión. Las capturas de Auth simulado no sustituyen esa comprobación.
 
 El navegador también ejecutó preparación, confirmación, resultado 5–2 y programación de fecha en un fixture local nuevo; al abrir otro partido su fecha no arrastra el valor del anterior. TypeScript, ESLint, assets (48 escudos y trofeo sin cambios) y compilación pasaron.
+
+## Presentación revisada
+
+Los conectores se calculan desde los destinos persistidos; no alteran cruces ni ordenan por favoritos. El chip de destino resalta y enfoca el partido real. Se conserva consulta por ronda y exploración horizontal móvil. Revisión del cierre al final del cuadro, con progreso y confirmación de sus efectos.
+
+La presentación del campeón reutiliza V03 e incorpora ambos escudos de la final, plantilla pública, avances registrados y descarga `/eventos/[id]/campeon/imagen` de 1080 × 1920 mediante el generador existente. Exige edición publicada y campeón terminado. Un pase por clasificación muestra «Sin marcador» y resolución administrativa; no se añaden goles deportivos. TikTok, notas y auditoría privada no forman parte del generador.

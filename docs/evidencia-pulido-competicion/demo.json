@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "auth": "Local simulated Auth/REST; independent demo/snapshot. No production writes.",
+  "checks": [
+    "seven guided stages, new calendar/table/32 bracket/champion and actual vertical PNG",
+    "12 matched screenshot pairs served from local comparison guide; mobile no overflow",
+    "new examples present in demo and recovery snapshot; existing practice was not reset"
+  ],
+  "errors": []
+}

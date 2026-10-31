@@ -34,8 +34,8 @@ export default async function Competition({
         <p>
           {section === "eliminatorias" ? "El cuadro se prepara después de cerrar la clasificación de liguilla. Primero crea el evento y completa esa fase." : "Crea un evento como borrador. Después de aprobar a los participantes y cerrar las inscripciones podrás preparar la liguilla."}
         </p>
-        <Link className="action-link" href="/admin/eventos/nuevo">
-          Crear evento
+        <Link className="action-link" href="/admin/eventos">
+          Ir a Eventos
         </Link>
       </main>
     );

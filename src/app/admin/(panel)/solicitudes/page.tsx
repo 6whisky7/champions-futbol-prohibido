@@ -47,7 +47,7 @@ export default async function Applications({
           />
         </>
       ) : (
-        <p>Crea primero un evento desde el panel.</p>
+        <section className="admin-empty"><h2>Todavía no hay solicitudes que revisar</h2><p>Prepara primero un evento como borrador. Aquí aparecerán sus equipos y requisitos.</p><Link className="action-link" href="/admin/eventos">Ir a Eventos</Link></section>
       )}
     </main>
   );

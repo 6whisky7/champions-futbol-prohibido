@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "auth": "Simulated local Auth/REST; real PostgreSQL fixture data. Empty event list is supplied by a separate loopback test adapter.",
+  "events": [
+    "54e35586-4bb5-44ee-afc8-5b094533ddf5",
+    "3934954a-9741-4536-812e-d5f673b38d36"
+  ],
+  "steps": [
+    "100-character event and 60-character team names: champion, roster, table, bracket and vertical PNG; empty requests/calendar/bracket at 1440/390/720",
+    "no-events state: shared frame stays visible, first-event route, mobile and desktop; empty event list supplied by isolated transport",
+    "native Edge zoom 200%, CSS zoom 1, four competition surfaces, no overflow and Axe violations"
+  ],
+  "errors": []
+}

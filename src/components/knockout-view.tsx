@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { BracketConnections } from "./bracket-connections";
+import { ConfirmAction } from "./confirm-action";
+import { SaveStatus } from "./save-status";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCrest } from "@/lib/crests";
@@ -29,6 +32,8 @@ export function KnockoutView({
     [tracked, setTracked] = useState(""),
     [allRounds, setAllRounds] = useState(false);
   const router = useRouter();
+  const bracket = useRef<HTMLDivElement>(null);
+  const [target, setTarget] = useState<string | null>(null);
   async function act(
     action: string,
     p: Record<string, unknown> = {
@@ -36,13 +41,26 @@ export function KnockoutView({
     },
   ) {
     setBusy(true);
+    setMessage("");
     try {
-      setMessage(await knockoutAction(eventId, action, p, data?.revision ?? 0));
-      router.refresh();
+      const result = await knockoutAction(
+        eventId,
+        action,
+        p,
+        data?.revision ?? 0,
+      );
+      setMessage(result);
+      if (result === "Guardado.") {
+        router.refresh();
+        window.dispatchEvent(new Event("cfp-admin-refresh"));
+        return true;
+      }
+      return false;
     } catch {
       setMessage(
         "No se pudo guardar. Conserva tus datos y recarga para comprobar el estado.",
       );
+      return false;
     } finally {
       setBusy(false);
     }
@@ -61,7 +79,7 @@ export function KnockoutView({
             Preparar revisión del cuadro
           </Button>
         )}
-        <p role="status">{message}</p>
+        <SaveStatus busy={busy} message={message} />
       </section>
     );
   const matches = data.matches;
@@ -70,11 +88,24 @@ export function KnockoutView({
   const currentRound = round === -1 ? rounds[0] : round;
   const selectedMatch = matches.find((m) => m.id === selected);
   const path = new Set<string>();
-  for (const m of matches.filter(m => tracked && (m.home === tracked || m.away === tracked))) {
+  for (const m of matches.filter(
+    (m) => tracked && (m.home === tracked || m.away === tracked),
+  )) {
     path.add(m.id);
-    if ((m.winner && m.winner !== tracked) || data.teams.find(t=>t.id===tracked)?.dq) continue;
-    let next = matches.find(n=>n.home_source === m.id || n.away_source === m.id);
-    while(next) {path.add(next.id); if(next.winner && next.winner !== tracked)break; const id=next.id; next=matches.find(n=>n.home_source===id||n.away_source===id);}
+    if (
+      (m.winner && m.winner !== tracked) ||
+      data.teams.find((t) => t.id === tracked)?.dq
+    )
+      continue;
+    let next = matches.find(
+      (n) => n.home_source === m.id || n.away_source === m.id,
+    );
+    while (next) {
+      path.add(next.id);
+      if (next.winner && next.winner !== tracked) break;
+      const id = next.id;
+      next = matches.find((n) => n.home_source === id || n.away_source === id);
+    }
   }
   const team = (id: string | null) => data.teams.find((t) => t.id === id);
   const roundName = (r: number) =>
@@ -101,7 +132,7 @@ export function KnockoutView({
         </span>
       </span>
     ) : (
-      <span>
+      <span className="ko-pending">
         {parent?.kind === "void"
           ? "Sin ganador habilitado"
           : `Ganador del partido ${parent?.number ?? "por definir"}`}
@@ -125,29 +156,25 @@ export function KnockoutView({
             : "Cuadro confirmado · a partido único"}
         . Los destinos son fijos, aunque gane el peor clasificado.
       </p>
-      <p role="status">{message}</p>
-      {data.champion && <ChampionPresentation champion={data.champion} />}
+      <SaveStatus busy={busy} message={message} />
+      {data.champion && (
+        <ChampionPresentation
+          champion={data.champion}
+          eventId={eventId}
+          matches={matches}
+          teams={data.teams}
+        />
+      )}
       <div className="admin-tabs">
         {admin && data.state === "preview" && (
-          <Button disabled={busy} onClick={() => void act("confirm")}>
-            Confirmar cuadro fijo
-          </Button>
-        )}
-        {admin && data.state === "active" && (
-          <div className="admin-surface">
-            <h3>Revisar cierre del evento</h3>
-            <p>
-              {winner
-                ? `Campeón propuesto: ${winner.name}. ${knockoutLabels[final!.kind]}.`
-                : "La final todavía no tiene un ganador habilitado."}
-            </p>
-            <Button
-              disabled={busy || !winner || winner.dq}
-              onClick={() => void act("close")}
-            >
-              Confirmar campeón y terminar evento
-            </Button>
-          </div>
+          <ConfirmAction
+            label="Confirmar cuadro fijo"
+            title="Fijar el cuadro de eliminatorias"
+            description="Los participantes, cruces y destinos de esta revisión quedarán fijados. El ganador avanza por esas conexiones, sin reordenar por favoritos. Revisa todo el cuadro antes de confirmar."
+            busy={busy}
+            message={message}
+            onConfirm={() => act("confirm")}
+          />
         )}
       </div>
       <label className="ko-round-switch" htmlFor="ko-round">
@@ -164,14 +191,51 @@ export function KnockoutView({
           ))}
         </select>
       </label>
-      <div className="bracket-controls"><label htmlFor="ko-team">Seguir equipo<select id="ko-team" value={tracked} onChange={e=>setTracked(e.target.value)}><option value="">Todos los equipos</option>{data.teams.map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</select></label><Button className="ko-mobile-explore" variant="outline" aria-pressed={allRounds} onClick={()=>setAllRounds(!allRounds)}>{allRounds?"Vista cómoda por rondas":"Explorar cuadro completo"}</Button></div>
-      {tracked && <p>Ruta resaltada de {team(tracked)?.name}: partidos disputados y destinos posibles si avanza. Los rivales y las conexiones permanecen fijos.</p>}
+      <div className="bracket-controls">
+        <label htmlFor="ko-team">
+          Seguir equipo
+          <select
+            id="ko-team"
+            value={tracked}
+            onChange={(e) => setTracked(e.target.value)}
+          >
+            <option value="">Todos los equipos</option>
+            {data.teams.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <Button
+          className="ko-mobile-explore"
+          variant="outline"
+          aria-pressed={allRounds}
+          onClick={() => setAllRounds(!allRounds)}
+        >
+          {allRounds ? "Vista cómoda por rondas" : "Explorar cuadro completo"}
+        </Button>
+      </div>
+      {tracked && (
+        <p>
+          Ruta resaltada de {team(tracked)?.name}: partidos disputados y
+          destinos posibles si avanza. Los rivales y las conexiones permanecen
+          fijos.
+        </p>
+      )}
       <div
+        ref={bracket}
         className={`ko-bracket${allRounds ? " ko-all-rounds" : ""}`}
         role="region"
         aria-label="Cuadro y destinos de ganadores"
         tabIndex={0}
       >
+        <BracketConnections
+          container={bracket}
+          matches={matches}
+          tracked={path}
+          target={target}
+        />
         {rounds.map((r) => (
           <section
             key={r}
@@ -195,10 +259,15 @@ export function KnockoutView({
                     <li
                       key={m.id}
                       id={`ko-game-${m.number}`}
-                      className={`ko-match${path.has(m.id)?" ko-tracked":""}`}
+                      className={`ko-match${path.has(m.id) ? " ko-tracked" : ""}${target === m.id ? " ko-target" : ""}`}
+                      tabIndex={-1}
                     >
                       <h4>Partido {m.number}</h4>
-                      {path.has(m.id)&&<p className="ko-route-label">Ruta de {team(tracked)?.name}</p>}
+                      {path.has(m.id) && (
+                        <p className="ko-route-label">
+                          Ruta de {team(tracked)?.name}
+                        </p>
+                      )}
                       <div
                         className={
                           m.winner === m.home && m.home ? "ko-winner" : ""
@@ -224,7 +293,25 @@ export function KnockoutView({
                         <a
                           className="ko-destination"
                           href={`#ko-game-${next.number}`}
-                          onClick={() => setRound(next.round)}
+                          onMouseEnter={() => setTarget(next.id)}
+                          onMouseLeave={() => setTarget(null)}
+                          onFocus={() => setTarget(next.id)}
+                          onBlur={() => setTarget(null)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setRound(next.round);
+                            requestAnimationFrame(() => {
+                              const el = document.getElementById(
+                                `ko-game-${next.number}`,
+                              );
+                              el?.focus();
+                              el?.scrollIntoView({
+                                block: "nearest",
+                                inline: "nearest",
+                                behavior: "instant",
+                              });
+                            });
+                          }}
                         >
                           Ganador → partido {next.number}
                           <ChevronRight size={18} />
@@ -233,7 +320,16 @@ export function KnockoutView({
                       <Button variant="outline" onClick={() => open(m.id)}>
                         Detalle del partido {m.number}
                       </Button>
-                      {!admin && <Link className="ko-public-link" href={`/eventos/${eventId}/partidos/${m.id}`}>{m.winner ? "Ver y compartir resultado" : "Detalle y calendario"}</Link>}
+                      {!admin && (
+                        <Link
+                          className="ko-public-link"
+                          href={`/eventos/${eventId}/partidos/${m.id}`}
+                        >
+                          {m.winner
+                            ? "Ver y compartir resultado"
+                            : "Detalle y calendario"}
+                        </Link>
+                      )}
                     </li>
                   );
                 })}
@@ -241,6 +337,39 @@ export function KnockoutView({
           </section>
         ))}
       </div>
+      <section
+        className="closure-review ko-final-review"
+        id="ko-final"
+        tabIndex={-1}
+      >
+        <h3>
+          {data.state === "finished"
+            ? "Final y campeón confirmados"
+            : "Revisión de la final"}
+        </h3>
+        <p>
+          <strong>
+            {matches.filter((m) => m.winner || m.kind === "void").length}/
+            {matches.length} partidos resueltos
+          </strong>
+        </p>
+        <p>
+          {winner
+            ? `Ganador de la final: ${winner.name}. ${knockoutLabels[final!.kind]}.`
+            : "La final todavía no tiene un ganador habilitado."}
+        </p>
+        {admin && data.state === "active" && (
+          <ConfirmAction
+            label="Confirmar campeón y terminar evento"
+            title="Confirmar campeón y cerrar la edición"
+            description="Se conserva el campeón, el subcampeón habilitado, la final y la plantilla Roblox oficial. El cierre es definitivo en esta etapa; no permite cambiar después el campeón desde estas pantallas. Las resoluciones administrativas no añaden goles deportivos."
+            busy={busy}
+            message={message}
+            disabled={!winner || winner.dq}
+            onConfirm={() => act("close")}
+          />
+        )}
+      </section>
       {selectedMatch && (
         <section
           className="admin-surface ko-detail"
@@ -337,10 +466,12 @@ export function KnockoutView({
                   minLength={3}
                   maxLength={1000}
                 />
-                <Button type="submit" disabled={busy}>Guardar decisión del partido</Button>
+                <Button type="submit" disabled={busy}>
+                  Guardar decisión del partido
+                </Button>
               </form>
               <form
-                key={selectedMatch.id+"-schedule-"+data.revision}
+                key={selectedMatch.id + "-schedule-" + data.revision}
                 className="event-form"
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -426,7 +557,12 @@ export function KnockoutView({
       )}
       {admin && (
         <details className="admin-surface">
-          <summary>Historial privado del cuadro</summary><p>Retirar un resultado exige revisar sus dependencias disputadas; no borra auditoría ni concede otro intento por doble ausencia. Un campeón cerrado no puede alterarse desde este historial.</p>
+          <summary>Historial privado del cuadro</summary>
+          <p>
+            Retirar un resultado exige revisar sus dependencias disputadas; no
+            borra auditoría ni concede otro intento por doble ausencia. Un
+            campeón cerrado no puede alterarse desde este historial.
+          </p>
           <ul>
             {data.history?.map((h, i) => (
               <li key={i}>
@@ -442,7 +578,11 @@ export function KnockoutView({
                   close: "Campeón confirmado",
                 }[h.action] ?? h.action}{" "}
                 · {h.reason}
-                <CompetitionAuditChanges before={h.before_value} after={h.after_value} teams={data.teams}/>
+                <CompetitionAuditChanges
+                  before={h.before_value}
+                  after={h.after_value}
+                  teams={data.teams}
+                />
                 <details>
                   <summary>Consultar valores anteriores y nuevos</summary>
                   <pre className="league-audit">

@@ -189,8 +189,8 @@ try {
   for (const width of [1440, 1024, 768, 390]) {
     await p.setViewportSize({ width, height: 1000 });
     await p.goto(base + "/#escudos");
-    await p.locator("#escudos").scrollIntoViewIfNeeded();
-    await p.waitForTimeout(80);
+    await p.locator("#escudos").evaluate(e=>e.scrollIntoView({block:"start",behavior:"instant"}));
+    await p.waitForFunction(()=>document.querySelector('.main-nav a[href="/#escudos"]')?.getAttribute('aria-current')==='location');
     assert.equal(
       await p
         .locator('.main-nav a[href="/#escudos"]')
