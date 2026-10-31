@@ -133,13 +133,19 @@ La sesión local de Vercel permite operar este proyecto. El conector devolvió 4
 
 Consulta [las decisiones del torneo](docs/decisiones-del-torneo.md). Las correcciones confirmadas más recientes prevalecen sobre versiones anteriores del reglamento; las sugerencias pendientes están separadas y no se presentan como reglas aprobadas.
 
-Después de verificar la importación quedan pendientes:
+Antes del primer evento real:
 
 - Completar y registrar la verificación de cada entrega antes de publicar. El esquema de participación, las reservas, la revisión y la privacidad de TikTok ya tienen implementación y migraciones; consulta [su alcance y evidencia](docs/inscripciones.md).
 - El propietario ya confirmó el acceso real al panel mediante su enlace de correo.
 - Mantener las URLs de Auth si cambia el dominio. Site URL y callback de producción están configurados.
 - Resolver las sanciones y casos administrativos todavía pendientes del reglamento. Liguilla, eliminatorias y cierre por campeón tienen implementación; consulta [liguilla](docs/liguilla.md) y [eliminatorias](docs/eliminatorias.md).
 - Resolver los puntos del reglamento que siguen abiertos. Escudos, cierre y promoción de espera ya tienen decisiones confirmadas.
+
+## Primer evento y revisión integral
+
+- [Guía breve con capturas](docs/primer-evento.md).
+- [Resultados, problemas corregidos y límites del ensayo](docs/revision-integral.md).
+- Recorrido completo aislado: inscripción pública → 12 aprobados → 24 partidos de liguilla → 7 eliminatorios → campeón. Auth y transporte simulados; PostgreSQL y permisos reales. No sustituye una prueba integral con Supabase Auth real.
 
 ## Documentación oficial utilizada
 

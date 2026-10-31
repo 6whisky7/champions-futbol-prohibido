@@ -27,7 +27,7 @@ export default async function EditEvent({
       {data.status === "published" && (
         <Link href={`/eventos/${id}`}>Ver página pública →</Link>
       )}
-      <EventForm event={data as TournamentEvent} />
+      <EventForm key={id} event={data as TournamentEvent} />
     </main>
   );
 }

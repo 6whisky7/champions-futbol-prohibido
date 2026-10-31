@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "auth": "local simulated; separate existing module fixture",
+  "checks": [
+    "schedule button submits and persists exact Costa Rica date",
+    "ineligible button submits and persists dq"
+  ]
+}

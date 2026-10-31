@@ -1,12 +1,12 @@
 # Administración y eventos
 
-La etapa de participación amplía este registro inicial. Para el comportamiento actual de apertura, reservas, revisión, cierre y lista de espera, consulta [Inscripciones](inscripciones.md). Las referencias al bloqueo provisional y al próximo bloque de participación que siguen documentan la entrega anterior; quedaron sustituidas por las migraciones de inscripción. La confirmación del acceso real del propietario sigue vigente.
+La administración incluye eventos, inscripciones, liguilla y eliminatorias. Consulta la [guía del primer evento](primer-evento.md) y la [revisión integral](revision-integral.md). La confirmación previa del acceso real del propietario sigue vigente; el ensayo completo de navegador usa Auth simulado aislado.
 
 ## Estado de esta etapa
 
 Trofeo V03 con carga automática visible, escenario e iluminación HDR propios, imagen inicial/alternativa y control frontal. Páginas `/eventos` y `/eventos/[id]`; acceso del propietario en `/admin/acceso`, panel `/admin` y creación/edición en `/admin/eventos`.
 
-El formulario de participación todavía no existe. La publicación de un evento no abre inscripciones. La columna `registration_status` tiene un CHECK que solo permite `closed`, además de la validación del servidor y la explicación administrativa.
+El formulario público está implementado. Publicar y abrir inscripciones son acciones distintas: se abre únicamente un evento publicado. Los eventos nacen cerrados y su propietario decide cuándo abrirlos.
 
 ## Acceso del propietario
 
@@ -37,15 +37,15 @@ La fila con el correo del propietario es configuración operativa y se provision
 
 Se guardan nombre, descripción, inicio y final previsto opcional, cupo par, formato, criterio de continuación desde la liguilla y estado borrador/publicado. Fechas en hora de Costa Rica, convertidas a timestamptz. Se comprueban fechas reales, orden y longitudes en servidor y restricciones en SQL.
 
-Cuartos: mínimo 8, 4 rivales, 8 clasificados. Octavos: 16, 6 y 16. Dieciseisavos clásicos: 32, 8 y 32. Repesca: mínimo 24, 8 rivales, 24 que continúan (8 directos y 16 a repesca). Sin eliminación de liguilla, el cupo coincide con los que continúan. No se implementan todavía sorteo, aprobación ni calendario. No se han decidido reglas pendientes del documento del torneo.
+Cuartos: mínimo 8, 4 rivales, 8 clasificados. Octavos: 16, 6 y 16. Dieciseisavos clásicos: 32, 8 y 32. Repesca: mínimo 24, 8 rivales, 24 que continúan (8 directos y 16 a repesca). Sin eliminación de liguilla, el cupo coincide con los que continúan. Aprobación, sorteo y calendario están implementados; la revisión previa y la confirmación son acciones distintas. No se han decidido reglas pendientes del documento del torneo.
 
 Las ediciones usan `updated_at` como condición para evitar sobrescribir cambios de otra pestaña. Las páginas públicas filtran explícitamente por publicado además de RLS. No se cachean datos administrativos ni páginas de eventos: los borradores no se filtran al público al reutilizar cachés.
 
 ## Verificación realizada y límites
 
 - TypeScript, ESLint, validación de 48 escudos/trofeo y build.
-- Pruebas de validación para cuatro formatos, cupos pares, mínimos, fechas, continuación y rechazo de apertura.
-- `supabase/tests/events_rls.sql`, ejecutado sobre el proyecto autorizado dentro de una sola transacción revertida. Prueba propietario verificado, ajeno, no verificado y anónimo: crear/editar, borrador privado, publicación visible y rechazo de apertura/cupos inválidos. Los fixtures de Auth y eventos nunca se confirman; verificado cero eventos después de rollback.
+- Pruebas de validación para cuatro formatos, cupos pares, mínimos, fechas, continuación y rechazo de apertura de borradores.
+- `supabase/tests/events_rls.sql`, ejecutado sobre el proyecto autorizado dentro de una sola transacción revertida. Prueba propietario verificado, ajeno, no verificado y anónimo: crear/editar, borrador privado, publicación visible y rechazo de apertura de borradores y cupos inválidos. Los fixtures de Auth y eventos nunca se confirman; verificado cero eventos después de rollback.
 - Navegador: rutas administrativas sin sesión, correo ajeno, callback inválido, listado público vacío y detalle de borrador 404.
 - Galería, diez filtros, búsqueda, teclado, 404, cinco anchuras, zoom 200 %, Axe y consola: ver reportes en `output/playwright`.
 - Trofeo: carga automática, cinco materiales, reset frontal, teclado, fallo de red con alternativa, ocultación fuera de pantalla y scroll táctil.
@@ -53,8 +53,8 @@ Las ediciones usan `updated_at` como condición para evitar sobrescribir cambios
 
 El propietario confirmó que entró al panel desde el enlace de su correo. La verificación remota confirmó cuenta de propietario verificada y sesión existente. No se ha suplantado su identidad. Creación/edición y aislamiento se probaron con fixtures SQL revertidos; no se presentan como pruebas automatizadas de edición desde el navegador del propietario. Los eventos de producción se mantienen vacíos hasta que el propietario configure uno real.
 
-Supabase Advisors no informa advertencias tras revocar EXECUTE al event-trigger. Conserva un aviso informativo de RLS sin políticas en `cfp_private.owner_config`: es deliberado para denegar todo acceso directo. [Explicación del aviso](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy).
+La revisión actual de Supabase Advisors conserva avisos de funciones SECURITY DEFINER y RLS sin políticas en las tablas privadas, además de protección de contraseñas filtradas desactivada. El acceso directo está denegado; las entradas RPC verifican permisos. Consulta el [detalle y los límites actuales](revision-integral.md#avisos-de-supabase).
 
-## Próximo bloque
+## Puesta en marcha
 
-Inscripción sin cuentas, revisión administrativa, plazo configurable de 48 horas, reservas de cupo/usuarios y concurrencia en base de datos. Resolver decisiones pendientes de lista de espera y escudos antes de implementarlas. La apertura requerirá una migración explícita que retire el bloqueo y añada las restricciones definitivas; no basta con habilitar un botón.
+Inscripción sin cuentas, revisión, reservas, promoción, liguilla y eliminatorias están disponibles. Antes de abrir un evento real, consulta los límites del ensayo y las decisiones deportivas pendientes en [Revisión integral](revision-integral.md).

@@ -1,6 +1,6 @@
 ---
 name: Champions Fútbol Prohibido
-description: Escudos propios, banderines de competición y lectura fácil sobre azul medianoche.
+description: Trofeo V03, escudos propios y lectura fácil sobre azul medianoche.
 colors:
   background: "#020612"
   surface: "#091326"
@@ -135,7 +135,7 @@ components:
 
 ## Portada actual: trofeo V03 aprobado
 
-Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático. Las referencias a los tres banderines que siguen documentan el diseño anterior.
+Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático.
 
 La inscripción conserva bloques con leyendas y resumen antes del envío. La administración tiene un marco común con navegación lateral, contexto del evento y cabecera. Resumen, Eventos, Solicitudes, Equipos y Lista de espera comparten el mismo lenguaje visual; el acceso permanece fuera del marco autenticado. El detalle agrupa Equipo, Jugadores, Requisitos e Historial. Los colores de estado se aplican a los datos y acompañan siempre un texto.
 
@@ -145,7 +145,7 @@ La administración y los eventos reutilizan Manrope, Barlow Condensed, superfici
 
 **Creative North Star: "Banderines de competición"**
 
-Los escudos propios y el nombre completo construyen la identidad. La geometría de banderín aparece en la marca y en el soporte de los PNG de portada. El azul medianoche, las superficies marinas y un acento frío moderado dejan que cada escudo conserve sus colores y su silueta.
+El trofeo V03, los escudos propios y el nombre completo construyen la identidad. La geometría de banderín permanece en la marca; el trofeo protagoniza la portada. El azul medianoche, las superficies marinas y un acento frío moderado dejan que cada recurso conserve sus colores y su silueta.
 
 La tipografía condensada da presencia al torneo; Manrope mantiene claros textos, controles y reglas. La densidad se regula con márgenes amplios, párrafos breves y una retícula estable. Este sistema se extrae del código terminado. El usuario eligió construir directamente en código; no existe una composición raster aprobada.
 
@@ -158,13 +158,13 @@ La tipografía condensada da presencia al torneo; Manrope mantiene claros textos
 
 ### Contrato de dirección conservado de esta entrega
 
-Este registro conserva la decisión que originó la portada. La secuencia y el primer viewport describen esta superficie, sin imponerlos a futuras pantallas.
+Este registro actualiza la dirección original con el trofeo V03 aprobado. La secuencia y el primer viewport describen esta superficie, sin imponerlos a futuras pantallas.
 
 - **THESIS:** el visitante entiende que es un torneo de Fútbol Prohibido en Roblox y puede explorar sus escudos desde la primera pantalla.
 - **OWN-WORLD:** los 48 PNG propios, el nombre CFP, las plantillas de tres jugadores y la comunidad @whiskyzc dan contenido a una identidad de competición propia.
 - **STORY:** presentación del torneo, colección explorable, recorrido de liguilla a final, reglas breves y comunidad; cada sección responde una pregunta concreta.
-- **FIRST VIEWPORT:** título de dos voces, explicación breve, acción hacia escudos y tres PNG sobre banderines; en móvil se compacta sin perder nombre, lectura ni recursos.
-- **FORM:** banderines de clubes, asignación de Impeccable `cd70daf9`, índice 5 de siete sistemas del fútbol. Geometría de banderín en marca y portada; retícula en colección; conectores de avance en el recorrido; búsqueda y selector con URL persistente. El azul medianoche y la lectura fácil fijados por el usuario prevalecen sobre paletas o efectos ajenos.
+- **FIRST VIEWPORT:** título de dos voces, explicación breve, acción hacia escudos y trofeo V03 interactivo; en móvil se compacta sin perder nombre, lectura ni recursos.
+- **FORM:** banderines de clubes, asignación de Impeccable `cd70daf9`, índice 5 de siete sistemas del fútbol. Geometría de banderín en la marca; trofeo V03 en portada; retícula en colección; conectores de avance en el recorrido; búsqueda y selector con URL persistente. El azul medianoche y la lectura fácil fijados por el usuario prevalecen sobre paletas o efectos ajenos.
 
 ## Colors
 
@@ -181,8 +181,8 @@ Una familia azul oscura sostiene el contenido; el acento claro señala acciones 
 ### Neutral
 
 - **Azul medianoche** (`background`): fondo de página, cabecera y campos.
-- **Marino de superficie** (`surface`): galería, reglas, preguntas y banderines exteriores.
-- **Marino elevado** (`secondary`): soporte de escudos, banderín central, botón secundario y comunidad. El nombre técnico no implica un segundo acento.
+- **Marino de superficie** (`surface`): galería, reglas, preguntas y escenario del trofeo.
+- **Marino elevado** (`secondary`): soporte de escudos, botón secundario y comunidad. El nombre técnico no implica un segundo acento.
 - **Blanco frío** (`foreground`): lectura principal.
 - **Azul de lectura auxiliar** (`muted-foreground`): metadatos, notas y descripciones secundarias.
 - **Azul de borde** (`border`): contorno de campos y barra de desplazamiento.
@@ -234,7 +234,7 @@ El foco global usa contorno sólido de 3 px y separación de 5 px. Botones, camp
 
 Controles, reglas y preguntas usan esquinas suaves (`lg`, 8 px); soportes y enlaces de escudos usan `xl` (12 px). Los campos tienen borde de 1 px. La colección no añade bordes a sus soportes.
 
-El banderín CFP usa `polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)`; mide 46 × 54 px en escritorio y 36 × 44 px en móvil. Los soportes de portada sitúan la punta desde el 85 % de altura en una capa independiente detrás de los PNG. Las flechas del recorrido son trazos CSS; los iconos de acciones son SVG.
+El banderín CFP usa `polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)`; mide 46 × 54 px en escritorio y 36 × 44 px en móvil. El trofeo completo utiliza contain y un escenario propio; no se recorta su silueta. Las flechas del recorrido son trazos CSS; los iconos de acciones son SVG.
 
 ## Components
 
@@ -292,9 +292,9 @@ Se muestran 12 diseños inicialmente y se añaden hasta 12 por pulsación. Al al
 
 Preguntas con `details`/`summary` nativos sobre `surface`, radio de 8 px y relleno lateral de 24 px, reducido a 20 px en móvil. El resumen mide al menos 64 px, con relleno vertical de 18 px y peso 600; hover usa el acento. El contenido abierto usa texto auxiliar, máximo de 70ch y 24 px de espacio inferior.
 
-### Pennants and motion
+### Trophy and motion
 
-Los tres banderines de portada entran una vez en 320 ms `ease-out`, desde opacidad 0.7 y desplazamiento vertical de 8 px; el segundo y tercero esperan 60 y 120 ms. No hay bucles.
+El visor carga al entrar en pantalla y conserva la imagen mientras carga o si falla. El usuario gira directamente con arrastre o teclado y puede recuperar el frontal. No hay giro automático. Fuera de pantalla se limita el trabajo gráfico; el scroll vertical móvil permanece operativo.
 
 React ViewTransition conserva identidad por escudo: entrada de opacidad en 160 ms, salida en 120 ms y actualización en 180 ms. Raíz y cabecera no se animan. Sin soporte del navegador, los filtros mantienen su función.
 

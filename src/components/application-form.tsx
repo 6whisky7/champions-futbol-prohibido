@@ -29,6 +29,7 @@ export function ApplicationForm({
   const [waiting, setWaiting] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
   const [result, setResult] = useState<{
     id: string;
     state: string;
@@ -41,9 +42,12 @@ export function ApplicationForm({
   async function send() {
     setBusy(true);
     setError("");
+    setNotice("");
     try {
       if (onSave) {
-        setError(await onSave(p));
+        const outcome = await onSave(p);
+        if (outcome === "Guardado.") setNotice(outcome);
+        else setError(outcome);
       } else {
         const r = await submitApplication(eventId, p, key, waiting);
         if (r.error) setError(r.error);
@@ -264,6 +268,7 @@ export function ApplicationForm({
           </p>
         </section>
       )}
+      <p role="status">{notice}</p>
       <p role="alert">{error}</p>
       <button className="action-link" disabled={busy}>
         {busy

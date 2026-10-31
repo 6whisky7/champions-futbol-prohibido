@@ -359,7 +359,7 @@
   ],
   "narrative": {
     "northStar": "Banderines de competición",
-    "overview": "Los escudos propios y el nombre completo construyen la identidad. La geometría de banderín aparece en la marca y en el soporte de los PNG de portada. El azul medianoche, las superficies marinas y un acento frío moderado dejan que cada escudo conserve sus colores y su silueta.\n\nLa tipografía condensada da presencia al torneo; Manrope mantiene claros textos, controles y reglas. La densidad se regula con márgenes amplios, párrafos breves y una retícula estable. Este sistema se extrae del código terminado. El usuario eligió construir directamente en código; no existe una composición raster aprobada.",
+    "overview": "El trofeo V03, los escudos propios y el nombre completo construyen la identidad. La geometría de banderín permanece en la marca; el trofeo protagoniza la portada. El azul medianoche, las superficies marinas y un acento frío moderado dejan que cada recurso conserve sus colores y su silueta.\n\nLa tipografía condensada da presencia al torneo; Manrope mantiene claros textos, controles y reglas. La densidad se regula con márgenes amplios, párrafos breves y una retícula estable. Este sistema se extrae del código terminado. El usuario eligió construir directamente en código; no existe una composición raster aprobada.",
     "keyCharacteristics": [
       "Escudos originales completos, con proporciones conservadas.",
       "Fondo azul medianoche y profundidad por capas de color.",
