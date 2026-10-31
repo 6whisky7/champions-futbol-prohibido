@@ -45,6 +45,8 @@ Actualización aprobada: trofeo V03 completo, usado en portada mediante una copi
 
 Texto principal de aproximadamente 18 px o mayor; información auxiliar legible; párrafos breves. Contraste cómodo, zoom al 200 %, teclado, objetivos táctiles amplios y movimiento reducido.
 
-La recepción pública tiene límites persistentes y firma de servidor. Turnstile fue retirado por el organizador. La apertura está bloqueada por política inactiva hasta aprobar conservación, menores y texto final; se conservan cerrados los eventos reales.
+La recepción pública tiene límites persistentes y firma de servidor. Turnstile fue retirado por el organizador. La apertura está bloqueada por política inactiva hasta completar identidad/aviso, validar e implementar representación y confirmación individual y revisar los plazos provisionales de conservación; se conservan cerrados los eventos reales.
 
 LIVE separa marcador provisional y resultado oficial. Solo el propietario convoca e inicia espera, registra ausencia o confirma resultado. Ayudantes verificados y asignados por evento solo editan marcadores de trabajo. OBS, revelación del sorteo guardado y exportaciones PNG/PDF/CSV utilizan datos públicos de eventos publicados. Clips privados salvo publicación explícita. No hay cuenta pública de administrador ni ayudantes de prueba en producción.
+
+Las decisiones del 31 de octubre admiten menores con autorización verificable y sin mínimo propio, respetando las plataformas. El procedimiento no está activado; la confirmación individual se revisa. Conservación 30/90 días provisional y sin purgas. La demostración personal es local, ficticia y recuperable; no publica datos ni inaugura eventos reales.

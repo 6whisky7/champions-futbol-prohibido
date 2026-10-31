@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "sha": "f048153f8be3f274193d67b17d75c3b2449bf438",
+  "checks": [
+    {
+      "url": "/live/acceso",
+      "status": 200
+    },
+    {
+      "url": "/api/live/0fbe00b5-e856-486e-868c-2fc88cf590e1",
+      "status": 401
+    },
+    {
+      "url": "/api/obs/0fbe00b5-e856-486e-868c-2fc88cf590e1/marcador",
+      "status": 404
+    },
+    {
+      "url": "/obs/0fbe00b5-e856-486e-868c-2fc88cf590e1/marcador",
+      "status": 404
+    },
+    {
+      "url": "/eventos/0fbe00b5-e856-486e-868c-2fc88cf590e1/exportar",
+      "status": 404
+    },
+    {
+      "url": "/eventos/0fbe00b5-e856-486e-868c-2fc88cf590e1/revelacion",
+      "status": 404
+    },
+    {
+      "url": "/admin/live",
+      "status": 307,
+      "location": "/admin/acceso"
+    },
+    {
+      "url": "/live",
+      "status": 307,
+      "location": "/live/acceso"
+    }
+  ],
+  "availability": {
+    "events": []
+  },
+  "limits": "Real anonymous domain checks only; owner/helper authenticated operations are isolated fixtures."
+}

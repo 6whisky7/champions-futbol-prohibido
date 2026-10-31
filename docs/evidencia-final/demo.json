@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "checks": [
+    "6 guided stages",
+    "draft, signup, LIVE, KO, champion, export, OBS actual local pages200",
+    "full event has working test-only form and waiting list",
+    "mobile no overflow"
+  ],
+  "auth": "simulated, dedicated local database cfp_demo_20261031; no real Auth",
+  "errors": []
+}

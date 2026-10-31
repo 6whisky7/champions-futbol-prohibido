@@ -1,0 +1,33 @@
+{
+  "event": "81324e5d-745f-4b4c-8e2d-84bf18912e3a",
+  "status": "PASS",
+  "auth": "simulated locally; real PostgreSQL roles/functions; test transport, not real Supabase Auth",
+  "steps": [
+    "event network failure preserves all typed inputs before retry",
+    "event server validation error preserves all typed inputs",
+    "same event created as draft, published and opened through owner UI",
+    "public request rejected via owner UI",
+    "only test clock/expiry shifted; no participant data inserted or edited directly",
+    "public signup 1 saved; crest/name/player release respected",
+    "public signup 2 saved; crest/name/player release respected",
+    "public signup 3 saved; crest/name/player release respected",
+    "public signup 4 saved; crest/name/player release respected",
+    "public signup 5 saved; crest/name/player release respected",
+    "public signup 6 saved; crest/name/player release respected",
+    "public signup 7 saved; crest/name/player release respected",
+    "public signup 8 saved; crest/name/player release respected",
+    "public signup 9 saved; crest/name/player release respected",
+    "public signup 10 saved; crest/name/player release respected",
+    "public signup 11 saved; crest/name/player release respected",
+    "waiting promotion refuses active player conflict",
+    "waiting corrected via UI and promoted to pending; no re-entry of teams",
+    "last seat enforced and typed data preserved on full capacity error",
+    "closing preserves pending deadline and blocks draw until resolved",
+    "24 league results entered through UI on the same approved teams",
+    "corrected result recalculates GF without duplicate played matches or points",
+    "final tie lots persisted and league table closed",
+    "same event completed31matches, champion/official Roblox roster public; private TikTok absent"
+  ],
+  "errors": [],
+  "out": "C:\\Users\\XT\\Projects\\cfp-registration-tests\\integral-mvww7v62"
+}
