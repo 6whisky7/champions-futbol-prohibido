@@ -27,6 +27,10 @@ export async function saveEvent(_state: { message: string }, form: FormData) {
   const client = await requireOwner();
   let value;
   try { value = parseEvent(form); } catch (error) { return { message: error instanceof Error ? error.message : "Revisa los campos." }; }
+  if(value.registration_status==="open") {
+    const {data:policy,error:policyError}=await client.rpc("cfp_registration_status");
+    if(policyError || !policy?.enabled) return {message:"Antes de abrir, confirma el aviso de privacidad, la conservación y la participación de menores."};
+  }
   const id = String(form.get("id") ?? "");
   if (id && !/^[0-9a-f-]{36}$/i.test(id)) return { message: "Evento inválido." };
   const query = id

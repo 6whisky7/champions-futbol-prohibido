@@ -158,3 +158,5 @@ Consulta el [plan y decisiones pendientes](docs/plan-mejoras.md) y la [comparaci
 - [Integrar el plugin oficial de Next.js en ESLint](https://nextjs.org/docs/app/api-reference/config/eslint).
 - [Clientes y sesiones SSR de Supabase](https://supabase.com/docs/guides/auth/server-side/creating-a-client).
 - [Importar un repositorio Git en Vercel](https://vercel.com/docs/git).
+
+La recepción pública requiere `CFP_SUBMISSION_HMAC_KEY` exclusivamente de servidor, coincidente con la configuración privada de ingreso. Ya está instalada en Production/Preview. `.env.example` contiene solo su nombre vacío. El aviso permanece inactivo hasta definir conservación y participación de menores; ninguna inscripción real se abre con esta entrega.

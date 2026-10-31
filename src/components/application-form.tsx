@@ -10,9 +10,11 @@ export function ApplicationForm({
   initial,
   onSave,
   defaultWaiting = false,
+  privacyVersion = null,
 }: {
   eventId: string;
   defaultWaiting?: boolean;
+  privacyVersion?: string | null;
   reserved: string[];
   initial?: ApplicationPayload;
   onSave?: (p: ApplicationPayload) => Promise<string>;
@@ -31,6 +33,7 @@ export function ApplicationForm({
   const [waiting, setWaiting] = useState(defaultWaiting);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [notice, setNotice] = useState("");
   const [result, setResult] = useState<{
     id: string;
@@ -51,9 +54,10 @@ export function ApplicationForm({
         if (outcome === "Guardado.") setNotice(outcome);
         else setError(outcome);
       } else {
-        const r = await submitApplication(eventId, p, key, waiting);
+        const r = await submitApplication(eventId, p, key, waiting, privacyVersion ? {version:privacyVersion,accepted:privacyAccepted} : undefined);
         if (r.error) setError(r.error);
-        else setResult(r.result);
+        else if (r.result) setResult(r.result);
+        else setError("No se pudo confirmar el envío. Conserva tus datos y reintenta.");
       }
     } catch {
       setError(
@@ -231,8 +235,7 @@ export function ApplicationForm({
             tap es voluntario.
           </p>
           <label>
-            <input type="checkbox" required /> He informado a mi plantilla y
-            entiendo los requisitos y la publicación de los usuarios de Roblox.
+            <input type="checkbox" required /> He revisado los datos y entiendo los requisitos y la publicación de Roblox. Esto no sustituye el consentimiento de cada integrante.
           </label>
           <label>
             <input
@@ -270,9 +273,14 @@ export function ApplicationForm({
           </p>
         </section>
       )}
+      {!onSave && <section className="registration-lock">
+        <p>Whisky utiliza Roblox y TikTok para revisar y organizar el torneo. Se publican equipo, escudo y Roblox; TikTok, notas e historial quedan privados. <a href="/privacidad" target="_blank" rel="noopener noreferrer">Consulta privacidad, contacto y retirada de datos</a>.</p>
+        {privacyVersion ? <label><input type="checkbox" checked={privacyAccepted} onChange={e=>setPrivacyAccepted(e.target.checked)} required /> He leído el aviso de privacidad presentado (versión {privacyVersion}).</label> : <p>El aviso definitivo, la conservación y la participación de menores están pendientes de confirmar. El envío todavía no está habilitado.</p>}
+        <p>Esta aceptación solo corresponde a quien envía. No acredita por sí sola el consentimiento de cada integrante ni una autorización familiar.</p>
+      </section>}
       <p role="status">{notice}</p>
       <p role="alert">{error}</p>
-      <button className="action-link" disabled={busy}>
+      <button className="action-link" disabled={busy || (!onSave && (!privacyVersion || !privacyAccepted))}>
         {busy
           ? "Guardando…"
           : review

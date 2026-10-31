@@ -5,14 +5,13 @@ export function Brand({ href = "/" }: { href?: string }) {
     <Link
       className="brand"
       href={href}
-      aria-label="Champions Fútbol Prohibido, inicio"
       translate="no"
     >
       <span className="brand-mark" aria-hidden="true">
         CFP
       </span>
       <span className="brand-name">
-        Champions<span>Fútbol Prohibido</span>
+        Champions{" "}<span>Fútbol Prohibido</span>
       </span>
     </Link>
   );

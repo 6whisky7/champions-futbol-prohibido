@@ -34,6 +34,8 @@ export default async function PublicEvent({
   if (!data) notFound();
   const e = data as TournamentEvent;
   const format = eventFormats[e.format];
+  const {data:privacy,error:privacyError}=await client.rpc("cfp_registration_status");
+  const privacyVersion=!privacyError && privacy?.enabled ? privacy.version as string : null;
   const { data: teams, error: teamsError } = await client.rpc(
     "cfp_public_teams",
     { e: id },
@@ -145,6 +147,7 @@ export default async function PublicEvent({
             </p>
             <ApplicationForm
               eventId={id}
+              privacyVersion={privacyVersion}
               defaultWaiting={publicTeams.length >= e.capacity}
               reserved={publicTeams.map((t) => t.crest)}
             />

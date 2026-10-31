@@ -13,6 +13,8 @@ export type Application = {
   expires_at: string | null;
   captain_confirmed: boolean;
   requirements_checked: boolean;
+  accepted_privacy_version?: string | null;
+  accepted_privacy_at?: string | null;
   history: {
     at: string;
     action: string;

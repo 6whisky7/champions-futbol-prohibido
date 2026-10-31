@@ -10,6 +10,7 @@ export function SiteFooter() {
         <br />
         Una competición de la comunidad <span translate="no">@whiskyzc</span>.
       </p>
+      <Link href="/privacidad">Privacidad y contacto</Link>
       <Link className="footer-top" href="/#inicio">
         Volver arriba
       </Link>
