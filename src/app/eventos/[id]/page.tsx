@@ -28,10 +28,13 @@ export async function generateMetadata({
 }
 export default async function PublicEvent({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{escudo?:string}>;
 }) {
   const { id } = await params;
+  const requestedCrest=(await searchParams).escudo;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const client = await createClient();
   const d = await publicCompetition(id);
@@ -150,6 +153,7 @@ export default async function PublicEvent({
             </p>
             <ApplicationForm
               eventId={id}
+              initialCrest={crests.some(c=>c.id===requestedCrest)&&(publicTeams.length>=e.capacity||!publicTeams.some(t=>t.crest===requestedCrest))?requestedCrest:''}
               privacyVersion={privacyVersion}
               defaultWaiting={publicTeams.length >= e.capacity}
               reserved={publicTeams.map((t) => t.crest)}

@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "steps": [
+    "published-only crest DTO and real calendar time, no private data or inferred LIVE",
+    "occupied label, no reservation, Escape focus and URL filters retained",
+    "free crest participation link prefills valid crest without creating an application",
+    "full event permits wait without reservation; mobile dialog, focus trap, direct-link return and Axe",
+    "availability failure is explicit and retry restores selector",
+    "active public section/page at four widths with no horizontal overflow"
+  ],
+  "errors": [],
+  "auth": "local Auth/REST fixture; real PostgreSQL and Next",
+  "fixtures": {
+    "league": "17c84e49-31ee-44f7-9c3d-c6b821575e42",
+    "quarters": "3f487ec5-30ea-478b-ab8f-fc3c8f424531",
+    "round16": "c1fa8306-a0b0-4fa6-a3e7-14930718979d",
+    "round32": "4eb17558-b9c3-41fe-be47-b212fd8115f2",
+    "repechage": "0cc58303-f142-4de8-afe8-b00ee90185b2",
+    "champion": "0ed71d7a-df28-4ff3-ba21-c65c0ed9745c"
+  }
+}

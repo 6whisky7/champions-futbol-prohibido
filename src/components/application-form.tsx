@@ -8,6 +8,7 @@ export function ApplicationForm({
   eventId,
   reserved,
   initial,
+  initialCrest = '',
   onSave,
   defaultWaiting = false,
   privacyVersion = null,
@@ -17,12 +18,13 @@ export function ApplicationForm({
   privacyVersion?: string | null;
   reserved: string[];
   initial?: ApplicationPayload;
+  initialCrest?: string;
   onSave?: (p: ApplicationPayload) => Promise<string>;
 }) {
   const [p, setP] = useState<ApplicationPayload>(
     initial ?? {
       name: "",
-      crest: "",
+      crest: initialCrest,
       number: "",
       captain: "0",
       members: Array.from({ length: 3 }, () => ({ roblox: "", tiktok: "" })),
