@@ -8,5 +8,5 @@ export async function proxy(request: NextRequest) {
 // Refreshes Auth cookies on administrative routes. Every protected page and
 // action independently checks the verified user plus database owner permission.
 export const config = {
-  matcher: ["/admin/:path*", "/auth/:path*"],
+  matcher: ["/admin/:path*", "/live/:path*", "/auth/:path*"],
 };

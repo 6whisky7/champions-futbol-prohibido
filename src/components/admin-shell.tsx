@@ -13,20 +13,69 @@ import {
   Menu,
   X,
   Plus,
+  Radio,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/app/admin/actions";
 import type { TournamentEvent } from "@/lib/events";
 const sections = [
-  { label: "Resumen", path: "/admin", icon: LayoutDashboard,group:"Resumen" },
-  { label: "Eventos", path: "/admin/eventos", icon: CalendarDays,group:"Preparar" },
-  { label: "Solicitudes",path:"/admin/solicitudes",view:"pending",icon:Inbox,group:"Preparar",counter:"pending" },
-  { label: "Equipos",path:"/admin/solicitudes",view:"approved",icon:Users,group:"Preparar",counter:"approved" },
-  { label: "Lista de espera",path:"/admin/solicitudes",view:"waiting",icon:ListOrdered,group:"Preparar",counter:"waiting" },
-  { label: "Calendario", path: "/admin/calendario", icon: CalendarDays,group:"Competición" },
-  { label: "Resultados", path: "/admin/resultados", icon: ListOrdered,group:"Competición",counter:"results" },
-  { label: "Clasificación", path: "/admin/clasificacion", icon: Users,group:"Competición" },
-  { label: "Eliminatorias", path: "/admin/eliminatorias", icon: ListOrdered,group:"Competición" },
+  { label: "Resumen", path: "/admin", icon: LayoutDashboard, group: "Resumen" },
+  {
+    label: "Eventos",
+    path: "/admin/eventos",
+    icon: CalendarDays,
+    group: "Preparar",
+  },
+  {
+    label: "Solicitudes",
+    path: "/admin/solicitudes",
+    view: "pending",
+    icon: Inbox,
+    group: "Preparar",
+    counter: "pending",
+  },
+  {
+    label: "Equipos",
+    path: "/admin/solicitudes",
+    view: "approved",
+    icon: Users,
+    group: "Preparar",
+    counter: "approved",
+  },
+  {
+    label: "Lista de espera",
+    path: "/admin/solicitudes",
+    view: "waiting",
+    icon: ListOrdered,
+    group: "Preparar",
+    counter: "waiting",
+  },
+  {
+    label: "Calendario",
+    path: "/admin/calendario",
+    icon: CalendarDays,
+    group: "Competición",
+  },
+  {
+    label: "Resultados",
+    path: "/admin/resultados",
+    icon: ListOrdered,
+    group: "Competición",
+    counter: "results",
+  },
+  {
+    label: "Clasificación",
+    path: "/admin/clasificacion",
+    icon: Users,
+    group: "Competición",
+  },
+  {
+    label: "Eliminatorias",
+    path: "/admin/eliminatorias",
+    icon: ListOrdered,
+    group: "Competición",
+  },
+  { label: "LIVE", path: "/admin/live", icon: Radio, group: "Competición" },
 ];
 export function AdminShell({
   events,
@@ -48,8 +97,25 @@ export function AdminShell({
           ? path.split("/").at(-1)
           : params.get("evento")),
     ) ?? events[0];
-  const [counts,setCounts]=useState<{evento:string;values:Record<string,number>}|null>(null);
-  useEffect(()=>{if(!event)return;const controller=new AbortController();fetch(`/api/admin/contadores?evento=${event.id}`,{signal:controller.signal,cache:"no-store"}).then(async r=>{if(!r.ok)throw Error("Counts unavailable");const values=await r.json();setCounts({evento:values.evento,values});}).catch(()=>{});return ()=>controller.abort();},[event]);
+  const [counts, setCounts] = useState<{
+    evento: string;
+    values: Record<string, number>;
+  } | null>(null);
+  useEffect(() => {
+    if (!event) return;
+    const controller = new AbortController();
+    fetch(`/api/admin/contadores?evento=${event.id}`, {
+      signal: controller.signal,
+      cache: "no-store",
+    })
+      .then(async (r) => {
+        if (!r.ok) throw Error("Counts unavailable");
+        const values = await r.json();
+        setCounts({ evento: values.evento, values });
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [event]);
   const view = params.get("vista") ?? "pending";
   const current =
     sections.find((s) => s.path === path && (!s.view || s.view === view)) ??
@@ -108,10 +174,41 @@ export function AdminShell({
           }}
         >
           <nav aria-label="Administración">
-            {["Resumen","Preparar","Competición"].map(group=><div className="admin-nav-group" role="group" aria-label={group} key={group}>
-              {group!=="Resumen"&&<p>{group}</p>}
-              {sections.filter(s=>s.group===group).map(s=><Link key={s.label} href={href(s.path,s.view)} aria-current={current.label===s.label?"page":undefined} onClick={()=>setMenu(false)}><s.icon size={21}/><span>{s.label}</span>{s.counter&&counts?.evento===event?.id&&<span className="admin-nav-count"><span className="sr-only">{s.counter==="results"?"Partidos por resolver: ":"Cantidad: "}</span>{counts.values[s.counter]}</span>}</Link>)}
-            </div>)}
+            {["Resumen", "Preparar", "Competición"].map((group) => (
+              <div
+                className="admin-nav-group"
+                role="group"
+                aria-label={group}
+                key={group}
+              >
+                {group !== "Resumen" && <p>{group}</p>}
+                {sections
+                  .filter((s) => s.group === group)
+                  .map((s) => (
+                    <Link
+                      key={s.label}
+                      href={href(s.path, s.view)}
+                      aria-current={
+                        current.label === s.label ? "page" : undefined
+                      }
+                      onClick={() => setMenu(false)}
+                    >
+                      <s.icon size={21} />
+                      <span>{s.label}</span>
+                      {s.counter && counts?.evento === event?.id && (
+                        <span className="admin-nav-count">
+                          <span className="sr-only">
+                            {s.counter === "results"
+                              ? "Partidos por resolver: "
+                              : "Cantidad: "}
+                          </span>
+                          {counts.values[s.counter]}
+                        </span>
+                      )}
+                    </Link>
+                  ))}
+              </div>
+            ))}
           </nav>
           <div className="admin-sidebar-bottom">
             <Link href="/" target="_blank">
@@ -127,7 +224,10 @@ export function AdminShell({
         </div>
       </aside>
       <div className="admin-body">
-        <section className="admin-context" aria-label="Contexto del evento activo">
+        <section
+          className="admin-context"
+          aria-label="Contexto del evento activo"
+        >
           <label htmlFor="workspace-event">Evento activo</label>
           <select
             id="workspace-event"
@@ -171,17 +271,26 @@ export function AdminShell({
                         "/admin/resultados",
                         "/admin/clasificacion",
                         "/admin/eliminatorias",
+                        "/admin/live",
                       ].includes(path)
-                    ? path === "/admin/eliminatorias"
-                      ? "Cuadro fijo, avance de ganadores y cierre del evento."
-                      : "Rivales, resultados oficiales y posiciones de la liguilla."
+                    ? path === "/admin/live"
+                      ? "Marcador de trabajo, espera, OBS y permisos limitados por evento."
+                      : path === "/admin/eliminatorias"
+                        ? "Cuadro fijo, avance de ganadores y cierre del evento."
+                        : "Rivales, resultados oficiales y posiciones de la liguilla."
                     : "Revisa las plantillas y resuelve cada solicitud con sus requisitos."}
             </p>
           </div>
-          {!path.endsWith("/nuevo") && (
-            <Link className="action-link" href="/admin/eventos/nuevo">
-              <Plus size={20} /> Crear evento
+          {path === "/admin/live" && event ? (
+            <Link className="action-link" href={href("/admin/resultados")}>
+              <ListOrdered size={20} /> Resultados oficiales
             </Link>
+          ) : (
+            !path.endsWith("/nuevo") && (
+              <Link className="action-link" href="/admin/eventos/nuevo">
+                <Plus size={20} /> Crear evento
+              </Link>
+            )
           )}
         </header>
         <div id="admin-content" tabIndex={-1}>

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { classificationZone } from "@/lib/public-matches";
 import { tieExplanation } from "@/lib/league/tie-explanation";
 import { CompetitionAuditChanges } from "@/components/competition-audit-changes";
+import { DrawReveal } from "@/components/draw-reveal";
 import { getCrest } from "@/lib/crests";
 import { localDate } from "@/lib/events";
 import { leagueAction } from "@/app/admin/league-actions";
@@ -65,7 +66,11 @@ export function LeagueView({
           <Image src={getCrest(t.crest).src} alt="" width={36} height={36} />
         )}
         <span>
-          {!admin && t ? <Link href={`/eventos/${eventId}/equipos/${id}`}>{t.name}</Link> : t?.name ?? id}
+          {!admin && t ? (
+            <Link href={`/eventos/${eventId}/equipos/${id}`}>{t.name}</Link>
+          ) : (
+            (t?.name ?? id)
+          )}
           {t?.dq ? " · Descalificado" : ""}
         </span>
       </span>
@@ -139,6 +144,18 @@ export function LeagueView({
           Volver a sortear la revisión previa
         </button>
       )}
+      {admin && tab === "calendar" && (
+        <DrawReveal
+          key={data.seed}
+          preview={data.state === "preview"}
+          matches={data.matches.map((m) => ({
+            id: m.id,
+            phase: `Jornada ${m.round} · partido ${m.game_order}`,
+            homeName: team(m.home)?.name ?? "Por definir",
+            awayName: team(m.away)?.name ?? "Por definir",
+          }))}
+        />
+      )}
       {tab === "standings" ? (
         <section className="admin-surface">
           <h2>
@@ -179,16 +196,20 @@ export function LeagueView({
               </thead>
               <tbody>
                 {data.table.map((r) => (
-                  <tr key={r.id} data-zone={classificationZone(r,data).key}>
+                  <tr key={r.id} data-zone={classificationZone(r, data).key}>
                     <td>
                       {r.tie_pending ? "=" : ""}
                       {r.position}
                     </td>
                     <th scope="row">
                       {name(r.id)}
-                      <span className={`zone-label zone-${classificationZone(r,data).key}`}>{classificationZone(r,data).label}</span>
+                      <span
+                        className={`zone-label zone-${classificationZone(r, data).key}`}
+                      >
+                        {classificationZone(r, data).label}
+                      </span>
                       <small>
-                        {tieExplanation(r,teams)}
+                        {tieExplanation(r, teams)}
                         {r.tie_pending ? " · Zona por resolver" : ""}
                         {!r.dq && !r.tie_pending && r.position <= data.qualified
                           ? data.format === "repechage" && r.position > 8
@@ -338,7 +359,13 @@ export function LeagueView({
                             ? ` · ${eventDate(m.scheduled_at)}`
                             : " · Sin fecha asignada"}
                         </p>
-                        {!admin && <Link href={`/eventos/${eventId}/partidos/${m.id}`}>{tab === "results" ? "Ver y compartir resultado" : "Detalle y calendario"}</Link>}
+                        {!admin && (
+                          <Link href={`/eventos/${eventId}/partidos/${m.id}`}>
+                            {tab === "results"
+                              ? "Ver y compartir resultado"
+                              : "Detalle y calendario"}
+                          </Link>
+                        )}
                         {admin && data.state === "active" && (
                           <button
                             className="trophy-button"
@@ -442,7 +469,11 @@ export function LeagueView({
       {admin && (
         <details className="admin-surface">
           <summary>Historial privado de la competición</summary>
-          <p>Volver a sortear solo está disponible en revisión previa. Las correcciones conservan la auditoría y no reorganizan un calendario confirmado.</p>
+          <p>
+            Volver a sortear solo está disponible en revisión previa. Las
+            correcciones conservan la auditoría y no reorganizan un calendario
+            confirmado.
+          </p>
           <ul>
             {data.history?.map((h, i) => (
               <li key={i}>
@@ -457,8 +488,17 @@ export function LeagueView({
                   close: "Cierre de liguilla",
                 }[h.action] ?? h.action}{" "}
                 · {h.reason}
-                <CompetitionAuditChanges before={h.before_value} after={h.after_value} teams={teams}/>
-                {h.actor&&<details><summary>Quién realizó la acción</summary><p>Usuario verificado: {h.actor}</p></details>}
+                <CompetitionAuditChanges
+                  before={h.before_value}
+                  after={h.after_value}
+                  teams={teams}
+                />
+                {h.actor && (
+                  <details>
+                    <summary>Quién realizó la acción</summary>
+                    <p>Usuario verificado: {h.actor}</p>
+                  </details>
+                )}
                 <details>
                   <summary>Valores anteriores y nuevos</summary>
                   <pre className="league-audit">
