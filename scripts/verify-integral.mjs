@@ -29,13 +29,12 @@ let e;
 async function post(page, button) { await page.waitForLoadState('networkidle'); const response = page.waitForResponse(r => r.request().method() === 'POST' && r.url().startsWith(base)); await Promise.all([button.click(), response]); await page.waitForTimeout(60); }
 async function shot(page, name) { await page.emulateMedia({ reducedMotion: 'reduce' }); await page.waitForLoadState('networkidle'); await page.evaluate(() => { document.activeElement?.blur(); document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); }); await page.waitForTimeout(120); await page.screenshot({ path: out + '/' + name + '.png', fullPage: false }); }
 const crew = (n, j) => ({ roblox: `a${tag}_${n}_${j}`, tiktok: `a${tag}.${n}.${j}` });
-async function submit(name, crest, n, { four = false, waiting = false, reuse = null, error = false } = {}) { await p.goto(base + '/eventos/' + e); await p.locator('#team-name').fill(name); if (waiting)
-    await p.getByRole('checkbox').filter({ visible: true }).last().check().catch(async () => p.getByLabel('Enviar a lista de espera', { exact: false }).check()); await p.locator('#crest').selectOption(String(crest).padStart(2, '0')); if (four)
+async function submit(name, crest, n, { four = false, waiting = false, reuse = null, error = false } = {}) { await pub.setExtraHTTPHeaders({'x-forwarded-for':`203.0.113.${n+1}`});await p.goto(base + '/eventos/' + e); await p.locator('#team-name').fill(name); await p.getByLabel('Enviar a lista de espera, sin reservas',{exact:false}).setChecked(waiting); await p.locator('#crest').selectOption(String(crest).padStart(2, '0')); if (four)
     await p.getByRole('button', { name: 'Añadir suplente' }).click(); for (let j = 0; j < (four ? 4 : 3); j++) {
     const m = j === 1 && reuse ? reuse : crew(n, j);
     await p.locator('#roblox-' + j).fill(m.roblox);
     await p.locator('#tiktok-' + j).fill(m.tiktok);
-} await p.getByRole('checkbox').first().check(); await p.getByRole('button', { name: 'Revisar datos' }).click(); await post(p, p.getByRole('button', { name: 'Enviar solicitud', exact: true })); if (error) {
+} await p.getByRole('checkbox').first().check(); await p.getByRole('checkbox',{name:/He leído el aviso/}).check(); await p.getByRole('button', { name: 'Revisar datos' }).click(); await post(p, p.getByRole('button', { name: 'Enviar solicitud', exact: true })); if (error) {
     assert.equal(await p.locator('#team-name').inputValue(), name);
     await p.getByRole('alert').filter({ hasText: /No quedan plazas/ }).waitFor();
     return null;

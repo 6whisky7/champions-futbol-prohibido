@@ -191,6 +191,7 @@ export function ApplicationManager({
           <p>
             {stateLabels[a.state]} · Referencia {a.id}
           </p>
+          <p className="admin-note">{a.accepted_privacy_version ? `Aviso presentado: ${a.accepted_privacy_version}. Aceptación registrada por quien envió; no acredita el consentimiento de toda la plantilla.` : "Sin aceptación versionada registrada. No se presume consentimiento por una inscripción anterior."}</p>
           <h3>Jugadores</h3>
           <ul className="admin-roster">
             {a.payload.members.map((m, i) => (
