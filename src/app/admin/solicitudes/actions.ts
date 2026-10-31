@@ -20,3 +20,10 @@ export async function reviewApplication(
   revalidatePath("/eventos", "layout");
   return "Guardado.";
 }
+export async function setRequirement(id:string,member_index:number,requirement:string,checked:boolean,reason:string){
+  const c=await requireOwner();
+  const {error}=await c.rpc("cfp_set_requirement",{aid:id,member_index,requirement,checked,reason});
+  if(error)return error.message;
+  revalidatePath("/admin/solicitudes");revalidatePath("/admin");
+  return "Comprobación guardada.";
+}

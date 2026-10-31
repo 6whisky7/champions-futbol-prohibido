@@ -164,3 +164,5 @@ La recepción pública requiere `CFP_SUBMISSION_HMAC_KEY` exclusivamente de serv
 ## Consulta pública y compartir
 
 [Alcance y pruebas del bloque público](docs/mejoras-bloque-3.md): próximo partido/ICS, páginas de equipo y partido, clasificación por zonas, seguimiento del cuadro, tarjetas PNG y OG, `/campeones` y `/como-se-juega`. Solo utilizan eventos publicados. Las descargas de calendario no se sincronizan automáticamente.
+
+El panel incorpora [orientación y revisión por integrante](docs/mejoras-bloque-4a.md), con contadores privados autorizados y explicación de los criterios de desempate guardados.

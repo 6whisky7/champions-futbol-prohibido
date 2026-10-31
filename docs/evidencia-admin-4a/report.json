@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "auth": "simulated local Auth/REST; real PG and Next server actions",
+  "event": "d55e786b-3fa6-4ac5-9ed7-9cd175dc6925",
+  "application": "08f31c8c-aa53-41ed-85cd-426bb1c5e866",
+  "steps": [
+    "real pending next step, grouped navigation and authorized counts",
+    "nine individual checks through real Next actions, captain guard, approval and private audit",
+    "next step advances after the same team is approved",
+    "eleven admin surfaces at 1440/390, Axe, no overflow, menu and Escape",
+    "counts denied without session; no React errors"
+  ]
+}

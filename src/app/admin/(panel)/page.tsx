@@ -3,6 +3,9 @@ import { CalendarDays, ArrowRight, Clock3 } from "lucide-react";
 import { requireOwner } from "@/lib/owner";
 import { eventColumns, eventDate, type TournamentEvent } from "@/lib/events";
 import { type Application } from "@/lib/applications";
+import { adminNextStep } from "@/lib/admin-next-step";
+import type { League } from "@/lib/league/types";
+import type { Knockout } from "@/lib/knockout";
 export default async function Admin({
   searchParams,
 }: {
@@ -40,9 +43,12 @@ export default async function Admin({
   );
   if (failed) throw new Error("No se pudieron consultar las solicitudes.");
   const items = raw as Application[];
+  const [league,knockout,privacy]=await Promise.all([client.rpc("cfp_league_read",{e:event.id,admin:true}),client.rpc("cfp_knockout_read",{e:event.id,admin:true}),client.rpc("cfp_registration_status")]);
+  if(league.error||knockout.error||privacy.error)throw new Error("No se pudo calcular el siguiente paso.");
   const pending = items.filter((a) => a.state === "pending"),
     approved = items.filter((a) => a.state === "approved"),
     waiting = items.filter((a) => a.state === "waiting");
+  const next=adminNextStep(event,league.data as League|null,knockout.data as Knockout|null,pending.length,approved.length,privacy.data?.enabled===true);
   const near = pending.filter(
     (a) =>
       a.expires_at &&
@@ -78,6 +84,7 @@ export default async function Admin({
         </div>
         <Link href={`/admin/eventos/${event.id}`}>Configurar evento →</Link>
       </section>
+      <section className="admin-surface admin-next-step"><h2>Siguiente paso</h2><h3>{next.title}</h3><p>{next.text}</p><Link className="action-link" href={next.href}>{next.action} <ArrowRight size={20}/></Link></section>
       <dl className="admin-counts">
         {[
           ["Plazas ocupadas", pending.length + approved.length],
@@ -107,7 +114,7 @@ export default async function Admin({
           {pending.length ? (
             <>
               <p>
-                {pending.length} solicitudes esperan confirmación o revisión.
+                {pending.length} {pending.length===1?"solicitud espera":"solicitudes esperan"} confirmación o revisión.
               </p>
               <Link className="action-link" href={review()}>
                 Revisar solicitudes →

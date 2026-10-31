@@ -21,3 +21,7 @@ Capturas, antes/después y scripts locales: `C:/Users/XT/Projects/cfp-registrati
 La revisión independiente de Impeccable y la segunda revisión de Taste comprobaron el conjunto de pantallas. El veredicto final `ship` cierra tres correcciones concretas: aprobación deshabilitada legible, color junto al texto de estado y enlace directo al detalle. No certifica por sí solo producción ni Auth real.
 
 Antes de publicar se ejecutan TypeScript, ESLint, assets y build. Después del PR se comprueban el commit de main, Production Ready, el dominio público y las redirecciones sin sesión. No se abren eventos ni se crean participantes reales para esta revisión.
+
+## Orientación y comprobaciones individuales
+
+[Siguiente paso, menú agrupado, contadores y revisión por integrante](mejoras-bloque-4a.md) amplían este panel. Las aprobaciones antiguas no cambian y no se habilita una excepción a requisitos. El alcance de LIVE/ayudantes se documenta en su entrega posterior.

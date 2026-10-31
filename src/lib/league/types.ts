@@ -29,6 +29,9 @@ export type LeagueRow = LeagueTeam & {
   tie_pending?: boolean;
   tie_key?: string;
   tie_reason?: string;
+  tie_opponent?: string;
+  tie_mini_teams?: string[];
+  tie_mini_wins?: number;
   administrative_gc: number;
 };
 export type League = {
@@ -49,6 +52,7 @@ export type League = {
   };
   history?: {
     at: string;
+    actor?: string | null;
     action: string;
     reason: string;
     before_value: unknown;

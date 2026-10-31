@@ -10,6 +10,7 @@ import { localDate } from "@/lib/events";
 import { type Knockout, knockoutLabels, knockoutDate } from "@/lib/knockout";
 import { knockoutAction } from "@/app/admin/knockout-actions";
 import { ChampionPresentation } from "./champion";
+import { CompetitionAuditChanges } from "@/components/competition-audit-changes";
 export function KnockoutView({
   eventId,
   data,
@@ -425,7 +426,7 @@ export function KnockoutView({
       )}
       {admin && (
         <details className="admin-surface">
-          <summary>Historial privado del cuadro</summary>
+          <summary>Historial privado del cuadro</summary><p>Retirar un resultado exige revisar sus dependencias disputadas; no borra auditoría ni concede otro intento por doble ausencia. Un campeón cerrado no puede alterarse desde este historial.</p>
           <ul>
             {data.history?.map((h, i) => (
               <li key={i}>
@@ -441,6 +442,7 @@ export function KnockoutView({
                   close: "Campeón confirmado",
                 }[h.action] ?? h.action}{" "}
                 · {h.reason}
+                <CompetitionAuditChanges before={h.before_value} after={h.after_value} teams={data.teams}/>
                 <details>
                   <summary>Consultar valores anteriores y nuevos</summary>
                   <pre className="league-audit">
