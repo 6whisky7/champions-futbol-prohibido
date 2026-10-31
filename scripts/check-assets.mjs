@@ -26,6 +26,11 @@ for (const crest of catalog.escudos) {
 }
 assert.deepEqual(counts, expectedCounts, "Debe conservarse la selección de clubes y su reparto aprobado.");
 console.log("Escudos: 48/48 PNG RGBA de 1254 × 1254; catálogo, rutas y reparto correctos.");
+for(const crest of catalog.escudos){
+  const png=await readFile(path.join(root,"public/escudos-mini",crest.id+".png"));
+  assert.equal(png.readUInt32BE(16),160);assert.equal(png.readUInt32BE(20),160);
+}
+console.log("48 copias de escudos de 160 px disponibles para tarjetas públicas.");
 
 const trophy = await readFile(path.join(root, "public/trofeo/cfp-v03-web.glb"));
 assert.equal(trophy.subarray(0, 4).toString(), "glTF");

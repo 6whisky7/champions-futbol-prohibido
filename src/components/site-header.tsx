@@ -10,7 +10,7 @@ const links = [
   ["/eventos", "Eventos"],
   ["/#torneo", "El torneo"],
   ["/#escudos", "Escudos"],
-  ["/#formato", "Cómo se juega"],
+  ["/como-se-juega", "Cómo se juega"],
   ["/#comunidad", "Comunidad"],
 ] as const;
 

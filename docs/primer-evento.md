@@ -10,7 +10,7 @@ Entra en [Administración](https://champions-futbol-prohibido.vercel.app/admin/a
 
 Para doce equipos: **Cuartos**, cupo **12**, «Clasifican los mejores»; cuatro rivales por equipo y ocho clasificados.
 
-Después guarda **Publicado**. Comprueba su página pública. Solo cuando estés listo, guarda **Abiertas**.
+Después guarda **Publicado**. Comprueba su página pública. Antes de abrir, completa el aviso definitivo, conservación y participación de menores. La configuración de privacidad está inactiva y bloquea la apertura; consulta [el bloque 2](mejoras-bloque-2.md). Solo después de aprobar y activar esa versión podrás guardar **Abiertas** cuando estés listo.
 
 ![Configuración del borrador: nombre, fechas, formato, cupo y estados](guia/01-configuracion.png)
 

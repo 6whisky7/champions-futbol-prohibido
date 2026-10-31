@@ -160,3 +160,7 @@ Consulta el [plan y decisiones pendientes](docs/plan-mejoras.md) y la [comparaci
 - [Importar un repositorio Git en Vercel](https://vercel.com/docs/git).
 
 La recepción pública requiere `CFP_SUBMISSION_HMAC_KEY` exclusivamente de servidor, coincidente con la configuración privada de ingreso. Ya está instalada en Production/Preview. `.env.example` contiene solo su nombre vacío. El aviso permanece inactivo hasta definir conservación y participación de menores; ninguna inscripción real se abre con esta entrega.
+
+## Consulta pública y compartir
+
+[Alcance y pruebas del bloque público](docs/mejoras-bloque-3.md): próximo partido/ICS, páginas de equipo y partido, clasificación por zonas, seguimiento del cuadro, tarjetas PNG y OG, `/campeones` y `/como-se-juega`. Solo utilizan eventos publicados. Las descargas de calendario no se sincronizan automáticamente.

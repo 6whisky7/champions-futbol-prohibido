@@ -227,13 +227,15 @@ try {
     .getByRole("navigation")
     .getByRole("link", { name: "Cómo se juega", exact: true })
     .click();
-  assert.ok(page.url().endsWith("#formato"));
+  await page.waitForURL("**/como-se-juega");
+  await page.getByRole("heading", {name:"Cómo se juega",exact:true}).waitFor();
   assert.equal(
     await page
       .getByRole("button", { name: "Menú", exact: true })
       .getAttribute("aria-expanded"),
     "false",
   );
+  await page.goto(base+"/#formato");
   const late = page.getByText("¿Puede llegar tarde el tercer titular?", {
     exact: true,
   });
