@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCrest } from "@/lib/crests";
@@ -23,7 +24,9 @@ export function KnockoutView({
   const [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
     [selected, setSelected] = useState<string | null>(null),
-    [round, setRound] = useState(-1);
+    [round, setRound] = useState(-1),
+    [tracked, setTracked] = useState(""),
+    [allRounds, setAllRounds] = useState(false);
   const router = useRouter();
   async function act(
     action: string,
@@ -65,6 +68,13 @@ export function KnockoutView({
   const rounds = [...new Set(matches.map((m) => m.round))];
   const currentRound = round === -1 ? rounds[0] : round;
   const selectedMatch = matches.find((m) => m.id === selected);
+  const path = new Set<string>();
+  for (const m of matches.filter(m => tracked && (m.home === tracked || m.away === tracked))) {
+    path.add(m.id);
+    if ((m.winner && m.winner !== tracked) || data.teams.find(t=>t.id===tracked)?.dq) continue;
+    let next = matches.find(n=>n.home_source === m.id || n.away_source === m.id);
+    while(next) {path.add(next.id); if(next.winner && next.winner !== tracked)break; const id=next.id; next=matches.find(n=>n.home_source===id||n.away_source===id);}
+  }
   const team = (id: string | null) => data.teams.find((t) => t.id === id);
   const roundName = (r: number) =>
     r === 0
@@ -153,8 +163,10 @@ export function KnockoutView({
           ))}
         </select>
       </label>
+      <div className="bracket-controls"><label htmlFor="ko-team">Seguir equipo<select id="ko-team" value={tracked} onChange={e=>setTracked(e.target.value)}><option value="">Todos los equipos</option>{data.teams.map(t=><option key={t.id} value={t.id}>{t.name}</option>)}</select></label><Button className="ko-mobile-explore" variant="outline" aria-pressed={allRounds} onClick={()=>setAllRounds(!allRounds)}>{allRounds?"Vista cómoda por rondas":"Explorar cuadro completo"}</Button></div>
+      {tracked && <p>Ruta resaltada de {team(tracked)?.name}: partidos disputados y destinos posibles si avanza. Los rivales y las conexiones permanecen fijos.</p>}
       <div
-        className="ko-bracket"
+        className={`ko-bracket${allRounds ? " ko-all-rounds" : ""}`}
         role="region"
         aria-label="Cuadro y destinos de ganadores"
         tabIndex={0}
@@ -182,9 +194,10 @@ export function KnockoutView({
                     <li
                       key={m.id}
                       id={`ko-game-${m.number}`}
-                      className="ko-match"
+                      className={`ko-match${path.has(m.id)?" ko-tracked":""}`}
                     >
                       <h4>Partido {m.number}</h4>
+                      {path.has(m.id)&&<p className="ko-route-label">Ruta de {team(tracked)?.name}</p>}
                       <div
                         className={
                           m.winner === m.home && m.home ? "ko-winner" : ""
@@ -219,6 +232,7 @@ export function KnockoutView({
                       <Button variant="outline" onClick={() => open(m.id)}>
                         Detalle del partido {m.number}
                       </Button>
+                      {!admin && <Link className="ko-public-link" href={`/eventos/${eventId}/partidos/${m.id}`}>{m.winner ? "Ver y compartir resultado" : "Detalle y calendario"}</Link>}
                     </li>
                   );
                 })}

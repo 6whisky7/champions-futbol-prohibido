@@ -1,5 +1,7 @@
 import { ChampionPresentation } from "@/components/champion";
-import type { Knockout } from "@/lib/knockout";
+import { publicCompetition } from "@/lib/public-competition";
+import { nextPublicMatch } from "@/lib/public-matches";
+import { NextMatch } from "@/components/next-match";
 import Link from "next/link";
 import { ApplicationForm } from "@/components/application-form";
 import Image from "next/image";
@@ -11,10 +13,12 @@ import { SiteFooter } from "@/components/site-footer";
 import {
   eventDate,
   eventFormats,
-  eventColumns,
-  type TournamentEvent,
 } from "@/lib/events";
 export const dynamic = "force-dynamic";
+export async function generateMetadata({params}:{params:Promise<{id:string}>}) {
+  const {id}=await params,d=await publicCompetition(id);
+  return {title:d ? `${d.event.name} | Champions Fútbol Prohibido` : "Evento no disponible",description:d?.event.description};
+}
 export default async function PublicEvent({
   params,
 }: {
@@ -23,40 +27,11 @@ export default async function PublicEvent({
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
   const client = await createClient();
-  const { data, error } = await client
-    .from("cfp_events")
-    .select(eventColumns)
-    .eq("id", id)
-    .eq("status", "published")
-    .maybeSingle();
-  if (error)
-    throw new Error("No se pudo cargar el evento. Vuelve a intentarlo.");
-  if (!data) notFound();
-  const e = data as TournamentEvent;
-  const format = eventFormats[e.format];
+  const d=await publicCompetition(id);
+  if(!d)notFound();
+  const e=d.event,format=eventFormats[e.format],publicTeams=d.teams,champion=d.knockout?.champion;
   const {data:privacy,error:privacyError}=await client.rpc("cfp_registration_status");
   const privacyVersion=!privacyError && privacy?.enabled ? privacy.version as string : null;
-  const { data: teams, error: teamsError } = await client.rpc(
-    "cfp_public_teams",
-    { e: id },
-  );
-  if (teamsError) throw new Error("No se pudieron consultar los equipos.");
-  type PublicTeam = {
-    id: string;
-    name: string;
-    crest: string;
-    number: string;
-    captain: string;
-    state: string;
-    members: { roblox: string }[];
-  };
-  const publicTeams = (teams ?? []) as PublicTeam[];
-  const { data: ko, error: koError } = await client.rpc("cfp_knockout_read", {
-    e: id,
-    admin: false,
-  });
-  if (koError) throw new Error("No se pudo consultar el cierre del evento");
-  const champion = (ko as Knockout | null)?.champion;
   return (
     <>
       <SiteHeader />
@@ -65,6 +40,7 @@ export default async function PublicEvent({
         <h1>{e.name}</h1>
         {champion && <ChampionPresentation champion={champion} />}
         <p className="event-description">{e.description}</p>
+        <NextMatch eventId={id} match={nextPublicMatch(d.matches)}/>
         <dl className="event-facts">
           <div>
             <dt>Inicio · hora de Costa Rica</dt>
@@ -113,7 +89,7 @@ export default async function PublicEvent({
                 />
                 <div>
                   <h3>
-                    {t.name}
+                    <Link href={`/eventos/${id}/equipos/${t.id}`}>{t.name}</Link>
                     {t.number ? ` · Nº ${t.number}` : ""}
                   </h3>
                   <p>

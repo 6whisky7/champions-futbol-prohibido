@@ -16,6 +16,7 @@ const barlow = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://champions-futbol-prohibido.vercel.app"),
   title: "Champions Fútbol Prohibido",
   description:
     "El torneo de Fútbol Prohibido en Roblox. Consulta cómo se juega y explora 48 escudos originales para tu equipo.",

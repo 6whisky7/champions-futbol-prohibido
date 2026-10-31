@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { classificationZone } from "@/lib/public-matches";
 import { getCrest } from "@/lib/crests";
 import { localDate } from "@/lib/events";
 import { leagueAction } from "@/app/admin/league-actions";
@@ -61,7 +63,7 @@ export function LeagueView({
           <Image src={getCrest(t.crest).src} alt="" width={36} height={36} />
         )}
         <span>
-          {t?.name ?? id}
+          {!admin && t ? <Link href={`/eventos/${eventId}/equipos/${id}`}>{t.name}</Link> : t?.name ?? id}
           {t?.dq ? " · Descalificado" : ""}
         </span>
       </span>
@@ -175,13 +177,14 @@ export function LeagueView({
               </thead>
               <tbody>
                 {data.table.map((r) => (
-                  <tr key={r.id}>
+                  <tr key={r.id} data-zone={classificationZone(r,data).key}>
                     <td>
                       {r.tie_pending ? "=" : ""}
                       {r.position}
                     </td>
                     <th scope="row">
                       {name(r.id)}
+                      <span className={`zone-label zone-${classificationZone(r,data).key}`}>{classificationZone(r,data).label}</span>
                       <small>
                         {r.dq
                           ? "Excluido · −12 puntos fijos y +100 GC administrativos"
@@ -335,6 +338,7 @@ export function LeagueView({
                             ? ` · ${eventDate(m.scheduled_at)}`
                             : " · Sin fecha asignada"}
                         </p>
+                        {!admin && <Link href={`/eventos/${eventId}/partidos/${m.id}`}>{tab === "results" ? "Ver y compartir resultado" : "Detalle y calendario"}</Link>}
                         {admin && data.state === "active" && (
                           <button
                             className="trophy-button"
