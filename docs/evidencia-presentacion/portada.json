@@ -1,0 +1,160 @@
+{
+  "base": "http://127.0.0.1:3211",
+  "engine": "Chromium / Edge",
+  "widths": [
+    {
+      "viewport": 360,
+      "scrollWidth": 360,
+      "images": true,
+      "title": "Champions Fútbol Prohibido",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        },
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
+          "tag": "INPUT",
+          "height": 52
+        },
+        {
+          "tag": "SELECT",
+          "height": 52
+        },
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        }
+      ],
+      "axeViolations": []
+    },
+    {
+      "viewport": 390,
+      "scrollWidth": 390,
+      "images": true,
+      "title": "Champions Fútbol Prohibido",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        },
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
+          "tag": "INPUT",
+          "height": 52
+        },
+        {
+          "tag": "SELECT",
+          "height": 52
+        },
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        }
+      ],
+      "axeViolations": []
+    },
+    {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "images": true,
+      "title": "Champions Fútbol Prohibido",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
+          "tag": "INPUT",
+          "height": 52
+        },
+        {
+          "tag": "SELECT",
+          "height": 52
+        },
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        }
+      ],
+      "axeViolations": []
+    },
+    {
+      "viewport": 1024,
+      "scrollWidth": 1024,
+      "images": true,
+      "title": "Champions Fútbol Prohibido",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
+          "tag": "INPUT",
+          "height": 52
+        },
+        {
+          "tag": "SELECT",
+          "height": 52
+        },
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        }
+      ],
+      "axeViolations": []
+    },
+    {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "images": true,
+      "title": "Champions Fútbol Prohibido",
+      "controls": [
+        {
+          "tag": "BUTTON",
+          "height": 48.390625
+        },
+        {
+          "tag": "INPUT",
+          "height": 52
+        },
+        {
+          "tag": "SELECT",
+          "height": 52
+        },
+        {
+          "tag": "BUTTON",
+          "height": 52.390625
+        }
+      ],
+      "axeViolations": []
+    }
+  ],
+  "actions": [
+    "Enlace de salto y teclado",
+    "10 filtros, URL, recarga e historial",
+    "Búsqueda sin acentos, número, estado vacío y recuperación del foco",
+    "Colección completa: 48 diseños, límite y foco conservado",
+    "48 rutas PNG responden 200",
+    "Menú móvil, Escape, anclas y detalles con teclado",
+    "Movimiento reducido mantiene controles y resultados",
+    "404 y regreso al inicio"
+  ],
+  "consoleErrors": [],
+  "zoom200": {
+    "method": "Native Edge/Chromium browser zoom 200% in isolated profile; default_zoom_level=log(2)/log(1.2), CSS zoom remains 1",
+    "outerWidth": 1440,
+    "cssViewport": 708,
+    "dpr": 2,
+    "cssZoom": "1",
+    "scrollWidth": 708,
+    "controls": "PASS"
+  },
+  "status": "PASS"
+}

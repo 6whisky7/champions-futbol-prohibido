@@ -42,6 +42,7 @@ export function EventForm({ event }: { event?: TournamentEvent }) {
     <form action={action} onReset={(event) => event.preventDefault()} className="event-form">
       <input type="hidden" name="id" value={event?.id ?? ""} />
       <input type="hidden" name="updated_at" value={event?.updated_at ?? ""} />
+      {!event && <p>Empieza guardando un borrador privado con las inscripciones cerradas. Después podrás revisarlo, publicarlo y abrirlo desde esta misma pantalla.</p>}
       <label htmlFor="name">Nombre del evento</label>
       <input
         id="name"

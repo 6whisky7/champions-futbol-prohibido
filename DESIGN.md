@@ -135,7 +135,7 @@ components:
 
 ## Portada actual: trofeo V03 aprobado
 
-Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático.
+Trofeo V03 completo junto al título, una columna en móvil. La imagen aparece primero y el visor carga automáticamente cuando la presentación entra en pantalla. Arrastre directo, teclado, reset frontal discreto y alternativa de imagen ante fallo. Luces doradas superiores y diagonales, halo tenue y contraluz frío sobre azul medianoche, con sombra bajo la base. Iluminación HDR propia conservada al girar, reconstruida desde los softboxes del maestro. El visor usa AgX y exposición 1; la imagen se conserva hasta cargar modelo y entorno. Efectos estáticos; visor oculto al salir de pantalla. Sin giro automático.
 
 La inscripción conserva bloques con leyendas y resumen antes del envío. La administración tiene un marco común con navegación lateral, contexto del evento y cabecera. Resumen, Eventos, Solicitudes, Equipos y Lista de espera comparten el mismo lenguaje visual; el acceso permanece fuera del marco autenticado. El detalle agrupa Equipo, Jugadores, Requisitos e Historial. Los colores de estado se aplican a los datos y acompañan siempre un texto.
 
@@ -237,6 +237,10 @@ Controles, reglas y preguntas usan esquinas suaves (`lg`, 8 px); soportes y enla
 El banderín CFP usa `polygon(0 0, 100% 0, 100% 80%, 50% 100%, 0 80%)`; mide 46 × 54 px en escritorio y 36 × 44 px en móvil. El trofeo completo utiliza contain y un escenario propio; no se recorta su silueta. Las flechas del recorrido son trazos CSS; los iconos de acciones son SVG.
 
 ## Components
+
+### Participación desde portada
+
+La acción principal sigue la disponibilidad pública del evento; los escudos son secundarios. Sin inscripciones abiertas se explica el estado y se ofrecen TikTok y La Chapizza. Los datos se consultan sin bloquear la portada estática; error y carga tienen texto y acceso al listado de eventos. Espera se explica sin prometer reservas ni promoción automática.
 
 ### Eliminatorias y campeón
 

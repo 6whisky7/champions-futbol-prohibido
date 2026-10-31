@@ -9,8 +9,10 @@ export function ApplicationForm({
   reserved,
   initial,
   onSave,
+  defaultWaiting = false,
 }: {
   eventId: string;
+  defaultWaiting?: boolean;
   reserved: string[];
   initial?: ApplicationPayload;
   onSave?: (p: ApplicationPayload) => Promise<string>;
@@ -26,7 +28,7 @@ export function ApplicationForm({
   );
   const [key] = useState(() => crypto.randomUUID());
   const [review, setReview] = useState(false);
-  const [waiting, setWaiting] = useState(false);
+  const [waiting, setWaiting] = useState(defaultWaiting);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");

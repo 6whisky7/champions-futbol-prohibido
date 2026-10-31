@@ -136,14 +136,16 @@ export default async function PublicEvent({
           )}
         </section>
         {e.registration_status === "open" ? (
-          <section>
-            <h2>Inscribe a tu equipo</h2>
+          <section id="inscripcion">
+            <h2>{publicTeams.length >= e.capacity ? "Apúntate a la lista de espera" : "Inscribe a tu equipo"}</h2>
+            {publicTeams.length >= e.capacity && <p>El cupo está lleno. La espera no reserva plaza, escudo ni jugadores. El propietario decide las promociones y vuelve a comprobar los datos.</p>}
             <p>
               Plazo de confirmación y revisión: {e.review_hours} horas. Los
               usuarios de TikTok son privados del administrador.
             </p>
             <ApplicationForm
               eventId={id}
+              defaultWaiting={publicTeams.length >= e.capacity}
               reserved={publicTeams.map((t) => t.crest)}
             />
           </section>

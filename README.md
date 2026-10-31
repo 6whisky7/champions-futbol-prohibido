@@ -141,6 +141,10 @@ Antes del primer evento real:
 - Resolver las sanciones y casos administrativos todavía pendientes del reglamento. Liguilla, eliminatorias y cierre por campeón tienen implementación; consulta [liguilla](docs/liguilla.md) y [eliminatorias](docs/eliminatorias.md).
 - Resolver los puntos del reglamento que siguen abiertos. Escudos, cierre y promoción de espera ya tienen decisiones confirmadas.
 
+## Mejoras por bloques
+
+Consulta el [plan y decisiones pendientes](docs/plan-mejoras.md) y la [comparación del trofeo y presentación](docs/mejoras-bloque-1.md). Turnstile fue retirado expresamente del encargo por el propietario.
+
 ## Primer evento y revisión integral
 
 - [Guía breve con capturas](docs/primer-evento.md).

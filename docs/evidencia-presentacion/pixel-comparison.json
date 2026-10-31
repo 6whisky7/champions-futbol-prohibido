@@ -1,0 +1,16 @@
+{
+  "before": {
+    "meanAbsoluteError255": 0.024512345679012348,
+    "resolution": [
+      720,
+      900
+    ]
+  },
+  "after": {
+    "meanAbsoluteError255": 0.04580658436213992,
+    "resolution": [
+      720,
+      900
+    ]
+  }
+}
