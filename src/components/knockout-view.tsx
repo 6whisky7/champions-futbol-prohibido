@@ -322,7 +322,7 @@ export function KnockoutView({
                   minLength={3}
                   maxLength={1000}
                 />
-                <Button disabled={busy}>Guardar decisión del partido</Button>
+                <Button type="submit" disabled={busy}>Guardar decisión del partido</Button>
               </form>
               <form
                 key={selectedMatch.id+"-schedule-"+data.revision}
@@ -357,7 +357,7 @@ export function KnockoutView({
                   minLength={3}
                   maxLength={1000}
                 />
-                <Button variant="outline" disabled={busy}>
+                <Button type="submit" variant="outline" disabled={busy}>
                   Guardar fecha
                 </Button>
               </form>
@@ -403,7 +403,7 @@ export function KnockoutView({
               minLength={3}
               maxLength={1000}
             />
-            <Button variant="outline" disabled={busy}>
+            <Button type="submit" variant="outline" disabled={busy}>
               Registrar inhabilitación confirmada
             </Button>
           </form>

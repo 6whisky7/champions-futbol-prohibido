@@ -47,7 +47,7 @@ export function LeagueView({
   }
   const teams = data?.teams ?? [];
   const team = (id: string) => teams.find((t) => t.id === id);
-  const match = data?.matches.find((m) => m.id === selected);
+  const match = data?.matches?.find((m) => m.id === selected);
   function score(m: LeagueMatch) {
     return ["pending", "postponed", "replay"].includes(m.kind)
       ? "Por jugar"
