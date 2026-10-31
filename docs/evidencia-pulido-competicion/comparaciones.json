@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "beforeCommit": "814e054",
+  "after": "working branch compiled build",
+  "sizes": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 1000
+    }
+  ],
+  "auth": "simulated local session; same real PostgreSQL fixtures in both applications",
+  "routes": {
+    "calendar": "/admin/calendario?evento=17c84e49-31ee-44f7-9c3d-c6b821575e42",
+    "table": "/admin/clasificacion?evento=17c84e49-31ee-44f7-9c3d-c6b821575e42",
+    "bracket": "/admin/eliminatorias?evento=3f487ec5-30ea-478b-ab8f-fc3c8f424531",
+    "champion": "/eventos/0ed71d7a-df28-4ff3-ba21-c65c0ed9745c",
+    "summary": "/admin?evento=17c84e49-31ee-44f7-9c3d-c6b821575e42",
+    "requests": "/admin/solicitudes?evento=d4cf77e1-913d-474c-b4b7-e2a147b16e9b&vista=pending&solicitud=08a5fd47-8e4d-4d96-9248-3918eb57c14f"
+  },
+  "requestFixture": {
+    "event": "d4cf77e1-913d-474c-b4b7-e2a147b16e9b",
+    "application": "08a5fd47-8e4d-4d96-9248-3918eb57c14f"
+  },
+  "notes": "Both versions wait for loaded content; screenshots are captured directly from archived/current builds. No image composition or alteration."
+}

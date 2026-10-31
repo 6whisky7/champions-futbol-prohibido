@@ -35,3 +35,9 @@ La aplicación y las funciones/roles de PostgreSQL son reales. La identidad, los
 La política real permanece inactiva. La autorización de menores y la confirmación individual todavía requieren aprobar e implementar el recorrido de [privacidad](privacidad-propuesta.md). Ningún requisito marcado en la demostración demuestra consentimiento de una persona real.
 
 Evidencia: [captura de la guía](evidencia-final/demo-desktop.png), [móvil](evidencia-final/demo-mobile.png) y [comprobación de rutas](evidencia-final/demo.json) y [envío público firmado](evidencia-final/demo-signup.json). Grabación local: `C:/Users/XT/Projects/cfp-registration-tests/demo/demo-recorrido.webm`.
+
+## Pulido visual y comparaciones
+
+La guía incorpora un séptimo bloque: jornadas/horarios con revisión y reintentos, tabla V/D/N y cortes, cuatro cuadros conectados y campeón por clasificación con tarjeta vertical. Puedes abrir [antes y después](http://127.0.0.1:8768/comparaciones) en este PC. Las imágenes proceden de la versión 814e054 y del build nuevo, con mismos eventos, datos, estados y tamaños. No son montajes ni datos reales.
+
+Se añadieron ejemplos a la base demo y a su snapshot mediante inserciones de identificadores nuevos, sin reemplazar tus seis puntos de práctica. No se ejecutó un restablecimiento para esta actualización. La recuperación conserva ahora también estos ejemplos. Los scripts siguen fuera del repositorio y no conceden acceso de prueba en producción.

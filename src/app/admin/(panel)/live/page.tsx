@@ -23,8 +23,8 @@ export default async function AdminLive({
           LIVE estará disponible cuando exista un evento publicado y partidos
           confirmados.
         </p>
-        <Link className="action-link" href="/admin/eventos/nuevo">
-          Crear evento
+        <Link className="action-link" href="/admin/eventos">
+          Ir a Eventos
         </Link>
       </main>
     );

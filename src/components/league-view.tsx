@@ -1,16 +1,15 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import { classificationZone } from "@/lib/public-matches";
-import { tieExplanation } from "@/lib/league/tie-explanation";
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { LeagueCalendar } from "./league-calendar";
+import { LeagueStandings } from "./league-standings";
+import { SaveStatus } from "./save-status";
+import { ConfirmAction } from "./confirm-action";
 import { CompetitionAuditChanges } from "@/components/competition-audit-changes";
 import { DrawReveal } from "@/components/draw-reveal";
-import { getCrest } from "@/lib/crests";
 import { localDate } from "@/lib/events";
 import { leagueAction } from "@/app/admin/league-actions";
-import { type League, type LeagueMatch, matchLabels } from "@/lib/league/types";
+import { type League, matchLabels } from "@/lib/league/types";
 function eventDate(value: string) {
   return (
     new Date(new Date(value).getTime() - 6 * 3600000)
@@ -30,9 +29,13 @@ export function LeagueView({
   admin?: boolean;
   tab?: string;
 }) {
+  const params = useSearchParams();
   const [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false),
-    [selected, setSelected] = useState<string | null>(null);
+    [busy, setBusy] = useState(false);
+  const selected = params.get("partido");
+  useEffect(() => {
+    if (selected) document.getElementById("league-match-editor")?.focus();
+  }, [selected]);
   const router = useRouter();
   async function act(
     action: string,
@@ -41,11 +44,26 @@ export function LeagueView({
     },
   ) {
     setBusy(true);
+    setMessage("");
     try {
-      setMessage(await leagueAction(eventId, action, p, data?.revision ?? 0));
-      router.refresh();
+      const result = await leagueAction(
+        eventId,
+        action,
+        p,
+        data?.revision ?? 0,
+      );
+      setMessage(result);
+      if (result === "Guardado.") {
+        router.refresh();
+        window.dispatchEvent(new Event("cfp-admin-refresh"));
+        return true;
+      }
+      return false;
     } catch {
-      setMessage("No se pudo guardar. Recarga y vuelve a intentarlo.");
+      setMessage(
+        "No se pudo confirmar el guardado. Conserva tus datos y revisa el calendario antes de repetir.",
+      );
+      return false;
     } finally {
       setBusy(false);
     }
@@ -53,29 +71,6 @@ export function LeagueView({
   const teams = data?.teams ?? [];
   const team = (id: string) => teams.find((t) => t.id === id);
   const match = data?.matches?.find((m) => m.id === selected);
-  function score(m: LeagueMatch) {
-    return ["pending", "postponed", "replay"].includes(m.kind)
-      ? "Por jugar"
-      : `${m.hg} – ${m.ag}`;
-  }
-  function name(id: string) {
-    const t = team(id);
-    return (
-      <span className="league-team">
-        {t && (
-          <Image src={getCrest(t.crest).src} alt="" width={36} height={36} />
-        )}
-        <span>
-          {!admin && t ? (
-            <Link href={`/eventos/${eventId}/equipos/${id}`}>{t.name}</Link>
-          ) : (
-            (t?.name ?? id)
-          )}
-          {t?.dq ? " · Descalificado" : ""}
-        </span>
-      </span>
-    );
-  }
   if (!data?.state)
     return (
       <section className="admin-surface">
@@ -106,7 +101,7 @@ export function LeagueView({
             >
               Generar revisión del calendario
             </button>
-            <p role="status">{message}</p>
+            <SaveStatus busy={busy} message={message} />
           </>
         ) : (
           <p>El calendario todavía no está confirmado.</p>
@@ -125,16 +120,17 @@ export function LeagueView({
           · {data.rounds} jornadas · {teams.length} equipos
         </p>
         {admin && data.state === "preview" && (
-          <button
-            className="action-link"
-            disabled={busy}
-            onClick={() => void act("confirm")}
-          >
-            Confirmar y fijar calendario
-          </button>
+          <ConfirmAction
+            label="Confirmar y fijar calendario"
+            title="Fijar participantes y calendario"
+            description="Se conservan los equipos, el formato y los rivales de esta revisión. Las inscripciones se cierran y las plantillas quedan fijadas. No se incorporan equipos de espera automáticamente."
+            busy={busy}
+            message={message}
+            onConfirm={() => act("confirm")}
+          />
         )}
       </div>
-      <p role="status">{message}</p>
+      <SaveStatus busy={busy} message={message} />
       {admin && data.state === "preview" && (
         <button
           className="trophy-button"
@@ -145,249 +141,41 @@ export function LeagueView({
         </button>
       )}
       {admin && tab === "calendar" && (
-        <DrawReveal
-          key={data.seed}
-          preview={data.state === "preview"}
-          matches={data.matches.map((m) => ({
-            id: m.id,
-            phase: `Jornada ${m.round} · partido ${m.game_order}`,
-            homeName: team(m.home)?.name ?? "Por definir",
-            awayName: team(m.away)?.name ?? "Por definir",
-          }))}
-        />
+        <details className="draw-disclosure">
+          <summary>Revelar el calendario guardado</summary>
+          <DrawReveal
+            key={data.seed}
+            preview={data.state === "preview"}
+            matches={data.matches.map((m) => ({
+              id: m.id,
+              phase: `Jornada ${m.round} · partido ${m.game_order}`,
+              homeName: team(m.home)?.name ?? "Por definir",
+              awayName: team(m.away)?.name ?? "Por definir",
+            }))}
+          />
+        </details>
       )}
       {tab === "standings" ? (
-        <section className="admin-surface">
-          <h2>
-            Clasificación {data.state === "closed" ? "final" : "provisional"}
-          </h2>
-          <p>
-            {data.format === "repechage"
-              ? "Primeros 8 directos; 9–24 a repesca."
-              : `Continúan los primeros ${data.qualified} habilitados.`}{" "}
-            Sin eliminatorias automáticas.
-          </p>
-          <div
-            className="league-table-scroll"
-            tabIndex={0}
-            role="region"
-            aria-label="Tabla de clasificación"
-          >
-            <table className="league-table">
-              <thead>
-                <tr>
-                  {[
-                    "Pos.",
-                    "Equipo",
-                    "PJ",
-                    "PG",
-                    "PP",
-                    "PN",
-                    "GF",
-                    "GC",
-                    "DG",
-                    "Puntos",
-                  ].map((c) => (
-                    <th key={c} scope="col">
-                      {c}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.table.map((r) => (
-                  <tr key={r.id} data-zone={classificationZone(r, data).key}>
-                    <td>
-                      {r.tie_pending ? "=" : ""}
-                      {r.position}
-                    </td>
-                    <th scope="row">
-                      {name(r.id)}
-                      <span
-                        className={`zone-label zone-${classificationZone(r, data).key}`}
-                      >
-                        {classificationZone(r, data).label}
-                      </span>
-                      <small>
-                        {tieExplanation(r, teams)}
-                        {r.tie_pending ? " · Zona por resolver" : ""}
-                        {!r.dq && !r.tie_pending && r.position <= data.qualified
-                          ? data.format === "repechage" && r.position > 8
-                            ? " · Repesca"
-                            : " · Clasifica"
-                          : ""}
-                      </small>
-                    </th>
-                    {[r.pj, r.pg, r.pp, r.pn, r.gf, r.gc, r.dg, r.points].map(
-                      (v, i) => (
-                        <td key={i}>{v}</td>
-                      ),
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="admin-note">
-            PJ: jugados; PG: ganados; PP: perdidos; PN: nulos; GF/GC: goles a
-            favor/en contra; DG: diferencia. Empates marcados «=» siguen sin
-            ordenar definitivamente.
-          </p>
-          {admin && data.state === "active" && (
-            <>
-              <h3>Revisión de cierre</h3>
-              <p>
-                Resuelve todos los partidos y luego los sorteos pendientes. Un
-                cambio de resultado invalida los sorteos actuales y conserva su
-                historial.
-              </p>
-              {[
-                ...new Set(
-                  data.table
-                    .filter((r) => r.tie_pending)
-                    .map((r) => r.tie_key!),
-                ),
-              ].map((key) => (
-                <button
-                  key={key}
-                  className="trophy-button"
-                  disabled={busy}
-                  onClick={() =>
-                    void act("lot", {
-                      key,
-                      reason: "Sorteo explícito de puestos empatados",
-                    })
-                  }
-                >
-                  Sortear:{" "}
-                  {data.table
-                    .filter((r) => r.tie_key === key)
-                    .map((r) => r.name)
-                    .join(", ")}
-                </button>
-              ))}
-              <button
-                className="action-link"
-                disabled={busy}
-                onClick={() => void act("close")}
-              >
-                Cerrar liguilla y conservar clasificación
-              </button>
-              <h3>Descalificación administrativa</h3>
-              <p>
-                Sustituye todos los encuentros del equipo por 0–3, o nulo si
-                ambos están descalificados. Conserva los resultados anteriores
-                en el historial.
-              </p>
-              <form
-                className="event-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const f = new FormData(e.currentTarget);
-                  void act("disqualify", {
-                    id: f.get("team"),
-                    reason: f.get("reason"),
-                  });
-                }}
-              >
-                <label htmlFor="dq-team">Equipo habilitado</label>
-                <select id="dq-team" name="team">
-                  {teams
-                    .filter((t) => !t.dq)
-                    .map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.name}
-                      </option>
-                    ))}
-                </select>
-                <label htmlFor="dq-reason">Motivo de descalificación</label>
-                <input
-                  id="dq-reason"
-                  name="reason"
-                  required
-                  minLength={3}
-                  maxLength={1000}
-                />
-                <button className="trophy-button" disabled={busy}>
-                  Registrar descalificación
-                </button>
-              </form>
-            </>
-          )}
-        </section>
+        <LeagueStandings
+          data={data}
+          eventId={eventId}
+          admin={admin}
+          busy={busy}
+          message={message}
+          onAction={act}
+        />
       ) : (
-        <section>
-          {tab === "results" &&
-            data.matches.every((m) =>
-              ["pending", "postponed", "replay"].includes(m.kind),
-            ) && (
-              <p className="admin-surface">
-                Todavía no hay resultados oficiales.
-              </p>
-            )}
-          {Array.from({ length: data.rounds }, (_, i) => i + 1)
-            .filter(
-              (r) =>
-                tab !== "results" ||
-                data.matches.some(
-                  (m) =>
-                    m.round === r &&
-                    !["pending", "postponed", "replay"].includes(m.kind),
-                ),
-            )
-            .map((r) => (
-              <section className="admin-surface league-round" key={r}>
-                <h2>Jornada {r}</h2>
-                <ol>
-                  {data.matches
-                    .filter(
-                      (m) =>
-                        m.round === r &&
-                        (tab !== "results" ||
-                          !["pending", "postponed", "replay"].includes(m.kind)),
-                    )
-                    .map((m) => (
-                      <li key={m.id}>
-                        <div className="league-fixture">
-                          {name(m.home)}
-                          <strong>{score(m)}</strong>
-                          {name(m.away)}
-                        </div>
-                        <p>
-                          {matchLabels[m.kind]} · Orden {m.game_order}
-                          {m.scheduled_at
-                            ? ` · ${eventDate(m.scheduled_at)}`
-                            : " · Sin fecha asignada"}
-                        </p>
-                        {!admin && (
-                          <Link href={`/eventos/${eventId}/partidos/${m.id}`}>
-                            {tab === "results"
-                              ? "Ver y compartir resultado"
-                              : "Detalle y calendario"}
-                          </Link>
-                        )}
-                        {admin && data.state === "active" && (
-                          <button
-                            className="trophy-button"
-                            onClick={() => setSelected(m.id)}
-                          >
-                            Editar partido {m.game_order} · jornada {r}
-                          </button>
-                        )}
-                      </li>
-                    ))}
-                </ol>
-              </section>
-            ))}
-        </section>
+        <LeagueCalendar data={data} eventId={eventId} admin={admin} tab={tab} />
       )}
       {admin && match && data.state === "active" && (
-        <section className="admin-surface">
+        <section
+          className="admin-surface"
+          id="league-match-editor"
+          tabIndex={-1}
+        >
           <h2>Registrar o corregir partido</h2>
           <p>
-            {team(match.home)?.name} contra {team(match.away)?.name}. Referencia
-            habitual: 8:00 p. m. de Costa Rica; puedes programar varias jornadas
-            el mismo día.
+            {team(match.home)?.name} contra {team(match.away)?.name}.
           </p>
           <form
             key={match.id + data.revision}

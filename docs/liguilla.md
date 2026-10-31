@@ -51,3 +51,11 @@ Referencias oficiales: [funciones y permisos](https://supabase.com/docs/guides/d
 - Navegador: calendario, resultados y clasificación en 1440/390 px; Axe sin infracciones detectadas, sin desbordamientos ni errores React, lectura pública y guardado de 5–2. Auth visual es un sustituto local: no equivale a verificar de nuevo la sesión real del propietario en producción.
 
 Scripts, reportes y capturas locales están en `C:/Users/XT/Projects/cfp-registration-tests/`, bajo `league-*` y `league-review`. El fixture SQL versionado está en `supabase/tests/league.sql`. La publicación debe comprobarse contra el commit integrado y Production Ready; estas pruebas no afirman por sí solas que el despliegue haya terminado.
+
+## Pulido visual y horarios por jornada
+
+La selección `jornada` y el partido editado se guardan en URL. Cambiar de jornada cierra el editor anterior; guardar y recargar conservan la jornada seleccionada. Las pestañas cuentan encuentros resueltos, incluidos los nulos administrativos, sin introducir empates deportivos.
+
+«Asignar fechas a la jornada» prepara horarios de encuentros sin resolver, con separación editable que no cambia la duración del juego. Exige motivo y revisión previa. Reutiliza cfp_league_action y su versión vigente; cada partido se confirma por separado. Un fallo puede dejar parte guardada: la interfaz identifica esos partidos, pide revisar y bloquea reutilizar una revisión desactualizada. Al preparar otra revisión, los horarios idénticos no generan otra escritura ni historial. Los jugados se conservan y sus correcciones siguen siendo individuales. No hay una nueva RPC ni un permiso de escritura directa.
+
+La tabla prioriza puntos y DG, mantiene equipo fijo en móvil, muestra V/D/N y explica zonas/cortes según formato. Cierre y bloqueos aparecen arriba y necesitan confirmación explícita. Evidencia en [pulido de competición](pulido-competicion.md).

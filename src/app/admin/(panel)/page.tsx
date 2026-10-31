@@ -1,3 +1,5 @@
+import { Occupancy } from "@/components/occupancy";
+import { ExpiryTime } from "@/components/expiry-time";
 import Link from "next/link";
 import { CalendarDays, ArrowRight, Clock3 } from "lucide-react";
 import { requireOwner } from "@/lib/owner";
@@ -29,8 +31,8 @@ export default async function Admin({
           Crea el primer evento como borrador. Después podrás preparar su
           formato, abrir inscripciones y revisar a los equipos desde este panel.
         </p>
-        <Link className="action-link" href="/admin/eventos/nuevo">
-          Crear evento <ArrowRight size={20} />
+        <Link className="action-link" href="/admin/eventos">
+          Preparar primer evento <ArrowRight size={20} />
         </Link>
         <p className="admin-note">
           El borrador es privado y nace con las inscripciones cerradas.
@@ -85,6 +87,7 @@ export default async function Admin({
         <Link href={`/admin/eventos/${event.id}`}>Configurar evento →</Link>
       </section>
       <section className="admin-surface admin-next-step"><h2>Siguiente paso</h2><h3>{next.title}</h3><p>{next.text}</p><Link className="action-link" href={next.href}>{next.action} <ArrowRight size={20}/></Link></section>
+      <Occupancy pending={pending.length} approved={approved.length} capacity={event.capacity}/>
       <dl className="admin-counts">
         {[
           ["Plazas ocupadas", pending.length + approved.length],
@@ -125,7 +128,7 @@ export default async function Admin({
                   {near.map((a) => (
                     <li key={a.id}>
                       <Link href={review(a.id)}>{a.payload.name}</Link>
-                      <span>{a.expires_at && eventDate(a.expires_at)}</span>
+                      {a.expires_at&&<ExpiryTime at={a.expires_at}/>}
                     </li>
                   ))}
                 </ul>

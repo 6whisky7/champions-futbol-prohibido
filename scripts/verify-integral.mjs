@@ -26,7 +26,7 @@ const a = await admin.newPage(), p = await pub.newPage();
 for (const pg of [a, p])
     pg.on('pageerror', e => report.errors.push(e.message));
 let e;
-async function post(page, button) { await page.waitForLoadState('networkidle'); const response = page.waitForResponse(r => r.request().method() === 'POST' && r.url().startsWith(base)); await Promise.all([button.click(), response]); await page.waitForTimeout(60); }
+async function post(page, button) { if(await button.getAttribute('data-confirm-action')){await button.click();assert.equal(await page.getByRole('dialog').locator('.save-status').count(),0,'confirmation must not announce an earlier save');button=page.getByRole('dialog').getByRole('button',{name:'Confirmar',exact:true});} await page.waitForLoadState('networkidle'); const response = page.waitForResponse(r => r.request().method() === 'POST' && r.url().startsWith(base)); await Promise.all([button.click(), response]); await page.waitForTimeout(60); }
 async function shot(page, name) { await page.emulateMedia({ reducedMotion: 'reduce' }); await page.waitForLoadState('networkidle'); await page.evaluate(() => { document.activeElement?.blur(); document.documentElement.style.scrollBehavior = 'auto'; window.scrollTo(0, 0); }); await page.waitForTimeout(120); await page.screenshot({ path: out + '/' + name + '.png', fullPage: false }); }
 const crew = (n, j) => ({ roblox: `a${tag}_${n}_${j}`, tiktok: `a${tag}.${n}.${j}` });
 async function submit(name, crest, n, { four = false, waiting = false, reuse = null, error = false } = {}) { await pub.setExtraHTTPHeaders({'x-forwarded-for':`203.0.113.${n+1}`});await p.goto(base + '/eventos/' + e); await p.locator('#team-name').fill(name); await p.getByLabel('Enviar a lista de espera, sin reservas',{exact:false}).setChecked(waiting); await p.locator('#crest').selectOption(String(crest).padStart(2, '0')); if (four)
@@ -91,7 +91,7 @@ try {
     const wait = await submit(names[11], 12, 12, { waiting: true, reuse: crew(3, 1), four: true });
     await detail(wait);
     await post(a, a.getByRole('button', { name: 'Promover y reservar plaza' }));
-    await a.getByRole('status').filter({ hasText: /integrante/ }).waitFor();
+    await a.getByRole('alert').filter({ hasText: /integrante/ }).waitFor();
     await log('waiting promotion refuses active player conflict');
     await detail(wait);
     await a.getByRole('button', { name: 'Corregir datos', exact: true }).click();
@@ -132,6 +132,7 @@ try {
     let matches = (await db.query('select * from cfp_private.league_matches where event_id=$1 order by round,game_order', [e])).rows;
     assert.equal(matches.length, 24);
     for (const m of matches) {
+        await a.getByRole('tab',{name:new RegExp(`^Jornada ${m.round} `)}).click();
         await a.getByRole('button', { name: `Editar partido ${m.game_order} · jornada ${m.round}`, exact: true }).click();
         await a.locator('#match-state').selectOption('sport');
         await a.locator('#home-goals').fill('5');
@@ -145,6 +146,7 @@ try {
     await log('24 league results entered through UI on the same approved teams');
     const first = matches[0];
     const beforeStats = (await db.query('select cfp_private.league_table($1) t', [e])).rows[0].t;
+    await a.getByRole('tab',{name:new RegExp(`^Jornada ${first.round} `)}).click();
     await a.getByRole('button', { name: `Editar partido ${first.game_order} · jornada ${first.round}`, exact: true }).click();
     await a.locator('#match-state').selectOption('sport');
     await a.locator('#home-goals').fill('4');
@@ -181,13 +183,13 @@ try {
         await a.locator('#ko-ag').fill('2');
         await a.locator('#ko-reason').fill('Eliminatoria oficial de ensayo');
         await post(a, a.getByRole('button', { name: 'Guardar decisión del partido' }));
-        await a.getByRole('status').filter({ hasText: 'Guardado.' }).waitFor();
+        await a.getByRole('status').filter({ hasText: /Guardado/ }).waitFor();
         await a.reload();
     }
     await post(a, a.getByRole('button', { name: 'Confirmar campeón y terminar evento' }));
     await a.reload();
     await p.goto(base + '/eventos/' + e);
-    await p.getByRole('heading', { name: 'Campeón', exact: true }).waitFor();
+    await p.getByRole('region', { name: 'Campeón del evento', exact: true }).waitFor();
     assert.ok(!(await p.content()).includes(crew(1, 0).tiktok));
     await shot(p, '07-campeon');
     await p.locator('.champion-stage').screenshot({ path: out + '/07-campeon-completo.png' });

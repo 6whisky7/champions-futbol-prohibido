@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "auth": "simulated Auth/REST transport; real PostgreSQL; fixtures local only",
+  "events": [
+    "50759131-c539-4250-b77e-486cd8cb5e4f",
+    "a0ccf326-1de9-4745-824d-e8c0134b2d4d"
+  ],
+  "steps": [
+    "next match, CR + Tokyo date boundary, countdown",
+    "ICS UTC, CRLF, UTF8 folds and stable UID",
+    "reschedule reflected in page and new ICS without changing UID",
+    "real PNG result/story/event OG; pending card and dateless ICS blocked",
+    "share page and Open Graph metadata",
+    "seven public surfaces at 1440/390, Axe, no overflow, no TikTok",
+    "team path, horizontal mobile exploration, round selector and keyboard",
+    "sport-only records, unresolved ties, repesca and invalid date guards",
+    "draft event, teams, match, PNG, ICS and OG all private",
+    "maximum name lengths render; ICS text cannot inject a property"
+  ]
+}

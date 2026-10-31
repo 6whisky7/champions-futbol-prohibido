@@ -1,11 +1,18 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Occupancy } from "./occupancy";
+import { ExpiryTime } from "./expiry-time";
+import { RosterLineup } from "./roster-lineup";
+import { SaveStatus } from "./save-status";
 import { ApplicationForm } from "./application-form";
 import Image from "next/image";
 import { crests } from "@/lib/crests";
 import { type Application, stateLabels } from "@/lib/applications";
-import { reviewApplication, setRequirement } from "@/app/admin/solicitudes/actions";
+import {
+  reviewApplication,
+  setRequirement,
+} from "@/app/admin/solicitudes/actions";
 import { RequirementChecks } from "@/components/requirement-checks";
 const actionLabels: Record<string, string> = {
   confirm: "Capitán confirmado",
@@ -44,7 +51,6 @@ export function ApplicationManager({
   initialFilter?: string;
   initialSelected?: string;
 }) {
-  const [now] = useState(() => Date.now());
   const [filter, setFilter] = useState(initialFilter),
     [search, setSearch] = useState(""),
     [selected, setSelected] = useState<string | null>(initialSelected ?? null),
@@ -59,17 +65,25 @@ export function ApplicationManager({
   async function act(decision: string) {
     if (!a) return;
     setBusy(true);
+    setMessage("");
     try {
-      setMessage(await reviewApplication(a.id, decision, reason));
-      router.refresh();
+      const result = await reviewApplication(a.id, decision, reason);
+      setMessage(result);
+      if (result === "Guardado.") {
+        router.refresh();
+        window.dispatchEvent(new Event("cfp-admin-refresh"));
+      }
     } catch {
-      setMessage("No se pudo guardar. Reintenta.");
+      setMessage(
+        "No se pudo confirmar el guardado. Conserva los campos y consulta el estado antes de repetir.",
+      );
     } finally {
       setBusy(false);
     }
   }
   return (
     <>
+      <Occupancy pending={pending} approved={approved} capacity={capacity} />
       <dl className="event-facts application-stats">
         <div>
           <dt>Plazas ocupadas</dt>
@@ -111,7 +125,11 @@ export function ApplicationManager({
           ))}
         </select>
       </div>
-      <ul className="application-list admin-request-list">
+      <ul
+        className="application-list admin-request-list"
+        id="application-list"
+        tabIndex={-1}
+      >
         {items
           .filter(
             (a) =>
@@ -138,16 +156,7 @@ export function ApplicationManager({
                   {a.payload.members[Number(a.payload.captain)]?.roblox}
                 </p>
                 {a.expires_at && a.state === "pending" && (
-                  <p>
-                    Vence en{" "}
-                    {Math.max(
-                      0,
-                      Math.ceil(
-                        (new Date(a.expires_at).getTime() - now) / 3600000,
-                      ),
-                    )}{" "}
-                    h · {formatTime(a.expires_at)}
-                  </p>
+                  <ExpiryTime at={a.expires_at} />
                 )}
                 <button
                   className="trophy-button"
@@ -193,17 +202,19 @@ export function ApplicationManager({
           <p>
             {stateLabels[a.state]} · Referencia {a.id}
           </p>
-          <p className="admin-note">{a.accepted_privacy_version ? `Aviso presentado: ${a.accepted_privacy_version}. Aceptación registrada por quien envió; no acredita el consentimiento de toda la plantilla.` : "Sin aceptación versionada registrada. No se presume consentimiento por una inscripción anterior."}</p>
+          <p className="admin-note">
+            {a.accepted_privacy_version
+              ? `Aviso presentado: ${a.accepted_privacy_version}. Aceptación registrada por quien envió; no acredita el consentimiento de toda la plantilla.`
+              : "Sin aceptación versionada registrada. No se presume consentimiento por una inscripción anterior."}
+          </p>
           <h3>Jugadores</h3>
-          <ul className="admin-roster">
-            {a.payload.members.map((m, i) => (
-              <li key={i}>
-                <strong>{m.roblox}</strong> · TikTok: {m.tiktok} ·{" "}
-                {i === 3 ? "Suplente" : "Titular"}
-                {String(i) === a.payload.captain ? " · Capitán" : ""}
-              </li>
-            ))}
-          </ul>
+          <RosterLineup
+            members={a.payload.members.map((m, i) => ({
+              ...m,
+              role: i === 3 ? "Suplente" : "Titular",
+              captain: String(i) === a.payload.captain,
+            }))}
+          />
           <h3>Requisitos</h3>
           {a.state === "pending" && (
             <p className="admin-note">
@@ -235,7 +246,27 @@ export function ApplicationManager({
               onChange={(e) => setReason(e.target.value)}
             />
           </div>
-          <RequirementChecks application={a} disabled={busy||reason.trim().length<3} save={(i,k,checked)=>{setBusy(true);void setRequirement(a.id,i,k,checked,reason).then(setMessage).catch(()=>setMessage("No se pudo guardar. Reintenta.")).finally(()=>{setBusy(false);router.refresh();});}}/>
+          <RequirementChecks
+            application={a}
+            disabled={busy || reason.trim().length < 3}
+            save={(i, k, checked) => {
+              setBusy(true);
+              void setRequirement(a.id, i, k, checked, reason)
+                .then((result) => {
+                  setMessage(result);
+                  if (result === "Comprobación guardada.") {
+                    router.refresh();
+                    window.dispatchEvent(new Event("cfp-admin-refresh"));
+                  }
+                })
+                .catch(() =>
+                  setMessage(
+                    "No se pudo confirmar el guardado. Conserva los campos y consulta el estado antes de repetir.",
+                  ),
+                )
+                .finally(() => setBusy(false));
+            }}
+          />
           <p>Rechazar libera la plaza, el nombre, los jugadores y el escudo.</p>
           <div className="admin-tabs">
             {a.state === "pending" && (
@@ -260,7 +291,11 @@ export function ApplicationManager({
                     busy ||
                     reason.trim().length < 3 ||
                     !a.captain_confirmed ||
-                    !a.requirements_checked || a.member_checks?.length!==a.payload.members.length || !a.member_checks.every(m=>m.follow&&m.group&&m.friend)
+                    !a.requirements_checked ||
+                    a.member_checks?.length !== a.payload.members.length ||
+                    !a.member_checks.every(
+                      (m) => m.follow && m.group && m.friend,
+                    )
                   }
                   onClick={() => void act("approve")}
                 >
@@ -297,7 +332,7 @@ export function ApplicationManager({
               </>
             )}
           </div>
-          <p role="status">{message}</p>
+          <SaveStatus busy={busy} message={message} />
           {!open && (
             <p>
               Inscripciones cerradas: no se permiten promociones ni cambios de
@@ -323,7 +358,10 @@ export function ApplicationManager({
                   reason,
                   p,
                 );
-                router.refresh();
+                if (message === "Guardado.") {
+                  router.refresh();
+                  window.dispatchEvent(new Event("cfp-admin-refresh"));
+                }
                 return message;
               }}
             />
@@ -334,8 +372,51 @@ export function ApplicationManager({
               <li key={i}>
                 {formatTime(h.at)} · {actionLabels[h.action] ?? h.action} ·{" "}
                 {h.reason}
-                {h.actor&&<details><summary>Quién realizó la acción</summary><p>Identificador del usuario verificado: {h.actor}</p></details>}
-                {((h.after_checks?.length??0)>0||(h.before_checks?.length??0)>0)&&<details><summary>Comprobaciones anteriores y nuevas</summary>{h.action==="correct"?<p>La corrección reinició la confirmación y los requisitos. Consulta las plantillas anterior y nueva.</p>:<ul>{(h.after_checks??[]).flatMap((m,index)=>(["follow","group","friend"] as const).filter(key=>h.before_checks?.[index]?.[key]!==m[key]).map(key=><li key={index+key}>{h.after_payload?.members[index]?.roblox??`Integrante ${index+1}`} · {key==="follow"?"Seguimiento":key==="group"?"La Chapizza":"Amistad Roblox"}: {h.before_checks?.[index]?.[key]?"revisado":"pendiente"} → {m[key]?"revisado":"pendiente"}</li>))}</ul>}</details>}
+                {h.actor && (
+                  <details>
+                    <summary>Quién realizó la acción</summary>
+                    <p>Identificador del usuario verificado: {h.actor}</p>
+                  </details>
+                )}
+                {((h.after_checks?.length ?? 0) > 0 ||
+                  (h.before_checks?.length ?? 0) > 0) && (
+                  <details>
+                    <summary>Comprobaciones anteriores y nuevas</summary>
+                    {h.action === "correct" ? (
+                      <p>
+                        La corrección reinició la confirmación y los requisitos.
+                        Consulta las plantillas anterior y nueva.
+                      </p>
+                    ) : (
+                      <ul>
+                        {(h.after_checks ?? []).flatMap((m, index) =>
+                          (["follow", "group", "friend"] as const)
+                            .filter(
+                              (key) =>
+                                h.before_checks?.[index]?.[key] !== m[key],
+                            )
+                            .map((key) => (
+                              <li key={index + key}>
+                                {h.after_payload?.members[index]?.roblox ??
+                                  `Integrante ${index + 1}`}{" "}
+                                ·{" "}
+                                {key === "follow"
+                                  ? "Seguimiento"
+                                  : key === "group"
+                                    ? "La Chapizza"
+                                    : "Amistad Roblox"}
+                                :{" "}
+                                {h.before_checks?.[index]?.[key]
+                                  ? "revisado"
+                                  : "pendiente"}{" "}
+                                → {m[key] ? "revisado" : "pendiente"}
+                              </li>
+                            )),
+                        )}
+                      </ul>
+                    )}
+                  </details>
+                )}
                 {h.before_payload && (
                   <details>
                     <summary>Consultar datos anteriores y nuevos</summary>

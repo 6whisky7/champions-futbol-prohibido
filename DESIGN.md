@@ -278,15 +278,15 @@ La URL conserva `buscar`, `liga` y `mostrar`. Buscar ignora acentos y admite clu
 
 ### Navigation
 
-Cabecera opaca sin sombra, marca a la izquierda y anclas a la derecha. Enlaces con altura mínima de 48 px; hover aclara y subraya el texto. No se implementa indicador de sección activa.
+Cabecera opaca sin sombra, marca a la izquierda y anclas a la derecha. Enlaces con altura mínima de 48 px; hover aclara y subraya el texto. La página o sección activa lleva indicador visible y aria-current; el foco de teclado se conserva.
 
-En móvil, Menú/Cerrar revela cuatro enlaces en dos columnas con `aria-expanded` y `aria-controls`. Elegir uno cierra el menú; Escape lo cierra y devuelve el foco al botón. El enlace de salto aparece al recibir foco. La 404 reutiliza los enlaces principales y de texto para regresar.
+En móvil, Menú/Cerrar revela los enlaces públicos en dos columnas con `aria-expanded` y `aria-controls`. Elegir uno cierra el menú; Escape lo cierra y devuelve el foco al botón. El enlace de salto aparece al recibir foco. La 404 reutiliza los enlaces principales y de texto para regresar.
 
 ### Cards / Containers
 
-Cada escudo es un enlace al PNG original en otra pestaña, con figura y pie. El soporte tiene proporción 1.12, relleno de 20 px y radio de 12 px; la imagen usa `contain`, ancho del 88 % y máximo de 220 px. En móvil el soporte es cuadrado, su relleno baja a 12 px y la imagen usa el 100 % de ancho.
+Cada escudo abre un diálogo accesible con el original completo, referencia y disponibilidad por evento. La selección y los filtros se conservan en la URL. El soporte tiene proporción 1.12, relleno de 20 px y radio de 12 px; la imagen usa `contain`, ancho del 88 % y máximo de 220 px. En móvil el soporte es cuadrado, su relleno baja a 12 px y la imagen usa el 100 % de ancho.
 
-Hover escala solo la imagen a 1.035 en 180 ms `ease-out`; pulsación a 0.99. El pie queda fuera del soporte, con 14 px de separación. Diseño, club y liga mantienen niveles de lectura distintos. No existe diálogo de detalle.
+Hover escala solo la imagen a 1.035 en 180 ms `ease-out`; pulsación a 0.99. El pie queda fuera del soporte, con 14 px de separación. Diseño, club y liga mantienen niveles de lectura distintos. El diálogo devuelve el foco al diseño de origen o a la búsqueda cuando se abre mediante URL. Consultar no reserva.
 
 ### Gallery states
 
@@ -326,7 +326,7 @@ Con `prefers-reduced-motion: reduce`, el desplazamiento pasa a `auto` y se desac
 
 ### Consulta pública ampliada
 
-Próximo partido antes de los datos de edición, equipos con plantilla Roblox y resultados en listas adaptables. Las zonas usan azul claro para directo y violeta moderado para repesca, siempre con etiqueta y carácter provisional. El cuadro resalta la ruta con texto, borde y superficie, conservando selector de ronda y exploración horizontal opcional en móvil. Las tarjetas de resultado usan Barlow, escudos propios y fondo medianoche, con formato vertical y OG; las resoluciones administrativas se identifican expresamente. Sin animaciones ornamentales.
+Próximo partido antes de los datos de edición, equipos con plantilla Roblox y resultados en listas adaptables. Las zonas de clasificación usan dorado y etiquetas de directo o repesca; las pendientes conservan texto explícito de zona por resolver y carácter provisional. El cuadro resalta la ruta con texto, borde y superficie, conservando selector de ronda y exploración horizontal opcional en móvil. Las tarjetas de resultado usan Barlow, escudos propios y fondo medianoche, con formato vertical y OG; las resoluciones administrativas se identifican expresamente. Sin animaciones ornamentales.
 
 ## Herramientas LIVE
 
@@ -335,3 +335,13 @@ Marcadores grandes y controles de goles de 48 px; textos de 18 px. La espera es 
 ## Ajustes aprobados de la guía visual
 
 El dorado señala trofeo, campeón, finalista, ganador del partido y clasificados, con texto que identifica cada caso. No se usa como acento general de acciones. La presentación del trofeo admite su resplandor moderado conservando la iluminación V03 aprobada. Texturas de cancha o banderín muy tenues y luz azul/cian/violeta discreta pueden dar contexto; no se añaden estrellas decorativas genéricas ni emblemas UEFA. La navegación pública marca página o sección con texto/indicador y aria-current. Ventanas de escudo con foco protegido, cierre Escape y devolución al control de origen. Consultar disponibilidad nunca reserva.
+
+## Calendario, tabla y administración pulidos
+
+Jornadas seleccionables con progreso, URL persistente y filas simétricas. Escudos de 40 px y metadatos de 14–16 px; «Sin fecha» usa texto y ámbar. La edición mantiene la jornada y lleva el foco al formulario. Horarios por jornada con preparación, revisión y guardado; los errores parciales identifican lo confirmado y los horarios idénticos no se vuelven a escribir.
+
+Tabla con puntos dorados destacados, DG con signo y estadísticas secundarias. Equipo fijo al desplazar en móvil, cortes según formato y racha V/D/N por jornada y orden; N es nulo administrativo. Insignias de desempate usan los criterios guardados. La revisión de cierre aparece sobre la tabla.
+
+El cuadro dibuja conexiones desde home_source/away_source; los destinos responden a ratón y teclado. Pendientes con contorno discontinuo y banderín tenue. La revisión de cierre se sitúa después del cuadro, junto a la final. El campeón tiene nombre y escudo protagonistas, trofeo V03 sobre fondo integrado, final, plantilla y camino registrado; los pases no inventan goles.
+
+El panel conserva su marco: fases derivadas del estado, publicación e inscripción separadas, acción contextual y ocupación. Alineación con tres titulares y suplente separado; inicial, capitán y rol sin posiciones impuestas. Estados Guardando, Guardado y Error reflejan respuestas reales, sin reutilizar éxitos anteriores en confirmaciones nuevas. Nombres máximos se ajustan también en auditoría, selectores y descargas.
