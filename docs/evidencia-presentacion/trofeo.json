@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:3211",
+  "errors": [],
+  "layouts": [
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "trophy": {
+        "x": 740,
+        "width": 620,
+        "height": 600
+      }
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "trophy": {
+        "x": 20,
+        "width": 350,
+        "height": 450
+      }
+    },
+    {
+      "width": 360,
+      "scrollWidth": 360,
+      "trophy": {
+        "x": 20,
+        "width": 320,
+        "height": 450
+      }
+    }
+  ],
+  "simulatedMobile": {
+    "lcpMs": 1012,
+    "domContentLoadedMs": 688.3999999999069,
+    "transferredBytes": 2012437,
+    "glbRequests": 1,
+    "conditions": "Edge desktop; mobile 390x844/DPR2, 1.6 Mbps, 150ms RTT, CPU x4; cold context; NOT physical phone or Lighthouse",
+    "modelReadyMs": 12317.299999999814,
+    "totalBytesAtReady": 2012437
+  },
+  "interaction": "PASS: automatic load, five materials, keyboard rotation, frontal reset, offscreen hidden, reduced motion, failure fallback, navigation",
+  "touchScroll": "PASS",
+  "status": "PASS"
+}

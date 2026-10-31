@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "auth": "simulated Auth and REST transport; real PostgreSQL and public RPC projection; filtered fixture event list",
+  "fixtures": [
+    "cd2ea85a-f6c3-49b0-b2d1-b24923046ce7",
+    "961bdbcb-e28f-4274-8b06-860545dd8022"
+  ],
+  "checks": [
+    "Seguir las convocatorias en TikTok",
+    "Inscribir mi equipo",
+    "Apuntarme a la lista de espera",
+    "Elegir evento",
+    "knockout empty explains required league phase"
+  ]
+}

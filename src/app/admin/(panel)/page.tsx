@@ -27,7 +27,7 @@ export default async function Admin({
           formato, abrir inscripciones y revisar a los equipos desde este panel.
         </p>
         <Link className="action-link" href="/admin/eventos/nuevo">
-          Crear el primer borrador <ArrowRight size={20} />
+          Crear evento <ArrowRight size={20} />
         </Link>
         <p className="admin-note">
           El borrador es privado y nace con las inscripciones cerradas.

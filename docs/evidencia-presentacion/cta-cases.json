@@ -1,0 +1,22 @@
+[
+  {
+    "case": "Seguir las convocatorias en TikTok",
+    "status": "PASS",
+    "data": "controlled public API response, not real event"
+  },
+  {
+    "case": "Inscribir mi equipo",
+    "status": "PASS",
+    "data": "controlled public API response, not real event"
+  },
+  {
+    "case": "Apuntarme a la lista de espera",
+    "status": "PASS",
+    "data": "controlled public API response, not real event"
+  },
+  {
+    "case": "Elegir evento",
+    "status": "PASS",
+    "data": "controlled public API response, not real event"
+  }
+]

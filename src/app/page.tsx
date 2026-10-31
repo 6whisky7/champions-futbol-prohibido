@@ -1,5 +1,5 @@
+import { ParticipationAction } from "@/components/participation-action";
 import { TrophyShowcase } from "@/components/trophy-showcase";
-import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { CrestGallery } from "@/components/crest-gallery";
 import { SiteHeader } from "@/components/site-header";
@@ -31,16 +31,9 @@ export default function Home() {
                 Torneo de Fútbol Prohibido en Roblox. Tres jugadores por equipo,
                 de la liguilla a la final.
               </p>
-              <a className="action-link" href="#escudos">
-                Explorar los escudos <ArrowRight aria-hidden="true" />
-              </a>
-              <a className="plain-link" href="#torneo">
-                Conocer el torneo <ArrowRight aria-hidden="true" />
-              </a>
-              <p className="hero-note">
-                Consulta los eventos y el estado de sus inscripciones.
-              </p>
-              <Link className="plain-link" href="/eventos">Consultar eventos <ArrowRight aria-hidden="true" /></Link>
+              <ParticipationAction />
+              <a className="plain-link" href="#escudos">Explorar los escudos <ArrowRight aria-hidden="true" /></a>
+              <a className="plain-link" href="#torneo">Conocer el torneo <ArrowRight aria-hidden="true" /></a>
             </div>
           <TrophyShowcase />
         </section>

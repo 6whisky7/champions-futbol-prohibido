@@ -1,0 +1,86 @@
+[
+  {
+    "src": "original.glb",
+    "env": "before.hdr",
+    "tone": "neutral",
+    "exposure": "0.85",
+    "orbit": {
+      "theta": 0.5028293574995664,
+      "phi": 1.4409438304465185,
+      "radius": 22.5
+    },
+    "canvas": {
+      "width": 720,
+      "height": 900
+    },
+    "size": {
+      "x": 5.60576868057251,
+      "y": 8.862719874829054,
+      "z": 4.059999942779541
+    },
+    "materials": 5
+  },
+  {
+    "src": "optimized.glb",
+    "env": "before.hdr",
+    "tone": "neutral",
+    "exposure": "0.85",
+    "orbit": {
+      "theta": 0.5028293574995664,
+      "phi": 1.4409438304465185,
+      "radius": 22.5
+    },
+    "canvas": {
+      "width": 720,
+      "height": 900
+    },
+    "size": {
+      "x": 5.60579252243042,
+      "y": 8.862723212689161,
+      "z": 4.059999942779541
+    },
+    "materials": 5
+  },
+  {
+    "src": "original.glb",
+    "env": "after.hdr",
+    "tone": "agx",
+    "exposure": "1",
+    "orbit": {
+      "theta": 0.5028293574995664,
+      "phi": 1.4409438304465185,
+      "radius": 22.5
+    },
+    "canvas": {
+      "width": 720,
+      "height": 900
+    },
+    "size": {
+      "x": 5.60576868057251,
+      "y": 8.862719874829054,
+      "z": 4.059999942779541
+    },
+    "materials": 5
+  },
+  {
+    "src": "optimized.glb",
+    "env": "after.hdr",
+    "tone": "agx",
+    "exposure": "1",
+    "orbit": {
+      "theta": 0.5028293574995664,
+      "phi": 1.4409438304465185,
+      "radius": 22.5
+    },
+    "canvas": {
+      "width": 720,
+      "height": 900
+    },
+    "size": {
+      "x": 5.60579252243042,
+      "y": 8.862723212689161,
+      "z": 4.059999942779541
+    },
+    "materials": 5
+  }
+]

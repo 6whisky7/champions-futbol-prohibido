@@ -30,13 +30,14 @@ export function TrophyShowcase() {
     import("@google/model-viewer").then(({ ModelViewerElement }) => {
       if (disposed) return;
       ModelViewerElement.dracoDecoderLocation = "/trofeo/draco/";
+      ModelViewerElement.minimumRenderScale = 0.75;
       const element = document.createElement("model-viewer") as ModelViewerElement;
       viewer.current = element;
       const attributes = {
         src: "/trofeo/cfp-v03-web.glb", alt: "Trofeo Champions Fútbol Prohibido en 3D. Usa las flechas para girarlo.",
         "camera-controls": "", "disable-zoom": "", "disable-pan": "",
-        "touch-action": "pan-y", "camera-orbit": "25deg 80deg auto",
-        "field-of-view": "30deg", "environment-image": "/trofeo/championship-studio.hdr", exposure: "0.85",
+        "touch-action": "pan-y", "camera-orbit": "28.81deg 82.56deg auto",
+        "field-of-view": "26deg", "environment-image": "/trofeo/cfp-studio-v2.hdr", exposure: "1", "tone-mapping": "agx",
         "interaction-prompt": "none", loading: "eager", tabindex: "-1",
       };
       Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
@@ -50,10 +51,21 @@ export function TrophyShowcase() {
         element.cameraOrbit = `${theta}deg ${phi}deg ${orbit.radius}m`;
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) element.jumpCameraToGoal();
       }, { capture: true });
-      element.addEventListener("load", () => {
-        window.clearTimeout(timer);
-        if (!disposed && !failed) { element.tabIndex = 0; setStatus("ready"); }
-      }, { once: true });
+      let modelReady = false, environmentReady = false;
+      const reveal = async () => {
+        if (!modelReady || !environmentReady) return;
+        await element.updateComplete;
+        // Keep the poster until model, HDR and a rendered frame are prepared.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (!disposed && !failed) {
+            window.clearTimeout(timer);
+            element.tabIndex = 0;
+            setStatus("ready");
+          }
+        }));
+      };
+      element.addEventListener("load", () => { modelReady = true; void reveal(); }, { once: true });
+      element.addEventListener("environment-change", () => { environmentReady = true; void reveal(); }, { once: true });
       element.addEventListener("error", fail);
       host.current?.append(element);
     }).catch(fail);

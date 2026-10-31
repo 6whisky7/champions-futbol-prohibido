@@ -17,7 +17,7 @@ Explicar el torneo, explorar sus 48 escudos originales y permitir al propietario
 ## Capabilities and Constraints
 
 - Next.js App Router, TypeScript, Tailwind y versiones estables existentes.
-- Portada con trofeo V03 automático, galería con filtros, comunidad, 404, eventos públicos y administración exclusiva del propietario. Incluye inscripción pública sin cuentas, revisión manual y lista de espera con promoción administrativa.
+- Portada orientada a participación según disponibilidad pública (inscripción, elección de evento, espera o comunidad), con trofeo V03 automático, galería con filtros, comunidad, 404, eventos públicos y administración exclusiva del propietario. Incluye inscripción pública sin cuentas, revisión manual y lista de espera con promoción administrativa.
 - La administración comparte navegación, selector de evento y cabecera: Resumen, Eventos, Solicitudes, Equipos, Lista de espera, Calendario, Resultados, Clasificación y Eliminatorias. El resumen utiliza datos reales, próximos vencimientos en seis horas y cinco acciones recientes; sin eventos conserva su marco y ofrece crear el primer borrador.
 - La competición incorpora revisión/confirmación del sorteo, jornadas públicas, resultados oficiales, desempates persistentes, descalificación y cierre de clasificación. Las eliminatorias parten de la clasificación final cerrada, se revisan y confirman explícitamente y conservan sus destinos; el propietario confirma el campeón y el cierre por evento. No inicia competiciones automáticamente.
 - Las reglas confirmadas están en `docs/decisiones-del-torneo.md`; prevalecen las correcciones recientes.

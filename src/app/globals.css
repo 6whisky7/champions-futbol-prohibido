@@ -1045,3 +1045,5 @@ div[id] {
     animation: none !important;
   }
 }
+
+.participation-action {display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-block:24px;max-width:48ch;min-height:190px}.participation-action p{color:var(--muted-foreground);font-size:18px;line-height:1.65}.participation-action .action-link{white-space:normal;text-align:left}.participation-action svg{flex-shrink:0}
