@@ -8,9 +8,9 @@ export type EventFormat = keyof typeof eventFormats;
 export interface TournamentEvent {
   id: string; name: string; description: string; starts_at: string; ends_at: string | null;
   capacity: number; format: EventFormat; eliminate_after_league: boolean;
-  status: "draft" | "published"; registration_status: "closed" | "open"; review_hours: number; updated_at: string;
+  status: "draft" | "published" | "finished" | "cancelled"; registration_status: "closed" | "open"; review_hours: number; updated_at: string; is_test: boolean | null; finished_at: string | null; cancelled_at: string | null;
 }
-export const eventColumns = "id,name,description,starts_at,ends_at,capacity,format,eliminate_after_league,status,registration_status,review_hours,updated_at";
+export const eventColumns = "id,name,description,starts_at,ends_at,capacity,format,eliminate_after_league,status,registration_status,review_hours,updated_at,is_test,finished_at,cancelled_at";
 export function eventDate(date: string) {
   return new Intl.DateTimeFormat("es-CR", { timeZone: "America/Costa_Rica", dateStyle: "long", timeStyle: "short" }).format(new Date(date));
 }
@@ -43,5 +43,11 @@ export function parseEvent(form: FormData) {
   if (!["closed","open"].includes(registration_status) || (registration_status==="open" && status!=="published")) throw new Error("Solo un evento publicado puede abrir inscripciones.");
   const review_hours=Number(text("review_hours")||48);
   if (!Number.isInteger(review_hours)||review_hours<1||review_hours>720) throw new Error("Plazo de revisión: entre 1 y 720 horas.");
-  return { name, description, capacity, format, eliminate_after_league: eliminate, starts_at, ends_at, status, registration_status, review_hours };
+  const is_test = text("is_test") === "yes";
+  if (text("is_test") && !["yes", "no"].includes(text("is_test"))) throw new Error("Elige si este evento será de prueba u oficial.");
+  return { name, description, capacity, format, eliminate_after_league: eliminate, starts_at, ends_at, status, registration_status, review_hours, is_test };
+}
+
+export function eventStatusTerminal(status: TournamentEvent["status"]) {
+  return status === "finished" || status === "cancelled";
 }

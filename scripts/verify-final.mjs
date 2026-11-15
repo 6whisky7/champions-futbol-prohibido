@@ -142,7 +142,7 @@ try {
   }));
   assert.equal(metrics.dpr, 2);
   assert.ok(metrics.scroll <= metrics.width);
-  await q.getByRole("button", { name: "Menú", exact: true }).click();
+  await q.getByRole("button", { name: /Menú/ }).click();
   await q.keyboard.press("Escape");
   await q.getByRole("link", { name: "Marcador", exact: true }).focus();
   assert.equal(

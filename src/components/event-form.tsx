@@ -27,6 +27,7 @@ export function EventForm({ event }: { event?: TournamentEvent }) {
     status: event?.status ?? "draft",
     review_hours: String(event?.review_hours ?? 48),
     registration_status: event?.registration_status ?? "closed",
+    is_test: event?.is_test ? "yes" : "no",
   });
   function bind(name: string) {
     return {
@@ -42,6 +43,7 @@ export function EventForm({ event }: { event?: TournamentEvent }) {
     <form action={action} onReset={(event) => event.preventDefault()} className="event-form">
       <input type="hidden" name="id" value={event?.id ?? ""} />
       <input type="hidden" name="updated_at" value={event?.updated_at ?? ""} />
+      {event && event.is_test !== null && <input type="hidden" name="is_test" value={event.is_test ? "yes" : "no"} />}
       {!event && <p>Empieza guardando un borrador privado con las inscripciones cerradas. Después podrás revisarlo, publicarlo y abrirlo desde esta misma pantalla.</p>}
       <label htmlFor="name">Nombre del evento</label>
       <input
@@ -115,6 +117,18 @@ export function EventForm({ event }: { event?: TournamentEvent }) {
         <option value="draft">Borrador privado</option>
         <option value="published">Publicado</option>
       </select>
+      {!event ? (
+        <>
+          <label htmlFor="is_test">Tipo de evento</label>
+          <select id="is_test" name="is_test" {...bind("is_test")}>
+            <option value="no">Oficial · sin datos ficticios</option>
+            <option value="yes">Prueba · entorno aislado de la web pública</option>
+          </select>
+          <p>La clasificación queda fija al crear el evento. Los eventos de prueba nunca aparecen en la web pública y solo admiten equipos ficticios generados por el panel.</p>
+        </>
+      ) : (
+        <p><strong>{event.is_test === null ? "EVENTO ANTERIOR · SIN CLASIFICAR" : event.is_test ? "PRUEBA" : "EVENTO OFICIAL"}</strong> · La clasificación queda fija.</p>
+      )}
       <label htmlFor="review_hours">
         Plazo para confirmar y revisar (horas)
       </label>

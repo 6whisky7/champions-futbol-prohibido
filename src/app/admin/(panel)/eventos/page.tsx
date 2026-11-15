@@ -32,7 +32,7 @@ export default async function Events() {
             </div>
             <div>
               <span className="admin-status">
-                {e.status === "draft" ? "Borrador" : "Publicado"}
+                {e.is_test === null ? "ANTERIOR · SIN CLASIFICAR" : e.is_test ? "PRUEBA" : "OFICIAL"} · {e.status === "draft" ? "Borrador" : e.status === "published" ? "Publicado" : e.status === "finished" ? "Finalizado" : "Cancelado"}
               </span>
               <span className="admin-status">
                 Inscripciones{" "}

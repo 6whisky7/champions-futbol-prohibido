@@ -1,10 +1,14 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { createClient } from "@/lib/supabase/server";
 export const metadata = {
   title: "Privacidad y contacto | Champions Fútbol Prohibido",
 };
-export default function Privacy() {
+export default async function Privacy() {
+  const client = await createClient();
+  const { data: policy, error } = await client.rpc("cfp_registration_status");
+  const enabled = !error && policy?.enabled === true;
   return (
     <>
       <SiteHeader />
@@ -12,18 +16,18 @@ export default function Privacy() {
         <Link href="/eventos">Volver a los eventos</Link>
         <h1>Privacidad y contacto</h1>
         <p>
-          Responsable indicado por el organizador: <strong>Whisky</strong>. Esta
-          página explica el funcionamiento y las decisiones aprobadas. El aviso
-          definitivo y el procedimiento de autorización todavía no están
-          activos. Las inscripciones reales permanecen cerradas.
+          Responsable indicado por el organizador: <strong>Whisky</strong>. Este
+          aviso explica el uso previsto de los datos. {enabled ? `Versión activa ${policy.version}.` : "El propietario todavía no ha activado esta versión."} Su publicación no abre las inscripciones de ningún evento. La identificación legal completa del responsable y el canal formal de notificación todavía requieren revisión; esta página no afirma cumplimiento legal.
         </p>
         <section>
           <h2>Qué datos usamos</h2>
           <p>
-            Nombre del equipo, escudo, número opcional y usuarios de Roblox y
-            TikTok de sus integrantes. Se usan para revisar requisitos,
-            confirmar al capitán, organizar partidos y conservar resultados de
-            la edición.
+            Nombre del equipo, escudo, número opcional, usuarios de Roblox y
+            TikTok, integrantes, capitán, solicitud, estado, confirmaciones y
+            verificaciones administrativas. Se usan para recibir y revisar la
+            inscripción, organizar equipos y partidos, comunicarse sobre la
+            solicitud y conservar el historial de la competición. El formulario
+            no pide identificaciones oficiales ni fechas de nacimiento completas.
           </p>
           <p>
             Para limitar envíos repetidos se calcula una huella temporal de la
@@ -36,11 +40,15 @@ export default function Privacy() {
         <section>
           <h2>Qué se publica</h2>
           <p>
-            Equipo, escudo, número voluntario, plantilla Roblox, estado público
-            de la solicitud, partidos, clasificación y campeón. Los marcadores
-            de trabajo se identifican como provisionales. Los clips solo
-            aparecen como enlaces si el organizador elige publicarlos; el vídeo
-            se abre en la plataforma externa.
+            Si un evento oficial está publicado: equipo, escudo, número
+            voluntario, usuarios Roblox necesarios para identificar la plantilla,
+            estado público de la solicitud, calendario, resultados,
+            clasificación e historial del campeón. Los datos de TikTok,
+            solicitudes privadas, notas, motivos y controles de revisión no se
+            publican. Los marcadores de trabajo se identifican como
+            provisionales. Un evento de prueba nunca aparece en las vistas
+            públicas. Los clips solo aparecen como enlaces si el organizador
+            elige publicarlos; el vídeo se abre en la plataforma externa.
           </p>
           <h2>Qué queda privado</h2>
           <p>
@@ -67,10 +75,11 @@ export default function Privacy() {
             .
           </p>
           <p>
-            Indica el evento, el equipo y qué necesitas corregir o retirar. Se
-            verificará quién solicita el cambio con la información necesaria
-            para ese caso. No envíes documentos de identidad ni tu fecha de
-            nacimiento completa por iniciativa propia.
+            Puedes solicitar acceso, corrección o eliminación. Indica el evento,
+            el equipo y qué necesitas; el organizador verificará la solicitud
+            con información proporcional al caso. Un participante menor puede
+            pedir ayuda a su responsable legal. No envíes documentos de
+            identidad ni tu fecha de nacimiento completa por iniciativa propia.
           </p>
           <p>
             Durante una competición, revisar una retirada de datos no equivale a
@@ -80,31 +89,32 @@ export default function Privacy() {
         <section>
           <h2>Conservación y eliminación</h2>
           <p>
-            Whisky aprobó provisionalmente retirar los datos privados de
-            solicitudes rechazadas después de 30 días y los datos internos de
-            cada edición después de 90 días desde su finalización. El historial
-            deportivo público se conservaría mientras la competición permanezca
-            publicada. Estos plazos requieren revisión legal y un procedimiento
-            seguro que contemple incidencias, auditoría y copias de seguridad.
-            Todavía no hay borrado automático ni se han eliminado registros.
+            El plazo operativo es de seis meses: desde el rechazo o vencimiento
+            para esas solicitudes, y desde la finalización o cancelación de la
+            edición para equipos aprobados, en espera y solicitudes que sigan
+            activas. Al vencer se anonimizan los usuarios Roblox y TikTok de la
+            solicitud y sus copias de historial. El nombre del equipo, escudo,
+            partidos, resultados, clasificación y datos necesarios para mostrar
+            al campeón se conservan sin esos identificadores. Las copias
+            técnicas de proveedores pueden tener plazos separados.
           </p>
         </section>
         <section>
           <h2>Participación de menores</h2>
           <p>
             CFP no establece una edad mínima propia. Se deben respetar la ley y
-            las condiciones de Roblox y TikTok. Whisky aprobó permitir menores
-            con autorización verificable de su responsable legal; el
-            procedimiento está en preparación y no está habilitado.
+            las condiciones de Roblox y TikTok. Se permite participación de
+            menores con medidas proporcionadas y autorización de su responsable
+            legal. El formulario no recopila documentos de identidad ni fecha
+            de nacimiento completa.
           </p>
           <p>
-            La confirmación individual de los integrantes todavía está en
-            revisión. Una declaración del capitán no acredita su consentimiento
-            ni la autorización de sus responsables legales. Antes de abrir se
-            debe completar esa verificación y el aviso, incluida la
-            identificación legal del responsable. No se solicitan fechas de
-            nacimiento completas ni documentos de identidad como solución
-            provisional.
+            La aplicación todavía no registra una verificación individual del
+            responsable legal. La declaración del capitán no acredita el
+            consentimiento de los demás integrantes. Antes de aceptar una
+            inscripción de un menor, el organizador debe comprobar y conservar
+            de forma restringida la autorización por un medio proporcional; no
+            debe presentarse una verificación externa como función de este sitio.
           </p>
         </section>
         <details>

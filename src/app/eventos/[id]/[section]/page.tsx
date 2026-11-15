@@ -26,7 +26,7 @@ export default async function PublicCompetition({
     .from("cfp_events")
     .select("id,name")
     .eq("id", id)
-    .eq("status", "published")
+    .in("status", ["published", "finished"])
     .maybeSingle();
   if (error) throw new Error("No se pudo consultar el evento");
   if (!ev) notFound();

@@ -2,6 +2,8 @@
 
 Actualización: 15 de noviembre de 2026, Costa Rica. Este documento recupera el estado real del proyecto tras la pausa posterior al PR #16, registra la auditoría y la corrección de accesibilidad de los escudos, y separa lo corregido de lo que sigue pendiente. Las inscripciones reales y la política de privacidad permanecen **cerradas**.
 
+El trabajo posterior de ciclo de vida, eventos de prueba y conservación de seis meses está documentado en el [informe final actualizado](ESTADO_FINAL_CFP.md); ese informe prevalece en esos temas.
+
 ## 1. Estado inicial recuperado
 
 - Repositorio local: `C:\Users\XT\Projects\champions-futbol-prohibido`, verificado como el proyecto correcto (remoto `6whisky7/champions-futbol-prohibido`, proyecto Supabase `cvenqmszdmhqaeokzbnz`, 48 escudos originales y trofeo V03).
