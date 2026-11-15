@@ -14,6 +14,7 @@ import {
   X,
   Plus,
   Radio,
+  ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PhaseBar } from "./phase-bar";
@@ -79,6 +80,7 @@ const sections = [
     group: "Competición",
   },
   { label: "LIVE", path: "/admin/live", icon: Radio, group: "Competición" },
+  { label: "Privacidad y conservación", path: "/admin/privacidad", icon: ShieldCheck, group: "Configuración" },
 ];
 export function AdminShell({
   events,
@@ -191,7 +193,7 @@ export function AdminShell({
           }}
         >
           <nav aria-label="Administración">
-            {["Resumen", "Preparar", "Competición"].map((group) => (
+            {["Resumen", "Preparar", "Competición", "Configuración"].map((group) => (
               <div
                 className="admin-nav-group"
                 role="group"
@@ -264,14 +266,14 @@ export function AdminShell({
             {!events.length && <option value="">Sin eventos todavía</option>}
             {events.map((e) => (
               <option key={e.id} value={e.id}>
-                {e.name}
+                {e.is_test === null ? "ANTERIOR · " : e.is_test ? "PRUEBA · " : ""}{e.name}
               </option>
             ))}
           </select>
           {event && (
             <div className="event-status-chips">
               <Badge variant="outline">
-                {event.status === "draft" ? "Borrador" : "Publicado"}
+                {event.status === "draft" ? "Borrador" : event.status === "published" ? "Publicado" : event.status === "finished" ? "Finalizado" : "Cancelado"}
               </Badge>
               <Badge variant="outline">
                 Inscripciones{" "}
@@ -297,9 +299,12 @@ export function AdminShell({
                         "/admin/clasificacion",
                         "/admin/eliminatorias",
                         "/admin/live",
+                        "/admin/privacidad",
                       ].includes(path)
                     ? path === "/admin/live"
                       ? "Marcador de trabajo, espera, OBS y permisos limitados por evento."
+                      : path === "/admin/privacidad"
+                        ? "Aviso publicado, conservación de solicitudes y controles de acceso."
                       : path === "/admin/eliminatorias"
                         ? "Cuadro fijo, avance de ganadores y cierre del evento."
                         : "Rivales, resultados oficiales y posiciones de la liguilla."

@@ -133,6 +133,7 @@ try {
     assert.equal(matches.length, 24);
     for (const m of matches) {
         await a.getByRole('tab',{name:new RegExp(`^Jornada ${m.round} `)}).click();
+        await a.waitForFunction((round) => document.querySelector('.league-round h3')?.textContent?.trim() === `Jornada ${round}`, m.round);
         await a.getByRole('button', { name: `Editar partido ${m.game_order} · jornada ${m.round}`, exact: true }).click();
         await a.locator('#match-state').selectOption('sport');
         await a.locator('#home-goals').fill('5');
@@ -147,6 +148,7 @@ try {
     const first = matches[0];
     const beforeStats = (await db.query('select cfp_private.league_table($1) t', [e])).rows[0].t;
     await a.getByRole('tab',{name:new RegExp(`^Jornada ${first.round} `)}).click();
+    await a.waitForFunction((round) => document.querySelector('.league-round h3')?.textContent?.trim() === `Jornada ${round}`, first.round);
     await a.getByRole('button', { name: `Editar partido ${first.game_order} · jornada ${first.round}`, exact: true }).click();
     await a.locator('#match-state').selectOption('sport');
     await a.locator('#home-goals').fill('4');

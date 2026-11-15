@@ -295,7 +295,7 @@ try {
     [],
   );
   await c.query("reset role");
-  await c.query("update public.cfp_events set status='draft' where id=$1", [e]);
+  await c.query("update public.cfp_events set status='cancelled' where id=$1", [e]);
   await c.query("set local role anon");
   assert.equal(
     (await c.query("select public.cfp_live_public($1) d", [e])).rows[0].d,
@@ -311,7 +311,7 @@ try {
     /permission denied/,
   );
   console.log(
-    "PASS HTTPS validation, explicit evidence visibility, actor audit, immediate revocation and draft/anonymous protection; all rolled back",
+    "PASS HTTPS validation, explicit evidence visibility, actor audit, immediate revocation and cancelled/anonymous protection; all rolled back",
   );
   await c.query("reset role");
   const ko = await fixture(c);

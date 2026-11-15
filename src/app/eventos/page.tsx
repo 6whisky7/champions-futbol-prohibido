@@ -23,7 +23,7 @@ export default async function Events({
   const { data, error } = await client
     .from("cfp_events")
     .select(eventColumns)
-    .eq("status", "published")
+    .in("status", ["published", "finished"])
     .order("starts_at");
   const events = ((data ?? []) as TournamentEvent[])
     .map((e) =>

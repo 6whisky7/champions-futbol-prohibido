@@ -1,6 +1,6 @@
 # Privacidad y autorización antes del primer evento
 
-Actualizado el 31 de octubre de 2026. Decisiones del propietario incorporadas; los recorridos propuestos aquí **no están activados**. La política de producción sigue inactiva y la base de datos bloquea abrir inscripciones. No se han borrado registros ni añadido edades mínimas propias.
+Actualizado el 15 de noviembre de 2026. La configuración y las operaciones de conservación ya están implementadas en el panel y en Supabase. En producción el aviso continúa inactivo, las inscripciones siguen bloqueadas y no hay solicitudes almacenadas. La implementación no registra autorizaciones individuales ni certifica cumplimiento legal. No se han borrado registros ni añadido edades mínimas propias.
 
 ## Lo que ya está decidido
 
@@ -10,7 +10,7 @@ CFP no establece una edad mínima propia. Se permite participar a menores con au
 
 Son públicos equipo, escudo, identificadores Roblox necesarios, plantilla autorizada, calendario, enfrentamientos, resultados, clasificación e historial deportivo/campeones. TikTok de solicitudes, notas, verificaciones y autorizaciones de menores son privados. Un ayudante solo recibe marcadores del evento asignado y no recibe esos datos.
 
-Plazos aprobados provisionalmente, sujetos a revisión legal: datos privados de rechazadas, 30 días; datos internos de una edición, 90 días desde su finalización; historial deportivo público, mientras siga publicada. No equivalen a retención indefinida ni impiden atender una retirada procedente.
+Plazo configurado por decisión del propietario: seis meses. El proceso localiza solicitudes rechazadas desde su rechazo, vencidas desde el vencimiento y solicitudes activas al finalizar o cancelar la edición. Anonimiza Roblox y TikTok en la solicitud y sus copias históricas; conserva los datos deportivos, el nombre y escudo del equipo y el campeón. La tarea diaria `pg_cron` está instalada en producción. La primera prueba aislada confirmó el comportamiento e idempotencia; no se han borrado solicitudes de producción.
 
 ## Restricciones comprobadas y cuestiones jurídicas
 
@@ -48,14 +48,14 @@ No automatizar todavía. Primero inventariar contactos y usuarios dentro de payl
 
 Preparar una previsualización por edición con filas/campos afectados y dependencias. Para rechazadas, computar desde la decisión de rechazo; para datos internos de la edición, desde el cierre confirmado. Dejar aparte incidencias o requerimientos concretos que justifiquen una conservación mínima adicional, con finalidad, acceso restringido y revisión: no retener todo por invocar genéricamente auditoría. Los datos deportivos necesarios sobreviven separados de los privados. Borrados y disociaciones conservan un registro mínimo sin reproducir los datos retirados.
 
-Probar recuperación y purga en una copia aislada antes de cada primera ejecución. Definir rotación de backups y cómo reaplicar las retiradas tras restaurar; no prometer desaparición instantánea de copias técnicas. No se activó cron ni se ejecutó una purga. Falta decidir expresamente el plazo de solicitudes **vencidas**, espera no promovida y preinscripciones incompletas; recomendación: incluirlas en un plazo corto equivalente al de rechazadas, sujeto a la misma revisión, en vez de conservarlas indefinidamente.
+El proceso cubre solicitudes vencidas y la lista de espera mediante sus estados y fechas de referencia. Las operaciones y resultados quedan auditados. Revisar rotación de backups y reaplicar retiradas tras una restauración; no prometer desaparición instantánea de copias técnicas.
 
 ## Lo indispensable antes de abrir
 
 1. Completar identidad legal y medio de notificación, proveedores y aviso final.
 2. Validar y aprobar el método de representación y la confirmación individual; implementar sus controles previos a recogida/publicación con pruebas reales.
 3. Resolver la adaptación de TikTok para participantes que no pueden usar sus funciones. Sin esa decisión, no se declara compatible el requisito actual con todos los menores.
-4. Revisar los plazos provisionales y los casos restantes; acordar conservación/purga segura, sin eliminar datos ahora.
-5. Versionar el aviso y activar la política solo tras esos pasos y una prueba completa aislada con Auth/PostgREST reales. Abrir el evento seguirá siendo una acción expresa del propietario.
+4. Revisar jurídicamente el aviso, alcance de seis meses, destinatarios, transferencias y copias de respaldo.
+5. Activar la versión solo después de los pasos anteriores. La aplicación no abre eventos automáticamente; la apertura continúa siendo una acción expresa del propietario.
 
 Turnstile está descartado y no es un bloqueo. Los límites persistentes, firma del servidor, idempotencia, reservas atómicas y permisos siguen activos. La revisión personal y la demostración ficticia pueden hacerse ahora, sin inaugurar ningún torneo.

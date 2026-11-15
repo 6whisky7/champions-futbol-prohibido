@@ -1,18 +1,18 @@
 # Tu primer evento CFP
 
-Puedes practicar ahora en la [demostración local recuperable](demostracion.md). No inaugura un torneo ni usa cuentas reales. El [informe actualizado](mejoras-bloque-5.md) distingue todas las pruebas.
+Empieza creando un evento **Prueba** desde el panel; no usa participantes reales ni publica resultados en los torneos oficiales. El [informe final](ESTADO_FINAL_CFP.md) distingue las pruebas locales de las comprobaciones pendientes de Auth/PostgREST reales.
 
 Capturas reales del ensayo aislado; equipos y usuarios ficticios. El acceso del ensayo es simulado. [Alcance de la revisión](revision-integral.md).
 
 Entra en [Administración](https://champions-futbol-prohibido.vercel.app/admin/acceso) con tu correo. Revisa siempre **Evento activo** antes de actuar.
 
-## 1. Crea y abre
+## 1. Crea un evento de prueba
 
-**Eventos → Crear evento.** Completa nombre, fecha de Costa Rica, formato y cupo par. Guarda primero como **Borrador privado / Cerradas**.
+**Eventos → Crear evento.** Completa nombre, fecha de Costa Rica, formato y cupo par. En **Tipo de evento**, selecciona **Prueba**. Guarda como **Borrador privado / Cerradas**.
 
-Para doce equipos: **Cuartos**, cupo **12**, «Clasifican los mejores»; cuatro rivales por equipo y ocho clasificados.
+En **Preparar equipos de prueba**, genera solicitudes ficticias y gestiona el torneo desde el panel: revisa solicitudes, aprueba equipos, crea el calendario, registra resultados, consulta desempates y confirma el campeón. Los eventos de prueba permanecen fuera de listados, páginas y proyecciones públicas incluso si se publican desde el panel.
 
-Después guarda **Publicado**. Comprueba su página pública. Antes de abrir, completa el aviso definitivo y la identificación legal, valida e implementa la autorización de menores y la confirmación individual, resuelve la adaptación de TikTok y revisa los plazos provisionales de conservación. [Propuesta concreta](privacidad-propuesta.md). La configuración de privacidad está inactiva y bloquea la apertura; consulta [el bloque 2](mejoras-bloque-2.md). Solo después de aprobar y activar esa versión podrás guardar **Abiertas** cuando estés listo.
+Los eventos **Oficiales** se crean por separado y no tienen controles para generar participantes ficticios. En producción, el aviso continúa inactivo y las inscripciones siguen cerradas. Antes del primer evento oficial deben revisarse la identificación del responsable, el aviso, el procedimiento de menores, el requisito TikTok y las copias de seguridad. Consulta [Privacidad y autorización](privacidad-propuesta.md) y [el estado final](ESTADO_FINAL_CFP.md). Activar condiciones de privacidad y abrir inscripciones son acciones administrativas distintas.
 
 ![Configuración del borrador: nombre, fechas, formato, cupo y estados](guia/01-configuracion.png)
 
