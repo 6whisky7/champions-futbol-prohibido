@@ -48,6 +48,10 @@ Los ensayos usan Edge/Chromium y PostgreSQL reales con Auth/REST simulados, sesi
 
 [Verificación de la demostración actualizada](evidencia-pulido-competicion/demo.json): siete bloques, páginas reales en 3220, doce parejas de capturas, descarga de campeón y ejemplos presentes en base/snapshot; sin restablecer la práctica.
 
+## Corrección detectada al revisar producción
+
+La revisión pública posterior al PR #16 detectó que los botones de escudos omitían la liga y añadían palabras entre las partes visibles de su nombre. Se sustituyó ese nombre por una referencia al pie visible completo y se indicó que abre un diálogo. Las comprobaciones locales de portada/escudos se ampliaron explícitamente a `wcag21a`, además de las etiquetas anteriores, para cubrir Label in Name. No cambia diseño, filtros, reserva ni contenido del primer bloque. La corrección se integra por otro PR y la revisión de producción se repite antes de cerrar la entrega.
+
 ## Repetir en el entorno aislado
 
 La base, transporte, perfiles y claves de ensayo permanecen en `C:/Users/XT/Projects/cfp-registration-tests`, fuera de Git y de public. `knockout-fixture.mjs` exige host 127.0.0.1 y puerto 55439; no se ejecutan estos scripts contra producción.
