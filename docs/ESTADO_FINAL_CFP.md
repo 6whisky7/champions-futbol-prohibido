@@ -37,7 +37,7 @@ Supabase devolvió ambas migraciones como aplicadas. Las tres columnas del ciclo
 - Las operaciones administrativas comprueban propietario en el servidor y vuelven a comprobar rol dentro de las funciones de Supabase. El cliente no recibe permisos directos a tablas privadas.
 - Las pruebas locales verificaron denegación por rol, aislamiento público, bloqueo de inscripción y controles de estado. **Auth/PostgREST del entorno de prueba son simulados**; PostgreSQL local ejecutó las funciones y políticas reales del esquema. No se presenta esto como una prueba de GoTrue, correo, PKCE o tokens reales.
 - La documentación previa registra que el propietario ya había confirmado acceso real. Este trabajo no volvió a autenticar a una persona en producción.
-- La integración Vercel no permitió listar el proyecto: la conexión MCP devolvió proyecto no encontrado/403 y el CLI `vercel whoami` no completó. No afirmo que la nueva versión esté desplegada. El acceso Vercel debe quedar disponible para identificar y verificar el deployment del SHA exacto.
+- El check de GitHub para el SHA `dda5507e1c6730428cdb6e01cf45c3e56f9952c4` confirma que Vercel terminó el preview en estado Ready. La URL de preview redirige a protección de Vercel (302); la conexión MCP no puede leer ese deployment (404) y el CLI `vercel whoami` no completó, por lo que no se inspeccionó el HTML detrás de la protección.
 - El código no registra autorización individual ni prueba la representación de responsables legales. La activación del aviso no certifica cumplimiento jurídico.
 
 ## Pruebas ejecutadas
@@ -71,7 +71,7 @@ Al principio, dos verificadores heredados intentaron despublicar una competició
 | Clasificación | Pendiente |
 | --- | --- |
 | **Bloqueante para abrir inscripciones oficiales** | Completar y revisar la identidad legal del responsable, el aviso final, la representación/autorización individual de menores y la adaptación del requisito TikTok. Mantener privacidad e inscripciones cerradas hasta resolverlo. |
-| **Bloqueante para declarar el despliegue verificado** | Restablecer acceso Vercel al proyecto conectado y comprobar el deployment del SHA de la rama/PR y luego del SHA integrado. El acceso disponible devolvió 403/404 y no se pudo completar por CLI. |
+| **Bloqueante para declarar el contenido del preview inspeccionado** | Autorizar acceso de lectura al deployment protegido de Vercel. El estado Ready del check sí está verificado para el SHA del PR, pero la protección impide comprobar rutas de preview directamente. |
 | **Importante** | Repetir autenticación con Supabase Auth/PostgREST reales en un entorno aislado autorizado, incluidos propietario, usuario ajeno, cookies, RLS y enlaces de acceso. |
 | **Importante** | Revisar retención, proveedores/transferencias y política de backups antes de activar el aviso. La anonimización operativa está probada, pero no borra copias técnicas instantáneamente. |
 | **Menor** | Revisar de nuevo las capturas/guías históricas después del primer ensayo manual del propietario; las capturas del flujo previo pueden mostrar una versión anterior del panel. |
@@ -95,8 +95,8 @@ Al principio, dos verificadores heredados intentaron despublicar una competició
 ## GitHub, PR y Vercel
 
 - Rama local: `feat/plataforma-final`, basada en `ec26ef4`.
-- Commit final: pendiente de confirmar.
-- PR: pendiente de abrir después del commit.
-- CI/estado de revisión: pendiente.
-- Deployment Vercel para SHA exacto: no verificado por falta de acceso al proyecto.
-- Producción comprobada solo por lectura de estado de Supabase: inscripción cerrada y aviso inactivo.
+- Commit de implementación: `dda5507e1c6730428cdb6e01cf45c3e56f9952c4` (`Complete test event lifecycle and privacy retention`).
+- PR: [#18](https://github.com/6whisky7/champions-futbol-prohibido/pull/18), abierto contra `main`.
+- Checks del PR: Vercel y Vercel Preview Comments, ambos SUCCESS; preview reportado Ready para el SHA exacto.
+- La integración del PR y el deployment de producción quedan pendientes de que se completen las comprobaciones finales.
+- Producción comprobada por lectura de estado de Supabase: inscripción cerrada y aviso inactivo.
