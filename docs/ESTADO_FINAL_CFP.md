@@ -37,7 +37,7 @@ Supabase devolvió ambas migraciones como aplicadas. Las tres columnas del ciclo
 - Las operaciones administrativas comprueban propietario en el servidor y vuelven a comprobar rol dentro de las funciones de Supabase. El cliente no recibe permisos directos a tablas privadas.
 - Las pruebas locales verificaron denegación por rol, aislamiento público, bloqueo de inscripción y controles de estado. **Auth/PostgREST del entorno de prueba son simulados**; PostgreSQL local ejecutó las funciones y políticas reales del esquema. No se presenta esto como una prueba de GoTrue, correo, PKCE o tokens reales.
 - La documentación previa registra que el propietario ya había confirmado acceso real. Este trabajo no volvió a autenticar a una persona en producción.
-- El check de GitHub para el SHA `dda5507e1c6730428cdb6e01cf45c3e56f9952c4` confirma que Vercel terminó el preview en estado Ready. La URL de preview redirige a protección de Vercel (302); la conexión MCP no puede leer ese deployment (404) y el CLI `vercel whoami` no completó, por lo que no se inspeccionó el HTML detrás de la protección.
+- GitHub confirmó Vercel Ready para el SHA del PR `a0cdc7ed8a22fad050aa68cd9843d6c52ec4e2f2` y para el merge de producción `19245e9c9547a3fba268454b8e9e158e16c8948a`. La URL de preview redirige a protección de Vercel (302); la conexión MCP no puede leer ese deployment (404), por lo que el preview no se inspeccionó directamente.
 - El código no registra autorización individual ni prueba la representación de responsables legales. La activación del aviso no certifica cumplimiento jurídico.
 
 ## Pruebas ejecutadas
@@ -71,11 +71,11 @@ Al principio, dos verificadores heredados intentaron despublicar una competició
 | Clasificación | Pendiente |
 | --- | --- |
 | **Bloqueante para abrir inscripciones oficiales** | Completar y revisar la identidad legal del responsable, el aviso final, la representación/autorización individual de menores y la adaptación del requisito TikTok. Mantener privacidad e inscripciones cerradas hasta resolverlo. |
-| **Bloqueante para declarar el contenido del preview inspeccionado** | Autorizar acceso de lectura al deployment protegido de Vercel. El estado Ready del check sí está verificado para el SHA del PR, pero la protección impide comprobar rutas de preview directamente. |
 | **Importante** | Repetir autenticación con Supabase Auth/PostgREST reales en un entorno aislado autorizado, incluidos propietario, usuario ajeno, cookies, RLS y enlaces de acceso. |
 | **Importante** | Revisar retención, proveedores/transferencias y política de backups antes de activar el aviso. La anonimización operativa está probada, pero no borra copias técnicas instantáneamente. |
+| **Menor** | El preview de PR está protegido por Vercel y no se inspeccionó su HTML directamente. Los checks Ready pasaron para el SHA del PR y el merge; las rutas públicas se comprobaron en el dominio de producción. |
 | **Menor** | Revisar de nuevo las capturas/guías históricas después del primer ensayo manual del propietario; las capturas del flujo previo pueden mostrar una versión anterior del panel. |
-| **Dependiente de configuración externa** | Permisos de Vercel, disponibilidad de un Auth/PostgREST aislado real y validación legal local. No se resolvieron por medio de credenciales ni datos ficticios de producción. |
+| **Dependiente de configuración externa** | Acceso de lectura al preview protegido, entorno autorizado para Auth/PostgREST real y validación legal local. No se resolvieron usando datos ficticios de producción. |
 
 ## Pasos del propietario
 
@@ -96,7 +96,8 @@ Al principio, dos verificadores heredados intentaron despublicar una competició
 
 - Rama local: `feat/plataforma-final`, basada en `ec26ef4`.
 - Commit de implementación: `dda5507e1c6730428cdb6e01cf45c3e56f9952c4` (`Complete test event lifecycle and privacy retention`).
-- PR: [#18](https://github.com/6whisky7/champions-futbol-prohibido/pull/18), abierto contra `main`.
-- Checks del PR: Vercel y Vercel Preview Comments, ambos SUCCESS; preview reportado Ready para el SHA exacto.
-- La integración del PR y el deployment de producción quedan pendientes de que se completen las comprobaciones finales.
-- Producción comprobada por lectura de estado de Supabase: inscripción cerrada y aviso inactivo.
+- PR: [#18](https://github.com/6whisky7/champions-futbol-prohibido/pull/18), integrado contra `main`.
+- SHA del head aprobado del PR: `a0cdc7ed8a22fad050aa68cd9843d6c52ec4e2f2`.
+- SHA integrado/desplegado en producción: `19245e9c9547a3fba268454b8e9e158e16c8948a`; check Vercel SUCCESS.
+- En producción respondieron HTTP 200 `/`, `/privacidad`, `/eventos` y `/admin/acceso`. `/api/participacion` informa cero eventos disponibles; el listado aún muestra `Prueba Evento`, publicado y cerrado. No se inició sesión en el panel durante esta comprobación.
+- Supabase confirma que el aviso sigue inactivo y las inscripciones cerradas.
