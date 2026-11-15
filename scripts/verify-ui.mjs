@@ -82,7 +82,7 @@ async function loadedCapture(width, name = `after-${width}`) {
     const result = await window.axe.run(document, {
       runOnly: {
         type: "tag",
-        values: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"],
+        values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "best-practice"],
       },
     });
     return result.violations.map((issue) => ({

@@ -92,7 +92,7 @@ try {
     "published-only crest DTO and real calendar time, no private data or inferred LIVE",
   );
   await p.goto(base + "/?buscar=01#escudos");
-  await p.getByRole("button", { name: /Ver diseño 01,/ }).click();
+  await p.getByRole("button", { name: /Diseño 01/ }).click();
   const dialog = p.getByRole("dialog", { name: "Escudo 01" });
   await dialog.waitFor();
   await p.locator("#crest-event").selectOption(e);
@@ -107,14 +107,14 @@ try {
   await dialog.waitFor({ state: "hidden" });
   assert.equal(
     await p
-      .getByRole("button", { name: /Ver diseño 01,/ })
+      .getByRole("button", { name: /Diseño 01/ })
       .evaluate((el) => el === document.activeElement),
     true,
   );
   assert.ok(p.url().includes("buscar=01"));
   log("occupied label, no reservation, Escape focus and URL filters retained");
   await p.locator("#crest-search").fill("02");
-  await p.getByRole("button", { name: /Ver diseño 02,/ }).click();
+  await p.getByRole("button", { name: /Diseño 02/ }).click();
   await p.getByText("Disponible en este evento", { exact: true }).waitFor();
   const link = p.getByRole("link", {
     name: "Inscribir mi equipo con este escudo",
@@ -140,7 +140,7 @@ try {
     (
       await p.evaluate(() =>
         window.axe.run(document, {
-          runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa"] },
+          runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
         }),
       )
     ).violations,
@@ -177,7 +177,7 @@ try {
   await p.route("**/api/escudos*", (r) =>
     r.fulfill({ status: 503, body: "{}" }),
   );
-  await p.getByRole("button", { name: /Ver diseño 02,/ }).click();
+  await p.getByRole("button", { name: /Diseño 02/ }).click();
   await p.getByRole("alert").waitFor();
   await p.unroute("**/api/escudos*");
   await p

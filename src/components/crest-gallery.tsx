@@ -178,7 +178,8 @@ export function CrestGallery({ crests, categories, featuredIds }: Props) {
                 updateFilters({ escudo: crest.id });
               }}
               className="crest-link"
-              aria-label={`Ver diseño ${crest.id}, inspirado en ${crest.club}`}
+              aria-labelledby={`crest-caption-${crest.id}`}
+              aria-haspopup="dialog"
             >
               <figure className="crest-tile">
                 <div className="crest-art">
@@ -190,7 +191,7 @@ export function CrestGallery({ crests, categories, featuredIds }: Props) {
                     sizes="(max-width: 767px) 40vw, (max-width: 1023px) 26vw, 220px"
                   />
                 </div>
-                <figcaption>
+                <figcaption id={`crest-caption-${crest.id}`}>
                   <span className="crest-meta">
                     Diseño {crest.id} <ArrowUpRight aria-hidden="true" />
                   </span>
