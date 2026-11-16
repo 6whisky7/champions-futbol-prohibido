@@ -60,7 +60,7 @@ try {
       ["after", "http://127.0.0.1:3210"],
     ]) {
       for (const [name, route] of Object.entries(routes)) {
-        await p.goto(base + route);
+        await p.goto(base + route + (name === "champion" && version === "after" ? "/eliminatorias#campeon" : ""));
         await p.locator("h1").waitFor();
         await p.evaluate(() => document.fonts.ready);
         if (name === "calendar")

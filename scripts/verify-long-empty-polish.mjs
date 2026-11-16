@@ -119,7 +119,7 @@ try {
       if(overflow){await p.screenshot({path:path.join(out,'long-failure.png'),fullPage:true});console.log(await p.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(e=>e.getBoundingClientRect().right>window.innerWidth+1).slice(0,15).map(e=>({tag:e.tagName,class:e.className,width:e.getBoundingClientRect().width}))))}
       assert.equal(overflow,false,route+' overflow '+width);
     }
-    await p.goto("http://127.0.0.1:3210/eventos/" + event);
+    await p.goto("http://127.0.0.1:3210/eventos/" + event + "/eliminatorias#campeon");
     await p.locator(".champion-presentation").waitFor();
     await p
       .locator(".champion-presentation")

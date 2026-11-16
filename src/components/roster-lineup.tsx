@@ -6,6 +6,7 @@ export function RosterLineup({
     role: string;
     captain: boolean;
     tiktok?: string;
+    number?: string;
   }[];
 }) {
   const card = (m: (typeof members)[number], i: number) => (
@@ -13,7 +14,7 @@ export function RosterLineup({
       <span className="roster-initial" aria-hidden="true">
         {m.roblox.slice(0, 1).toUpperCase()}
       </span>
-      <strong>{m.roblox}</strong>
+      <strong>{m.roblox}{m.number && <span className="roster-number">Nº {m.number}</span>}</strong>
       <span>
         {m.role}
         {m.captain && <span className="captain-mark">C · Capitán</span>}

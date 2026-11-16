@@ -148,8 +148,8 @@ Se incluirán reglas para trampas, suplantación y acuerdos para regalar resulta
 
 ## Número opcional y escudos
 
-- Número del equipo voluntario del **01 al 99**, mostrado con dos dígitos.
-- Puede dejarse vacío; no se asigna automáticamente y **puede repetirse entre equipos**.
+- Cada integrante puede indicar un número del **01 al 99**, con dos dígitos. Puede repetirse entre jugadores.
+- Los números de equipo de solicitudes anteriores permanecen en el registro histórico. Los nuevos números se usan en la solicitud privada.
 - No afecta puntos, sorteos, clasificación ni desempates.
 - Los 48 escudos originales son individuales, sin nombres y con fondo transparente. El orden de referencias no constituye una clasificación de clubes.
 - Se conserva exactamente la selección de clubes de `public/escudos/catalogo.json`: cinco por Inglaterra, Italia, España, Alemania, Francia, Brasil, México y Argentina; cuatro de MLS y cuatro de Costa Rica.

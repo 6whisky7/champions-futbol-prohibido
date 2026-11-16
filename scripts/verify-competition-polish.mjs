@@ -215,7 +215,7 @@ try {
   await p.locator(".ko-bracket").evaluate((e) => (e.scrollLeft = 800));
   await checkAxe();
   await shot("large-explore-390");
-  await ready("/eventos/" + f.champion);
+  await ready("/eventos/" + f.champion + "/eliminatorias#campeon");
   const stage = p.locator(".champion-presentation");
   await stage.waitFor();
   assert.match(await stage.innerText(), /Sin marcador/);

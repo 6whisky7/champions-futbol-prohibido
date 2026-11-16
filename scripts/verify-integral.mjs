@@ -196,6 +196,7 @@ try {
     await p.getByRole('region', { name: 'Campeón del evento', exact: true }).waitFor();
     assert.ok(!(await p.content()).includes(crew(1, 0).tiktok));
     await shot(p, '07-campeon');
+    await p.goto(base + '/eventos/' + e + '/eliminatorias#campeon');
     await p.locator('.champion-stage').screenshot({ path: out + '/07-campeon-completo.png' });
     const counts = (await db.query('select (select count(*) from cfp_private.league_matches where event_id=$1) league,(select count(*) from cfp_private.knockout_matches where event_id=$1) ko', [e])).rows[0];
     assert.equal(Number(counts.league) + Number(counts.ko), 31);

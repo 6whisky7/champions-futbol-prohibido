@@ -354,6 +354,7 @@ export function ApplicationManager({
           )}
           <details className="guided-options">
             <summary>Historial privado</summary>
+            {a.payload.number && <p className="admin-note">Número de equipo guardado en la solicitud anterior: {a.payload.number}</p>}
             <p className="admin-note">Referencia {a.id}</p>
           <p className="admin-note">
             {a.accepted_privacy_version

@@ -22,7 +22,7 @@ export default async function Privacy() {
         <section>
           <h2>Qué datos usamos</h2>
           <p>
-            Nombre del equipo, escudo, número opcional, usuarios de Roblox y
+            Nombre del equipo, escudo, número opcional de cada jugador, usuarios de Roblox y
             TikTok, integrantes, capitán, solicitud, estado, confirmaciones y
             verificaciones administrativas. Se usan para recibir y revisar la
             inscripción, organizar equipos y partidos, comunicarse sobre la
@@ -40,8 +40,7 @@ export default async function Privacy() {
         <section>
           <h2>Qué se publica</h2>
           <p>
-            Si un evento oficial está publicado: equipo, escudo, número
-            voluntario, usuarios Roblox necesarios para identificar la plantilla,
+            Si un evento oficial está publicado: equipo, escudo y usuarios Roblox necesarios para identificar la plantilla,
             estado público de la solicitud, calendario, resultados,
             clasificación e historial del campeón. Los datos de TikTok,
             solicitudes privadas, notas, motivos y controles de revisión no se
@@ -52,7 +51,7 @@ export default async function Privacy() {
           </p>
           <h2>Qué queda privado</h2>
           <p>
-            TikTok de los integrantes, notas, motivos e historial de revisión.
+            TikTok y número opcional de los integrantes, notas, motivos e historial de revisión.
             El acceso a estos datos está reservado al propietario. Un ayudante
             necesita una cuenta verificada y una asignación expresa por evento;
             solo puede editar su marcador de trabajo. Su correo y el historial
@@ -92,7 +91,7 @@ export default async function Privacy() {
             El plazo operativo es de seis meses: desde el rechazo o vencimiento
             para esas solicitudes, y desde la finalización o cancelación de la
             edición para equipos aprobados, en espera y solicitudes que sigan
-            activas. Al vencer se anonimizan los usuarios Roblox y TikTok de la
+            activas. Al vencer se anonimizan los usuarios Roblox, TikTok y números de los jugadores de la
             solicitud y sus copias de historial. El nombre del equipo, escudo,
             partidos, resultados, clasificación y datos necesarios para mostrar
             al campeón se conservan sin esos identificadores. Las copias
