@@ -130,6 +130,8 @@ export function LeagueView({
   const team = (id: string) => teams.find((t) => t.id === id);
   const match = data?.matches?.find((m) => m.id === selected);
   const editorKey = match ? match.id + ":" + match.version : "";
+  const readOnlyReason = data?.state === "closed" ? "La clasificación final ya está confirmada."
+    : match && (team(match.home)?.dq || team(match.away)?.dq) ? "El marcador corresponde a una descalificación." : undefined;
   if (!data?.state)
     return (
       <section className="admin-surface">
@@ -210,7 +212,7 @@ export function LeagueView({
           startOperation={startOperation}
           finishOperation={finishOperation}
           selected={selected}
-          editor={admin && match && data.state === "active" && (
+          editor={admin && match && data.state !== "preview" && (
             <LeagueMatchEditor
               key={editorKey}
               match={match}
@@ -220,6 +222,7 @@ export function LeagueView({
               error={matchError}
               saved={confirmation?.id === match.id && confirmation.version === match.version ? confirmation.text : undefined}
               draft={drafts[editorKey]}
+              readOnlyReason={readOnlyReason}
               onDraft={(draft) => setDrafts((previous) => ({ ...previous, [editorKey]: draft }))}
               onSave={(form, mode) => void persistMatch(form, match, mode)}
             />
