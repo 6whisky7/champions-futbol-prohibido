@@ -1,5 +1,13 @@
 # Pendientes externos y antes de abrir un torneo real
 
+## Validación del 16 de noviembre de 2026
+
+Se probó el recorrido de inscripción con Auth y PostgREST reales en Supabase local, usando nombres e identificadores ficticios. Se verificaron el aviso versionado, la recepción, la aprobación, el rechazo y la promoción desde espera. En producción se consultaron únicamente el formulario, los estados y los conteos. La edición antigua «Prueba Evento», sin clasificación explícita, sigue mostrando el formulario y conserva una solicitud en espera. Se propone cerrar la recepción en esa edición conservando su solicitud para revisión.
+
+La configuración activa del aviso acredita la acción del operador. La autorización individual de menores requiere un procedimiento verificado e independiente de la declaración del capitán. Antes de aceptar inscripciones oficiales siguen pendientes la identificación formal del responsable, la revisión del aviso y los respaldos, la acreditación de cada integrante y el recorrido compatible con las condiciones de Roblox y TikTok. El plazo operativo existente es de seis meses. Se volvió a comprobar localmente la anonimización de candidatos y sus copias de historial mediante una transacción revertida.
+
+## Registro de la entrega anterior
+
 Actualización: 15 de noviembre de 2026, Costa Rica. Las inscripciones reales permanecen cerradas. El estado completo está en [ESTADO_FINAL_CFP.md](ESTADO_FINAL_CFP.md).
 
 | Pendiente | Situación comprobada | Siguiente paso |

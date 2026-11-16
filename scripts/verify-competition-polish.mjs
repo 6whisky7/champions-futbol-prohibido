@@ -129,43 +129,36 @@ try {
       await shot(name + "-" + width);
     }
     await ready(routes.calendar);
-    await p.getByLabel("Elegir jornada").selectOption("3");
+    await p.getByRole("button", { name: "Buscar partido", exact: true }).click();
+    await p.getByRole("dialog").getByRole("searchbox").fill("Jornada 3");
+    await p.locator(".match-picker-row").first().click();
     await p.waitForURL(/jornada=3/);
     assert.equal(new URL(p.url()).searchParams.get("jornada"), "3");
-    await p
-      .getByRole("button", { name: /^(Registrar|Ver) resultado$/ })
-      .first()
-      .click();
     await p.waitForFunction(()=>document.activeElement?.id==="league-match-editor");
     await p.reload();
-    assert.equal(await p.getByLabel("Elegir jornada").inputValue(), "3");
+    assert.equal(new URL(p.url()).searchParams.get("jornada"), "3");
     await p.locator("#league-match-editor").waitFor();
     log("calendar round, progress, URL and editor survive reload " + width);
     await ready(routes.table);
     await p.getByRole("button", { name: "Ver más estadísticas" }).click();
-    await p.locator(".form-strip [data-result=N]").first().waitFor();
+    await p.locator(".rank-streak [data-result=N]:visible").first().waitFor();
     assert.match(
       await p
-        .locator(".difference-cell")
+        .locator(".rank-difference")
         .allTextContents()
         .then((x) => x.join(" ")),
       /\+/,
     );
     assert.equal(await p.getByRole("button", { name: "Cerrar liguilla y continuar" }).count(), 0);
     if (width === 390) {
-      await p.locator(".league-table-scroll").evaluate((e) => {
-        e.scrollLeft = 500;
-      });
-      const box = await p.locator(".sticky-team").first().boundingBox(),
-        scroll = await p.locator(".league-table-scroll").boundingBox();
-      assert.ok(Math.abs(box.x - scroll.x) < 3);
-      await p
-        .locator(".league-table-scroll")
-        .screenshot({ path: path.join(out, "after", "table-sticky-390.png") });
+      const table = p.locator(".rank-table");
+      assert.equal(await table.locator("th[scope=col]:visible").count(), 5);
+      assert.ok(await table.evaluate((el) => el.scrollWidth <= el.clientWidth + 1));
+      await table.screenshot({ path: path.join(out, "after", "table-390.png") });
     }
   }
   log(
-    "standings V/D/N, signed DG, blocked closure above table and sticky mobile team",
+    "standings V/D/N, signed DG, blocked closure and five mobile columns",
   );
   await p.setViewportSize({ width: 1440, height: 1000 });
   for (const format of ["quarters", "round16", "round32", "repechage"]) {
@@ -456,7 +449,7 @@ try {
   ]);
   await db.query("commit");
   await ready("/admin/clasificacion?evento=" + batch);
-  assert.match(await p.locator(".league-table").innerText(), /Excluido/);
+  assert.match(await p.locator(".rank-table").innerText(), /Descalificado/);
   await checkAxe();
   log("disqualified team remains excluded in the isolated table");
   assert.deepEqual(errors, []);

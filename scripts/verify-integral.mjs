@@ -134,7 +134,7 @@ try {
     let matches = (await db.query('select * from cfp_private.league_matches where event_id=$1 order by round,game_order', [e])).rows;
     assert.equal(matches.length, 24);
     for (const m of matches) {
-        await a.getByLabel('Elegir jornada').selectOption(String(m.round));
+        await a.goto(base + '/admin/calendario?evento=' + e + '&jornada=' + m.round);
         await a.locator('.guided-calendar .match-row').nth(m.game_order - 1)
             .getByRole('button', { name: 'Registrar resultado', exact: true }).click();
         await a.locator('#home-goals').fill('5');
@@ -147,7 +147,7 @@ try {
     await log('24 league results entered through UI on the same approved teams');
     const first = matches[0];
     const beforeStats = (await db.query('select cfp_private.league_table($1) t', [e])).rows[0].t;
-    await a.getByLabel('Elegir jornada').selectOption(String(first.round));
+    await a.goto(base + '/admin/calendario?evento=' + e + '&jornada=' + first.round);
     await a.locator('.guided-calendar .match-row').nth(first.game_order - 1)
         .getByRole('button', { name: 'Ver resultado', exact: true }).click();
     await a.getByRole('button', { name: 'Corregir resultado', exact: true }).click();
