@@ -70,3 +70,8 @@ export function knockoutDate(value: string) {
       .replace("T", " ") + " · Costa Rica"
   );
 }
+
+export function knockoutRoundName(round: number, final: number) {
+  if (round === 0) return "Repesca";
+  return ["Final", "Semifinales", "Cuartos de final", "Octavos", "Dieciseisavos"][final - round] ?? "Ronda " + round;
+}

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import type { MatchChoice } from "@/lib/admin-match-choices";
 import { LeagueCalendar } from "./league-calendar";
 import { LeagueStandings } from "./league-standings";
 import { SaveStatus } from "./save-status";
@@ -23,11 +24,15 @@ export function LeagueView({
   data: initial,
   admin = false,
   tab = "calendar",
+  bracketChoices,
+  liveMatches,
 }: {
   eventId: string;
   data: League | null;
   admin?: boolean;
   tab?: string;
+  bracketChoices?: MatchChoice[];
+  liveMatches?: string[];
 }) {
   const params = useSearchParams();
   const [message, setMessage] = useState(""),
@@ -212,6 +217,8 @@ export function LeagueView({
           startOperation={startOperation}
           finishOperation={finishOperation}
           selected={selected}
+          bracketChoices={bracketChoices}
+          liveMatches={liveMatches}
           editor={admin && match && data.state !== "preview" && (
             <LeagueMatchEditor
               key={editorKey}

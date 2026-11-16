@@ -104,7 +104,11 @@ export function LeagueMatchEditor({
         }}>
           <fieldset className="event-form" disabled={locked}>
             <label htmlFor="match-state">Decisión del partido</label>
-            <select id="match-state" name="kind" defaultValue="" required>
+            <p id="league-decision-help" className="admin-note">
+              La ausencia se registra antes de jugar. El abandono ocurre con el partido iniciado.
+              Si la sala cae para ambos equipos, elige «Repetir desde cero».
+            </p>
+            <select id="match-state" name="kind" defaultValue="" aria-describedby="league-decision-help" required>
               <option value="" disabled>Selecciona una decisión</option>
               {Object.entries(matchLabels).filter(([kind]) => kind !== "sport").map(([kind, label]) => (
                 <option key={kind} value={kind}>{label}</option>

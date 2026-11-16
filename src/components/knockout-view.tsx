@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { BracketConnections } from "./bracket-connections";
@@ -11,30 +10,33 @@ import { Button } from "@/components/ui/button";
 import { getCrest } from "@/lib/crests";
 import { unresolved } from "@/lib/public-matches";
 import { localDate } from "@/lib/events";
-import { type Knockout, knockoutLabels, knockoutDate } from "@/lib/knockout";
+import { type Knockout, knockoutLabels, knockoutDate, knockoutRoundName } from "@/lib/knockout";
 import { knockoutAction } from "@/app/admin/knockout-actions";
 import { ChampionPresentation } from "./champion";
 import { CompetitionAuditChanges } from "@/components/competition-audit-changes";
 export function KnockoutView({
   eventId,
-  data,
+  data: initial,
   admin = false,
   mode = "bracket",
   format,
+  initialMatch,
 }: {
   eventId: string;
   data: Knockout | null;
   admin?: boolean;
   mode?: string;
   format?: string;
+  initialMatch?: string;
 }) {
+  const [snapshot, setSnapshot] = useState<Knockout>();
+  const data = snapshot && snapshot.revision > (initial?.revision ?? -1) ? snapshot : initial;
   const [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
-    [selected, setSelected] = useState<string | null>(null),
-    [round, setRound] = useState(-1),
+    [selected, setSelected] = useState<string | null>(initialMatch ?? null),
+    [round, setRound] = useState(() => data?.matches.find((match) => match.id === initialMatch)?.round ?? -1),
     [tracked, setTracked] = useState(""),
     [allRounds, setAllRounds] = useState(false);
-  const router = useRouter();
   const saving = useRef(false);
   const bracket = useRef<HTMLDivElement>(null);
   const [correction, setCorrection] = useState<string | null>(null);
@@ -56,9 +58,9 @@ export function KnockoutView({
         p,
         data?.revision ?? 0,
       );
-      setMessage(result);
-      if (result === "Guardado." || result === "Resultado guardado correctamente") {
-        router.refresh();
+      setMessage(result.message);
+      if (result.ok) {
+        setSnapshot(result.saved);
         window.dispatchEvent(new Event("cfp-admin-refresh"));
         return true;
       }
@@ -118,18 +120,7 @@ export function KnockoutView({
     }
   }
   const team = (id: string | null) => data.teams.find((t) => t.id === id);
-  const roundName = (r: number) =>
-    r === 0
-      ? "Repesca"
-      : r === maxRound
-        ? "Final"
-        : r === maxRound - 1
-          ? "Semifinales"
-          : r === maxRound - 2
-            ? "Cuartos de final"
-            : r === maxRound - 3
-              ? "Octavos"
-              : "Dieciseisavos";
+  const roundName = (r: number) => knockoutRoundName(r, maxRound);
   const participant = (id: string | null, source: string | null) => {
     const t = team(id);
     const parent = matches.find((m) => m.id === source);
@@ -391,8 +382,7 @@ export function KnockoutView({
                     </option>
                   ))}
                   <option value="double_absence">
-                    Doble ausencia · primer intento reprograma; segundo decide
-                    clasificación
+                    Doble ausencia · aplazar primero, resolver el segundo intento por clasificación
                   </option>
                   <option value="reset">
                     Retirar resultado para corregir una dependencia

@@ -2,11 +2,13 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CalendarClock } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { Badge } from "./ui/badge";
 import { TeamIdentity } from "./team-identity";
+import { AdminMatchPicker } from "./admin-match-picker";
+import { leagueMatchChoices, type MatchChoice } from "@/lib/admin-match-choices";
 import { RoundSchedule } from "./round-schedule";
 import { matchLabels, type League } from "@/lib/league/types";
 import { unresolved } from "@/lib/public-matches";
@@ -20,7 +22,7 @@ const time = new Intl.DateTimeFormat("es-CR", {
 });
 
 export function LeagueCalendar({
-  data, eventId, admin, tab, locked, onSelect, startOperation, finishOperation, selected, editor,
+  data, eventId, admin, tab, locked, onSelect, startOperation, finishOperation, selected, editor, bracketChoices = [], liveMatches = [],
 }: {
   data: League;
   eventId: string;
@@ -32,8 +34,11 @@ export function LeagueCalendar({
   onSelect: (id: string | null, round: number) => void;
   selected?: string | null;
   editor?: ReactNode;
+  bracketChoices?: MatchChoice[];
+  liveMatches?: string[];
 }) {
   const params = useSearchParams();
+  const router = useRouter();
   const rounds = Array.from({ length: data.rounds }, (_, i) => i + 1);
   const requested = Number(params.get("jornada"));
   const remaining = data.matches.filter((match) => unresolved(match.kind));
@@ -119,6 +124,9 @@ export function LeagueCalendar({
   );
 
   const completed = current.length - pending.length;
+  const choices = tab === "calendar" && data.state !== "preview"
+    ? [...leagueMatchChoices(data), ...bracketChoices].map((match) => ({ ...match, inProgress: liveMatches.includes(match.id) }))
+    : [];
   return (
     <section className="league-calendar guided-calendar" id="league-calendar">
       <header className="guided-round">
@@ -153,12 +161,17 @@ export function LeagueCalendar({
       </header>
       <nav className="guided-actions" aria-label="Navegar entre jornadas">
         <button className="trophy-button" disabled={locked || round <= 1} onClick={() => setRound(round - 1)}>Jornada anterior</button>
-        <label className="guided-round-select">
+        {choices.length ? (
+          <AdminMatchPicker matches={choices} selected={selected} disabled={locked} onSelect={(match) => {
+            if (match.stage === "league") onSelect(match.id, match.round);
+            else router.push("/admin/eliminatorias?evento=" + eventId + "&partido=" + match.id + "#ko-detail");
+          }} />
+        ) : <label className="guided-round-select">
           <span className="sr-only">Elegir jornada</span>
           <select value={round} disabled={locked} onChange={(e) => setRound(Number(e.target.value))}>
             {rounds.map((j) => <option key={j} value={j}>Jornada {j} de {data.rounds}</option>)}
           </select>
-        </label>
+        </label>}
         <button className="trophy-button" disabled={locked || round >= data.rounds} onClick={() => setRound(round + 1)}>Jornada siguiente</button>
       </nav>
       <section className="league-round" aria-label={"Partidos de la jornada " + round}>{rows(round)}</section>

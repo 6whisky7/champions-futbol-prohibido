@@ -76,7 +76,7 @@ try {
               ? ".league-round"
               : ".league-calendar"
             : name === "table"
-              ? ".league-table-scroll"
+              ? ".rank-table, .league-table-scroll"
               : name === "bracket"
                 ? ".ko-bracket"
                 : name === "champion"
