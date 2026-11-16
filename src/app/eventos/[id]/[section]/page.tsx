@@ -2,6 +2,7 @@ import { KnockoutView } from "@/components/knockout-view";
 import type { Knockout } from "@/lib/knockout";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { publicEventFilter } from "@/lib/events";
 import { createClient } from "@/lib/supabase/server";
 import { LeagueView } from "@/components/league-view";
 import { SiteHeader } from "@/components/site-header";
@@ -24,7 +25,7 @@ export default async function PublicCompetition({
   const c = await createClient();
   const { data: ev, error } = await c
     .from("cfp_events")
-    .select("id,name")
+    .select("id,name").or(publicEventFilter)
     .eq("id", id)
     .in("status", ["published", "finished"])
     .maybeSingle();

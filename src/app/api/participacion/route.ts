@@ -1,3 +1,4 @@
+import { publicEventFilter } from "@/lib/events";
 import { createClient } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 export async function GET() {
@@ -15,7 +16,7 @@ export async function GET() {
     );
   const { data, error } = await client
     .from("cfp_events")
-    .select("id,name,capacity,registration_status")
+    .select("id,name,capacity,registration_status").or(publicEventFilter)
     .eq("status", "published")
     .order("starts_at");
   if (error)

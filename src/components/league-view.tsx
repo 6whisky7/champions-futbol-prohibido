@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { LeagueCalendar } from "./league-calendar";
 import { LeagueStandings } from "./league-standings";
@@ -8,8 +8,8 @@ import { ConfirmAction } from "./confirm-action";
 import { CompetitionAuditChanges } from "@/components/competition-audit-changes";
 import { DrawReveal } from "@/components/draw-reveal";
 import { localDate } from "@/lib/events";
-import { leagueAction } from "@/app/admin/league-actions";
-import { type League, matchLabels } from "@/lib/league/types";
+import { leagueAction, saveLeagueMatch } from "@/app/admin/league-actions";
+import { type League, type LeagueMatch, matchLabels } from "@/lib/league/types";
 function eventDate(value: string) {
   return (
     new Date(new Date(value).getTime() - 6 * 3600000)
@@ -32,7 +32,34 @@ export function LeagueView({
   const params = useSearchParams();
   const [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false);
-  const selected = params.get("partido");
+  const [selection, setSelection] = useState<string | null>();
+  const [confirmation, setConfirmation] = useState<{ match: LeagueMatch; revision: number }>();
+  const [matchError, setMatchError] = useState("");
+  const [refreshing, startRefresh] = useTransition();
+  const saving = useRef(false);
+  const selected = selection === undefined ? params.get("partido") : selection;
+  const awaitingCalendar = !!confirmation && !!data && data.revision < confirmation.revision;
+  const locked = busy || refreshing || awaitingCalendar;
+  function startOperation() {
+    if (saving.current || locked) return false;
+    saving.current = true;
+    setBusy(true);
+    return true;
+  }
+  function finishOperation() {
+    saving.current = false;
+    setBusy(false);
+  }
+  function selectMatch(id: string | null, round: number) {
+    if (saving.current || locked) return;
+    setSelection(id);
+    setMatchError("");
+    const url = new URL(window.location.href);
+    url.searchParams.set("jornada", String(round));
+    if (id) url.searchParams.set("partido", id);
+    else url.searchParams.delete("partido");
+    window.history.replaceState(null, "", url);
+  }
   useEffect(() => {
     if (selected) document.getElementById("league-match-editor")?.focus();
   }, [selected]);
@@ -43,7 +70,7 @@ export function LeagueView({
       reason: "Revisión administrativa confirmada",
     },
   ) {
-    setBusy(true);
+    if (!startOperation()) return false;
     setMessage("");
     try {
       const result = await leagueAction(
@@ -54,7 +81,7 @@ export function LeagueView({
       );
       setMessage(result);
       if (result === "Guardado.") {
-        router.refresh();
+        startRefresh(() => router.refresh());
         window.dispatchEvent(new Event("cfp-admin-refresh"));
         return true;
       }
@@ -65,7 +92,33 @@ export function LeagueView({
       );
       return false;
     } finally {
-      setBusy(false);
+      finishOperation();
+    }
+  }
+  async function persistMatch(form: FormData, match: LeagueMatch) {
+    if (!data || !startOperation()) return;
+    setMessage("");
+    setMatchError("");
+    setConfirmation(undefined);
+    try {
+      const date = String(form.get("date") ?? "");
+      const result = await saveLeagueMatch(eventId, {
+        id: match.id,
+        kind: String(form.get("kind")),
+        hg: Number(form.get("hg")),
+        ag: Number(form.get("ag")),
+        scheduled_at: date ? new Date(date + ":00-06:00").toISOString() : null,
+        reason: String(form.get("reason") ?? ""),
+      }, data.revision, match.version);
+      if (result.ok) {
+        setConfirmation(result);
+        startRefresh(() => router.refresh());
+        window.dispatchEvent(new Event("cfp-admin-refresh"));
+      } else setMatchError(result.message);
+    } catch {
+      setMatchError("No se pudo confirmar el guardado. Revisa el partido en el calendario antes de reintentar.");
+    } finally {
+      finishOperation();
     }
   }
   const teams = data?.teams ?? [];
@@ -96,7 +149,7 @@ export function LeagueView({
             </p>
             <button
               className="action-link"
-              disabled={busy || !data?.readiness?.ready}
+              disabled={locked || !data?.readiness?.ready}
               onClick={() => void act("preview")}
             >
               Generar revisión del calendario
@@ -134,7 +187,7 @@ export function LeagueView({
       {admin && data.state === "preview" && (
         <button
           className="trophy-button"
-          disabled={busy}
+          disabled={locked}
           onClick={() => void act("regenerate")}
         >
           Volver a sortear la revisión previa
@@ -160,12 +213,21 @@ export function LeagueView({
           data={data}
           eventId={eventId}
           admin={admin}
-          busy={busy}
+          busy={locked}
           message={message}
           onAction={act}
         />
       ) : (
-        <LeagueCalendar data={data} eventId={eventId} admin={admin} tab={tab} />
+        <LeagueCalendar
+          data={data}
+          eventId={eventId}
+          admin={admin}
+          tab={tab}
+          locked={locked}
+          onSelect={selectMatch}
+          startOperation={startOperation}
+          finishOperation={finishOperation}
+        />
       )}
       {admin && match && data.state === "active" && (
         <section
@@ -178,80 +240,82 @@ export function LeagueView({
             {team(match.home)?.name} contra {team(match.away)?.name}.
           </p>
           <form
-            key={match.id + data.revision}
+            key={match.id + ":" + match.version}
             className="event-form"
             onSubmit={(e) => {
               e.preventDefault();
-              const f = new FormData(e.currentTarget);
-              const date = String(f.get("date") ?? "");
-              void act("match", {
-                id: match.id,
-                kind: f.get("kind"),
-                hg: Number(f.get("hg")),
-                ag: Number(f.get("ag")),
-                scheduled_at: date
-                  ? new Date(date + ":00-06:00").toISOString()
-                  : null,
-                reason: f.get("reason"),
-              });
+              void persistMatch(new FormData(e.currentTarget), match);
             }}
           >
-            <label htmlFor="match-state">Estado o decisión</label>
-            <select id="match-state" name="kind" defaultValue={match.kind}>
-              {Object.entries(matchLabels).map(([k, l]) => (
-                <option key={k} value={k}>
-                  {l}
-                </option>
-              ))}
-            </select>
-            <label htmlFor="home-goals">Goles del local</label>
-            <input
-              id="home-goals"
-              name="hg"
-              type="number"
-              min={0}
-              step={1}
-              defaultValue={match.hg}
-              required
-            />
-            <label htmlFor="away-goals">Goles del visitante</label>
-            <input
-              id="away-goals"
-              name="ag"
-              type="number"
-              min={0}
-              step={1}
-              defaultValue={match.ag}
-              required
-            />
-            <p>
-              Los marcadores administrativos se asignan según la decisión. Un
-              resultado deportivo exige ganador; puede tener más de cuatro goles
-              totales.
-            </p>
-            <label htmlFor="match-date">
-              Fecha y hora de Costa Rica (opcional)
-            </label>
-            <input
-              id="match-date"
-              name="date"
-              type="datetime-local"
-              defaultValue={localDate(match.scheduled_at)}
-            />
-            <label htmlFor="match-reason">
-              Motivo del registro o corrección
-            </label>
-            <input
-              id="match-reason"
-              name="reason"
-              required
-              minLength={3}
-              maxLength={1000}
-            />
-            <button className="action-link" disabled={busy}>
-              Guardar partido
-            </button>
+            <fieldset disabled={locked} className="event-form">
+              <label htmlFor="match-state">Estado o decisión</label>
+              <select id="match-state" name="kind" defaultValue={match.kind}>
+                {Object.entries(matchLabels).map(([k, l]) => (
+                  <option key={k} value={k}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+              <label htmlFor="home-goals">Goles del local</label>
+              <input
+                id="home-goals"
+                name="hg"
+                type="number"
+                min={0}
+                step={1}
+                defaultValue={match.hg}
+                required
+              />
+              <label htmlFor="away-goals">Goles del visitante</label>
+              <input
+                id="away-goals"
+                name="ag"
+                type="number"
+                min={0}
+                step={1}
+                defaultValue={match.ag}
+                required
+              />
+              <p>
+                Los marcadores administrativos se asignan según la decisión. Un
+                resultado deportivo exige ganador; puede tener más de cuatro goles
+                totales.
+              </p>
+              <label htmlFor="match-date">
+                Fecha y hora de Costa Rica (opcional)
+              </label>
+              <input
+                id="match-date"
+                name="date"
+                type="datetime-local"
+                defaultValue={localDate(match.scheduled_at)}
+              />
+              <label htmlFor="match-reason">
+                Motivo del registro o corrección
+              </label>
+              <input
+                id="match-reason"
+                name="reason"
+                required
+                minLength={3}
+                maxLength={1000}
+              />
+              <button className="action-link" disabled={locked}>
+                {busy ? "Guardando partido…" : "Guardar partido"}
+              </button>
+            </fieldset>
           </form>
+          {matchError && <SaveStatus busy={false} message={matchError} />}
+          {confirmation?.match.id === match.id && (
+            <p className="save-status" role="status" data-state="saved">
+              Resultado guardado · {matchLabels[confirmation.match.kind]} · {confirmation.match.hg} – {confirmation.match.ag}.
+            </p>
+          )}
+          {(matchError || awaitingCalendar) && (
+            <button type="button" className="trophy-button" disabled={busy || refreshing} onClick={() => startRefresh(() => router.refresh())}>
+              Actualizar calendario
+            </button>
+          )}
         </section>
       )}
       {admin && (

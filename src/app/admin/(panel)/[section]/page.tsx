@@ -58,6 +58,7 @@ export default async function Competition({
   return (
     <main>
       <LeagueView
+        key={event.id + ":" + section}
         eventId={event.id}
         data={data as League}
         admin

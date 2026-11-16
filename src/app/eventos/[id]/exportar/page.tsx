@@ -19,7 +19,7 @@ export default async function ExportPage({
         <Link href={`/eventos/${id}`}>Volver al evento</Link>
         <h1>Exportar la edición</h1>
         <p>
-          Clasificación y resultados de {d.event.name}. La imagen corresponde a
+          Calendario, clasificación y resultados de {d.event.name}. La imagen corresponde a
           la página elegida; el PDF y CSV incluyen todas.
         </p>
         <CompetitionExport

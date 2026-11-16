@@ -74,11 +74,11 @@ export function CompetitionExport({
           classificationZone(r, league!).label,
         ])
       : matches
-          .filter((m) => !unresolved(m.kind))
+          .filter((m) => view === "calendar" || !unresolved(m.kind))
           .map((m) => [
             m.phase,
             m.homeName,
-            m.hg === null || m.ag === null ? "Sin goles" : `${m.hg}–${m.ag}`,
+            unresolved(m.kind) ? "—" : m.hg === null || m.ag === null ? "Sin goles" : `${m.hg}–${m.ag}`,
             m.awayName,
             knockoutLabels[m.kind] ??
               matchLabels[m.kind] ??
@@ -95,7 +95,7 @@ export function CompetitionExport({
     title =
       view === "standings"
         ? `Clasificación ${league?.state === "closed" ? "final" : "provisional"}`
-        : "Resultados oficiales",
+        : view === "calendar" ? "Calendario" : "Resultados oficiales",
     filename = `cfp-${event.id}-${view}`;
   async function image(format: "png" | "pdf") {
     if (!sheet.current || busy || !rows.length) return;
@@ -178,6 +178,7 @@ export function CompetitionExport({
             }}
           >
             <option value="standings">Clasificación</option>
+            <option value="calendar">Calendario</option>
             <option value="results">Resultados oficiales</option>
           </select>
         </label>

@@ -11,10 +11,16 @@ export function RoundSchedule({
   data,
   eventId,
   round,
+  locked,
+  startOperation,
+  finishOperation,
 }: {
   data: League;
   eventId: string;
   round: number;
+  locked: boolean;
+  startOperation: () => boolean;
+  finishOperation: () => void;
 }) {
   const matches = data.matches.filter(
     (m) => m.round === round && unresolved(m.kind),
@@ -51,6 +57,7 @@ export function RoundSchedule({
     <section className="round-schedule" id="round-schedule">
       <Button
         variant="outline"
+        disabled={locked}
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls="round-schedule-form"
@@ -228,8 +235,9 @@ export function RoundSchedule({
                   Volver a editar fechas
                 </Button>
                 <Button
-                  disabled={busy || data.revision !== review.revision}
+                  disabled={locked || busy || data.revision !== review.revision}
                   onClick={async () => {
+                    if (!startOperation()) return;
                     setBusy(true);
                     setResult(null);
                     try {
@@ -256,6 +264,7 @@ export function RoundSchedule({
                       });
                     } finally {
                       setBusy(false);
+                      finishOperation();
                     }
                   }}
                 >

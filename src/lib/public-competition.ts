@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { publicEventFilter } from "@/lib/events";
 import { createClient } from "@/lib/supabase/server";
 import { eventColumns, type TournamentEvent } from "@/lib/events";
 import type { League } from "@/lib/league/types";
@@ -11,7 +12,7 @@ export const publicCompetition = cache(async (id: string) => {
   if (!/^[a-f0-9-]{36}$/i.test(id)) return null;
   const c = await createClient();
   // Explicit published filter also applies when a signed-in owner follows a public link.
-  const { data: event, error } = await c.from("cfp_events").select(eventColumns).eq("id", id).in("status", ["published", "finished"]).maybeSingle();
+  const { data: event, error } = await c.from("cfp_events").select(eventColumns).or(publicEventFilter).eq("id", id).in("status", ["published", "finished"]).maybeSingle();
   if (error) throw new Error("No se pudo consultar el evento.");
   if (!event) return null;
   const [l, k, t] = await Promise.all([
@@ -28,7 +29,7 @@ export async function publishedEvents() {
   const c = await createClient();
   const result: TournamentEvent[] = [];
   for (let offset = 0; ; offset += 100) {
-    const { data, error } = await c.from("cfp_events").select(eventColumns).in("status", ["published", "finished"]).order("starts_at", { ascending: false }).order("id").range(offset, offset + 99);
+    const { data, error } = await c.from("cfp_events").select(eventColumns).or(publicEventFilter).in("status", ["published", "finished"]).order("starts_at", { ascending: false }).order("id").range(offset, offset + 99);
     if (error) throw new Error("No se pudieron consultar las ediciones.");
     result.push(...(data ?? []) as TournamentEvent[]);
     if (!data || data.length < 100) return result;
