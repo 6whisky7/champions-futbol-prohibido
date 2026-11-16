@@ -75,6 +75,12 @@ export function KnockoutView({
       setBusy(false);
     }
   }
+  if (!data && !admin) return (
+    <section className="public-event-empty" aria-labelledby="public-knockout-empty">
+      <h2 id="public-knockout-empty">Eliminatorias</h2>
+      <p>Las eliminatorias todavía no se han generado.</p>
+    </section>
+  );
   if (!data)
     return (
       <section className="admin-surface">
@@ -156,7 +162,7 @@ export function KnockoutView({
   const selectedPlayed = selectedMatch ? !unresolved(selectedMatch.kind) : false;
   const bracketControls = (
     <>
-      <label className={admin ? "guided-ko-round" : "ko-round-switch"} htmlFor="ko-round">
+      {admin && <label className="guided-ko-round" htmlFor="ko-round">
         Consultar ronda
         <select
           id="ko-round"
@@ -169,7 +175,7 @@ export function KnockoutView({
             </option>
           ))}
         </select>
-      </label>
+      </label>}
       <div className="bracket-controls">
         <label htmlFor="ko-team">
           Seguir equipo
@@ -205,20 +211,20 @@ export function KnockoutView({
     </>
   );
   return (
-    <section className="ko-section">
+    <section className={admin ? "ko-section" : "ko-section public-knockout"}>
       <h2>Cuadro de eliminatorias</h2>
-      <p>
+      {admin && <p>
         {data.state === "preview"
           ? "Revisión previa · aún no confirmada"
           : data.state === "finished"
             ? "Evento terminado"
             : "Cuadro confirmado · a partido único"}
         . Los destinos son fijos, aunque gane el peor clasificado.
-      </p>
+      </p>}
       {message === "Resultado guardado correctamente"
         ? <p className="save-status" role="status" data-state="saved">{message}</p>
         : <SaveStatus busy={busy} message={message} />}
-      {data.champion && (
+      {admin && data.champion && (
         <ChampionPresentation
           champion={data.champion}
           eventId={eventId}
@@ -226,8 +232,8 @@ export function KnockoutView({
           teams={data.teams}
         />
       )}
-      <div className="admin-tabs">
-        {admin && data.state === "preview" && (
+      {admin && data.state === "preview" && (
+        <div className="admin-tabs">
           <ConfirmAction
             label="Confirmar emparejamientos"
             title="Fijar el cuadro de eliminatorias"
@@ -236,8 +242,8 @@ export function KnockoutView({
             message={message}
             onConfirm={() => act("confirm")}
           />
-        )}
-      </div>
+        </div>
+      )}
       {admin && data.state === "active" && (
         <div className="admin-surface guided-round">
           <div role="status">
@@ -257,7 +263,7 @@ export function KnockoutView({
           )}
         </div>
       )}
-      {(!admin || winner || data.state === "finished") && <section
+      {admin && (winner || data.state === "finished") && <section
         className="closure-review ko-final-review"
         id="ko-final"
         tabIndex={-1}
@@ -442,7 +448,19 @@ export function KnockoutView({
           )}
         </section>
       )}
-      {admin ? <details className="guided-options"><summary>Consultar rondas y seguir equipos</summary>{bracketControls}</details> : bracketControls}
+      {!admin && (
+        <div className="public-ko-rounds" role="group" aria-label="Rondas">
+          {rounds.map((r) => (
+            <button type="button" key={r} className="trophy-button" aria-pressed={r === currentRound}
+              onClick={() => setRound(r)}>{roundName(r)}</button>
+          ))}
+        </div>
+      )}
+      {(!admin && data.champion) && <a className="public-ko-champion-link" href="#campeon">Ver campeón</a>}
+      <details className={admin ? "guided-options" : "public-event-tools"}>
+        <summary>{admin ? "Consultar rondas y seguir equipos" : "Seguir un equipo"}</summary>
+        {bracketControls}
+      </details>
       <div
         ref={bracket}
         className={`ko-bracket${allRounds ? " ko-all-rounds" : ""}`}
@@ -505,7 +523,8 @@ export function KnockoutView({
                         <strong>{m.ag ?? "—"}</strong>
                       </div>
                       <p>
-                        {knockoutLabels[m.kind]} · Intento {m.attempt}
+                        {!admin && m.kind === "sport" ? "Finalizado" : knockoutLabels[m.kind]}
+                        {(admin || m.attempt > 1) && " · Intento " + m.attempt}
                       </p>
                       {m.scheduled_at && <p>{knockoutDate(m.scheduled_at)}</p>}
                       {m.winner && <p>Avanza: {team(m.winner)?.name}</p>}
@@ -537,19 +556,19 @@ export function KnockoutView({
                           <ChevronRight size={18} />
                         </a>
                       )}
-                      <Button variant="outline" disabled={busy} onClick={() => { if (admin) setRound(m.round); open(m.id); }}>
+                      {admin && <Button variant="outline" disabled={busy} onClick={() => { if (admin) setRound(m.round); open(m.id); }}>
                         {admin && data.state === "active" && m.home && m.away && m.kind !== "blocked"
                           ? (m.winner ? "Ver" : "Registrar") + " resultado"
                           : "Detalle del partido " + m.number}
-                      </Button>
+                      </Button>}
                       {!admin && (
                         <Link
                           className="ko-public-link"
                           href={`/eventos/${eventId}/partidos/${m.id}`}
                         >
                           {m.winner
-                            ? "Ver y compartir resultado"
-                            : "Detalle y calendario"}
+                            ? "Ver resultado"
+                            : "Ver partido"}
                         </Link>
                       )}
                     </li>
@@ -559,6 +578,11 @@ export function KnockoutView({
           </section>
         ))}
       </div>
+      {!admin && data.champion && (
+        <div id="campeon">
+          <ChampionPresentation champion={data.champion} eventId={eventId} matches={matches} teams={data.teams} />
+        </div>
+      )}
       {admin && data.state === "active" && (
         <details className="admin-surface">
           <summary>Situación administrativa de un equipo</summary>

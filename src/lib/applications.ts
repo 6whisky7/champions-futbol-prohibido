@@ -1,8 +1,9 @@
-export type Member = { roblox: string; tiktok: string };
+export type Member = { roblox: string; tiktok: string; number?: string };
 export type ApplicationPayload = {
   name: string;
   crest: string;
-  number: string;
+  /** Legacy team number, carried through edits of existing applications. */
+  number?: string;
   captain: string;
   members: Member[];
 };

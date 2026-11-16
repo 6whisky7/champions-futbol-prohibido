@@ -4,7 +4,7 @@
 
 Inscripción pública sin cuenta desde `/eventos/[id]`, únicamente si el evento está publicado y abierto. El propietario administra solicitudes, equipos y espera desde `/admin/solicitudes`; conserva el acceso por enlace de correo ya configurado. Los eventos reales se mantienen cerrados en esta entrega hasta que el propietario decida abrirlos.
 
-El formulario recoge nombre, escudo, número opcional 01–99, tres titulares, capitán entre esos titulares y suplente opcional. Todos los integrantes declaran Roblox y TikTok. El resumen permite revisar antes de enviar; errores conservan los campos. La confirmación incluye referencia, vencimiento e instrucciones para que el capitán contacte desde el TikTok declarado. Enviar no equivale a aprobación.
+El formulario recoge nombre, escudo, tres titulares, capitán entre esos titulares y suplente opcional. Cada integrante declara Roblox y TikTok y puede indicar un número privado del 01 al 99. El resumen permite revisar antes de enviar; errores conservan los campos. La confirmación incluye referencia, vencimiento e instrucciones para que el capitán contacte desde el TikTok declarado. Enviar no equivale a aprobación.
 
 ## Reservas y estados
 
@@ -15,7 +15,7 @@ El formulario recoge nombre, escudo, número opcional 01–99, tres titulares, c
 | En espera | No | No |
 | Rechazado o vencido | No | No |
 
-El número opcional puede repetirse. Un escudo puede reutilizarse en otro evento. Seleccionarlo no reserva nada: la reserva se crea al guardar correctamente una pendiente.
+El número opcional puede repetirse entre jugadores. Los números de equipo históricos se conservan en las solicitudes anteriores. Un escudo puede reutilizarse en otro evento. Seleccionarlo no reserva nada: la reserva se crea al guardar correctamente una pendiente.
 
 El plazo inicial es de 48 horas; `review_hours` admite 1–720 y afecta reservas nuevas. Cerrar impide nuevos envíos y promociones; las pendientes conservan sus vencimientos y pueden resolverse. Promover requiere evento publicado y abierto, vuelve a validar todos los conflictos y crea una nueva reserva con el plazo configurado. El administrador elige manualmente la solicitud; no existe prioridad automática de espera.
 

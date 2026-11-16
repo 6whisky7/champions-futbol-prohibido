@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { crests } from "@/lib/crests";
 import { submitApplication } from "@/app/eventos/actions";
-import type { ApplicationPayload } from "@/lib/applications";
+import type { ApplicationPayload, Member } from "@/lib/applications";
 export function ApplicationForm({
   eventId,
   reserved,
@@ -25,7 +25,6 @@ export function ApplicationForm({
     initial ?? {
       name: "",
       crest: initialCrest,
-      number: "",
       captain: "0",
       members: Array.from({ length: 3 }, () => ({ roblox: "", tiktok: "" })),
     },
@@ -42,9 +41,17 @@ export function ApplicationForm({
     state: string;
     expires_at: string | null;
   }>();
-  function field(k: keyof ApplicationPayload, v: string) {
-    setP({ ...p, [k]: v });
+  const selectedCrest = crests.find((crest) => crest.id === p.crest);
+  function field(k: "name" | "crest" | "captain", v: string) {
+    setP((value) => ({ ...value, [k]: v }));
     setReview(false);
+  }
+  function memberField(index: number, key: keyof Member, value: string) {
+    setReview(false);
+    setP((previous) => ({
+      ...previous,
+      members: previous.members.map((member, i) => i === index ? { ...member, [key]: value } : member),
+    }));
   }
   async function send() {
     setBusy(true);
@@ -89,8 +96,8 @@ export function ApplicationForm({
         )}
         <p>
           {result.state === "waiting"
-            ? "No reserva plaza, nombre, jugadores ni escudo. El organizador podrá promoverla si hay disponibilidad."
-            : "El capitán debe contactar a @whiskyzc desde el perfil de TikTok declarado para confirmar su inscripción antes del vencimiento. Enviar la solicitud todavía no significa estar aprobado."}
+            ? "La espera no reserva plaza, escudo ni jugadores."
+            : "El capitán debe escribir a @whiskyzc desde el TikTok declarado antes del vencimiento. El equipo queda pendiente de aprobación."}
         </p>
       </section>
     );
@@ -114,52 +121,30 @@ export function ApplicationForm({
           value={p.name}
           onChange={(e) => field("name", e.target.value)}
         />
-        <label htmlFor="team-number">
-          Número opcional · 01–99, puede repetirse
-        </label>
-        <input
-          id="team-number"
-          inputMode="numeric"
-          pattern="0[1-9]|[1-9][0-9]"
-          maxLength={2}
-          value={p.number}
-          onChange={(e) => field("number", e.target.value)}
-        />
-        <label htmlFor="crest">Escudo</label>
-        <select
-          id="crest"
-          required
-          value={p.crest}
-          onChange={(e) => field("crest", e.target.value)}
-        >
-          <option value="">Elige un diseño</option>
-          {crests.map((c) => (
-            <option
-              key={c.id}
-              value={c.id}
-              disabled={!onSave && !waiting && reserved.includes(c.id)}
-            >
-              Diseño {c.id} · {c.club}
-              {reserved.includes(c.id) ? " · Reservado" : ""}
-            </option>
-          ))}
-        </select>
-        {p.crest && (
-          <Image
-            className="application-crest"
-            src={crests.find((c) => c.id === p.crest)?.src ?? ""}
-            alt={`Diseño ${p.crest}`}
-            width={100}
-            height={100}
-          />
-        )}
-        <p>Se reserva al guardar correctamente, no al seleccionarlo.</p>
+        <div className="application-crest-picker">
+          <div>
+            <label htmlFor="crest">Escudo</label>
+            <select id="crest" required value={p.crest} onChange={(e) => field("crest", e.target.value)}>
+              <option value="">Elige un escudo</option>
+              {crests.map((c) => (
+                <option key={c.id} value={c.id} disabled={!onSave && !waiting && reserved.includes(c.id)}>
+                  {c.club}{reserved.includes(c.id) ? " · Reservado" : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+          {selectedCrest && (
+            <div className="application-crest-preview">
+              <Image src={selectedCrest.src} alt={"Escudo de " + selectedCrest.club} width={72} height={72} />
+            </div>
+          )}
+        </div>
+        <p>El escudo se reserva al guardar una solicitud con plaza.</p>
       </fieldset>
       <fieldset>
         <legend>Plantilla</legend>
         <p>
-          Tres titulares y un suplente opcional. Usa los nombres de usuario, no
-          los nombres visibles.
+          Añade tres titulares y, si quieres, un suplente. Escribe sus nombres de usuario.
         </p>
         {p.members.map((m, i) => (
           <div className="member-fields" key={i}>
@@ -176,20 +161,19 @@ export function ApplicationForm({
                   required
                   maxLength={k === "roblox" ? 20 : 24}
                   value={m[k]}
-                  onChange={(e) => {
-                    setReview(false);
-                    setP({
-                      ...p,
-                      members: p.members.map((v, j) =>
-                        j === i ? { ...v, [k]: e.target.value } : v,
-                      ),
-                    });
-                  }}
+                  onChange={(e) => memberField(i, k, e.target.value)}
                 />
               </div>
             ))}
+            <div className="player-number">
+              <label htmlFor={"player-number-" + i}>Número del jugador (opcional)</label>
+              <input id={"player-number-" + i} inputMode="numeric" placeholder="01–99"
+                pattern="0[1-9]|[1-9][0-9]" maxLength={2} value={m.number ?? ""}
+                aria-describedby="player-number-help" onChange={(e) => memberField(i, "number", e.target.value)} />
+            </div>
           </div>
         ))}
+        <p id="player-number-help">Del 01 al 99. Puede repetirse entre jugadores.</p>
         <button
           className="trophy-button"
           type="button"
@@ -232,12 +216,10 @@ export function ApplicationForm({
             >
               La Chapizza
             </a>{" "}
-            y tener aceptada la amistad con SOYWHYSKY en Roblox. El
-            administrador lo revisa manualmente. Ver el LIVE, comentar y dar tap
-            tap es voluntario.
+            y tener aceptada la amistad con SOYWHYSKY en Roblox.
           </p>
           <label>
-            <input type="checkbox" required /> He revisado los datos y entiendo los requisitos y la publicación de Roblox. Esto no sustituye el consentimiento de cada integrante.
+            <input type="checkbox" required /> He revisado la plantilla, los requisitos y la publicación de los nombres de Roblox.
           </label>
           <label>
             <input
@@ -245,6 +227,7 @@ export function ApplicationForm({
               checked={waiting}
               onChange={(e) => {
                 setWaiting(e.target.checked);
+                if (!e.target.checked && reserved.includes(p.crest)) field("crest", "");
                 setReview(false);
               }}
             />{" "}
@@ -254,10 +237,9 @@ export function ApplicationForm({
       )}
       {review && (
         <section className="registration-lock">
-          <h2>Revisa tu solicitud</h2>
+          <h2>{onSave ? "Revisa la corrección" : "Revisa tu solicitud"}</h2>
           <p>
-            {p.name} · Escudo {p.crest}
-            {p.number ? ` · Nº ${p.number}` : ""}
+            {p.name}{selectedCrest && " · " + selectedCrest.club}
           </p>
           <ul>
             {p.members.map((m, i) => (
@@ -265,20 +247,17 @@ export function ApplicationForm({
                 {m.roblox} · TikTok: {m.tiktok}
                 {String(i) === p.captain ? " · Capitán" : ""}
                 {i === 3 ? " · Suplente" : ""}
+                {m.number && " · Nº " + m.number}
               </li>
             ))}
           </ul>
-          <p>
-            {waiting
-              ? "Lista de espera sin reservas."
-              : "Pendiente de confirmación y revisión."}
-          </p>
+          {!onSave && <p>{waiting ? "Lista de espera sin reservas." : "Pendiente de confirmación y revisión."}</p>}
         </section>
       )}
       {!onSave && <section className="registration-lock">
-        <p>Whisky utiliza Roblox y TikTok para revisar y organizar el torneo. Se publican equipo, escudo y Roblox; TikTok, notas e historial quedan privados. <a href="/privacidad" target="_blank" rel="noopener noreferrer">Consulta privacidad, contacto y retirada de datos</a>.</p>
+        <p>Whisky usa estos datos para organizar el torneo. Equipo, escudo y Roblox pueden publicarse. TikTok y el número del jugador quedan privados. <a href="/privacidad" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a>.</p>
         {privacyVersion ? <label><input type="checkbox" checked={privacyAccepted} onChange={e=>setPrivacyAccepted(e.target.checked)} required /> He leído el aviso de privacidad presentado (versión {privacyVersion}).</label> : <p>Falta completar el aviso definitivo y el procedimiento de autorización de los integrantes y menores. El envío todavía no está habilitado.</p>}
-        <p>Esta aceptación solo corresponde a quien envía. No acredita por sí sola el consentimiento de cada integrante ni una autorización familiar.</p>
+        <p>La aceptación registra la decisión de quien envía. El organizador debe verificar por separado la autorización de cada integrante.</p>
       </section>}
       <p role="status">{notice}</p>
       <p role="alert">{error}</p>

@@ -1,169 +1,109 @@
-import { ChampionPresentation } from "@/components/champion";
 import { publicCompetition } from "@/lib/public-competition";
-import { nextPublicMatch } from "@/lib/public-matches";
-import { NextMatch } from "@/components/next-match";
+import { nextPublicMatch, unresolved } from "@/lib/public-matches";
 import Link from "next/link";
 import { ApplicationForm } from "@/components/application-form";
-import Image from "next/image";
+import { EventStatus, PublicEventNavigation } from "@/components/public-event-navigation";
+import { TeamIdentity } from "@/components/team-identity";
 import { crests } from "@/lib/crests";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { eventDate, eventFormats } from "@/lib/events";
+
 export const dynamic = "force-dynamic";
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params,
-    d = await publicCompetition(id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const competition = await publicCompetition(id);
   return {
-    title: d
-      ? `${d.event.name} | Champions Fútbol Prohibido`
-      : "Evento no disponible",
-    description: d?.event.description,
+    title: competition ? competition.event.name + " | Champions Fútbol Prohibido" : "Evento no disponible",
+    description: competition?.event.description,
   };
 }
-export default async function PublicEvent({
-  params,
-  searchParams,
-}: {
+
+export default async function PublicEvent({ params, searchParams }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{escudo?:string}>;
+  searchParams: Promise<{ escudo?: string }>;
 }) {
   const { id } = await params;
-  const requestedCrest=(await searchParams).escudo;
-  if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
+  const requestedCrest = (await searchParams).escudo;
+  const data = await publicCompetition(id);
+  if (!data) notFound();
+
+  const { event, teams, league, knockout, matches } = data;
+  const champion = knockout?.champion;
+  const next = nextPublicMatch(matches);
   const client = await createClient();
-  const d = await publicCompetition(id);
-  if (!d) notFound();
-  const e = d.event,
-    format = eventFormats[e.format],
-    publicTeams = d.teams,
-    champion = d.knockout?.champion;
-  const { data: privacy, error: privacyError } = await client.rpc(
-    "cfp_registration_status",
-  );
-  const privacyVersion =
-    !privacyError && privacy?.enabled ? (privacy.version as string) : null;
+  const privacy = event.registration_status === "open" ? await client.rpc("cfp_registration_status") : null;
+  const privacyVersion = privacy && !privacy.error && privacy.data?.enabled ? privacy.data.version as string : null;
+  const open = event.status === "published" && !!privacyVersion;
+  const free = Math.max(0, event.capacity - teams.length);
+  const reserved = teams.map(({ crest }) => crest);
+  const initialCrest = requestedCrest && crests.some((crest) => crest.id === requestedCrest) &&
+    (free === 0 || !reserved.includes(requestedCrest)) ? requestedCrest : "";
+  const hasResults = matches.some((match) => !unresolved(match.kind));
+  const tabs = ["calendario", "clasificacion",
+    ...(hasResults ? ["resultados"] : []),
+    ...(knockout || league?.state === "closed" ? ["eliminatorias"] : []),
+  ];
+
   return (
     <>
       <SiteHeader />
-      <main className="management-page page-width">
-        <Link href="/eventos">← Todos los eventos</Link>
-        <h1>{e.name}</h1>
-        {champion && <ChampionPresentation champion={champion} eventId={id} matches={d.knockout?.matches} teams={d.knockout?.teams}/>}
-        <p className="event-description">{e.description}</p>
-        <NextMatch eventId={id} match={nextPublicMatch(d.matches)} />
-        <dl className="event-facts">
-          <div>
-            <dt>Inicio · hora de Costa Rica</dt>
-            <dd>{eventDate(e.starts_at)}</dd>
-          </div>
-          {e.ends_at && (
-            <div>
-              <dt>Final previsto</dt>
-              <dd>{eventDate(e.ends_at)}</dd>
-            </div>
-          )}
-          <div>
-            <dt>Cupo</dt>
-            <dd>{e.capacity} equipos</dd>
-          </div>
-          <div>
-            <dt>Formato</dt>
-            <dd>{format.label}</dd>
-          </div>
-          <div>
-            <dt>Liguilla</dt>
-            <dd>
-              {format.opponents} rivales distintos por equipo.{" "}
-              {e.eliminate_after_league
-                ? `Continúan los ${format.qualified} mejores.`
-                : "Continúan todos los equipos."}
-            </dd>
-          </div>
-        </dl>
-        <nav className="admin-tabs">
-          <Link href={`/eventos/${id}/eliminatorias`}>Eliminatorias</Link>
-          <Link href={`/eventos/${id}/calendario`}>Calendario</Link>
-          <Link href={`/eventos/${id}/resultados`}>Resultados</Link>
-          <Link href={`/eventos/${id}/clasificacion`}>Clasificación</Link>
-        </nav>
-        <section>
-          <h2>Equipos del evento</h2>
-          <ul className="application-list">
-            {publicTeams.map((t) => (
-              <li key={t.id}>
-                <Image
-                  src={crests.find((c) => c.id === t.crest)?.src ?? ""}
-                  alt={`Escudo ${t.crest}`}
-                  width={72}
-                  height={72}
-                />
-                <div>
-                  <h3>
-                    <Link href={`/eventos/${id}/equipos/${t.id}`}>
-                      {t.name}
-                    </Link>
-                    {t.number ? ` · Nº ${t.number}` : ""}
-                  </h3>
-                  <p>
-                    {t.state === "approved"
-                      ? "Aprobado"
-                      : "Pendiente de revisión"}
-                  </p>
-                  <ul>
-                    {t.members.map((m, i) => (
-                      <li key={i}>
-                        {m.roblox} · {i === 3 ? "Suplente" : "Titular"}
-                        {String(i) === t.captain ? " · Capitán" : ""}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
-            ))}
-          </ul>
-          {!publicTeams.length && (
-            <p>Todavía no hay equipos con reserva activa.</p>
-          )}
+      <main className="management-page page-width public-event-detail">
+        <Link className="public-event-back" href="/eventos">← Eventos</Link>
+        <section className="public-event-hero" aria-labelledby="public-event-title">
+          <EventStatus status={event.status} registrationOpen={open} />
+          <h1 id="public-event-title">{event.name}</h1>
+          {event.description && <p className="event-description">{event.description}</p>}
+          <dl className="public-event-facts">
+            <div><dt>Inicio en Costa Rica</dt><dd><time dateTime={event.starts_at}>{eventDate(event.starts_at)}</time></dd></div>
+            {event.ends_at && <div><dt>Fin previsto</dt><dd><time dateTime={event.ends_at}>{eventDate(event.ends_at)}</time></dd></div>}
+            <div><dt>Formato</dt><dd>{eventFormats[event.format].label}</dd></div>
+            <div><dt>Cupo</dt><dd>{event.capacity} equipos</dd></div>
+            {open && <div><dt>Plazas disponibles</dt><dd>{free}</dd></div>}
+          </dl>
+          {open && <a className="action-link" href="#inscripcion">{free ? "Inscribir equipo" : "Ir a lista de espera"}</a>}
         </section>
-        {e.registration_status === "open" ? (
-          <section id="inscripcion">
-            <h2>
-              {!privacyVersion
-                ? "Inscripciones no disponibles"
-                : publicTeams.length >= e.capacity
-                  ? "Apúntate a la lista de espera"
-                  : "Inscribe a tu equipo"}
-            </h2>
-            {publicTeams.length >= e.capacity && (
-              <p>
-                El cupo está lleno. La espera no reserva plaza, escudo ni
-                jugadores. El propietario decide las promociones y vuelve a
-                comprobar los datos.
-              </p>
-            )}
-            <p>
-              Plazo de confirmación y revisión: {e.review_hours} horas. Los
-              usuarios de TikTok son privados del administrador.
-            </p>
-            <ApplicationForm
-              eventId={id}
-              initialCrest={crests.some(c=>c.id===requestedCrest)&&(publicTeams.length>=e.capacity||!publicTeams.some(t=>t.crest===requestedCrest))?requestedCrest:''}
-              privacyVersion={privacyVersion}
-              defaultWaiting={publicTeams.length >= e.capacity}
-              reserved={publicTeams.map((t) => t.crest)}
-            />
+        <PublicEventNavigation eventId={id} visible={tabs}
+          featured={open || champion ? undefined : knockout ? "eliminatorias" : hasResults ? "clasificacion" : league ? "calendario" : undefined} />
+        {champion && (
+          <section className="public-event-highlight" aria-label="Campeón del evento">
+            <div>
+              <h2>Campeón</h2>
+              <TeamIdentity name={champion.team.name} crest={champion.team.crest} />
+            </div>
+            <Link className="action-link" href={"/eventos/" + id + "/eliminatorias#campeon"}>Ver final y campeón</Link>
           </section>
-        ) : (
-          <p className="registration-lock">
-            Inscripciones cerradas. Las solicitudes pendientes conservan su
-            plazo de revisión.
-          </p>
+        )}
+        {next?.scheduled_at && (
+          <section className="public-event-highlight">
+            <div>
+              <h2>Próximo partido</h2>
+              <p>{next.homeName} vs {next.awayName}</p>
+              <time dateTime={next.scheduled_at}>{eventDate(next.scheduled_at)} · Costa Rica</time>
+            </div>
+            <Link href={"/eventos/" + id + "/partidos/" + next.id}>Ver partido →</Link>
+          </section>
+        )}
+        {open && (
+          <section className="public-registration" id="inscripcion">
+            <h2>{free ? "Inscribe a tu equipo" : "Lista de espera"}</h2>
+            <p>{free ? "Confirma tu solicitud en " + event.review_hours + " horas." : "El cupo está completo. La espera no reserva plaza."}</p>
+            <ApplicationForm eventId={id} initialCrest={initialCrest} privacyVersion={privacyVersion}
+              defaultWaiting={free === 0} reserved={reserved} />
+          </section>
+        )}
+        {!!teams.length && (
+          <details className="public-event-teams">
+            <summary>Equipos del evento ({teams.length})</summary>
+            <ul>{teams.map((team) => (
+              <li key={team.id}>
+                <TeamIdentity href={"/eventos/" + id + "/equipos/" + team.id} name={team.name} crest={team.crest} />
+                <span>{team.state === "approved" ? "Aprobado" : "Pendiente"}</span>
+              </li>
+            ))}</ul>
+          </details>
         )}
       </main>
       <SiteFooter />

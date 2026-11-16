@@ -13,14 +13,14 @@ const statistics = [
   ["gf", "GF", "Goles a favor"], ["gc", "GC", "Goles en contra"],
 ] as const;
 
-export function AdminLeagueTable({ data, played }: { data: League; played: number }) {
+export function LeagueTable({ data, played, eventId }: { data: League; played: number; eventId?: string }) {
   const [expanded, setExpanded] = useState(false);
   const total = data.matches.length;
   const qualifier = data.format === "repechage" ? "Top 8 a octavos · 9–24 a repesca"
     : "Top " + data.qualified + " pasan a " + (data.format === "quarters" ? "cuartos" : data.format === "round16" ? "octavos" : "dieciseisavos");
 
   return (
-    <div className="admin-rankings">
+    <div className="competition-rankings">
       <header className="rank-header">
         <h2 id="league-table">Clasificación {data.state === "closed" ? "final" : "provisional"}</h2>
         <div className="rank-summary">
@@ -37,7 +37,7 @@ export function AdminLeagueTable({ data, played }: { data: League; played: numbe
       </header>
       <div className="rank-tools">
         <button type="button" className="trophy-button" onClick={() => setExpanded(!expanded)}
-          aria-expanded={expanded} aria-controls="admin-ranking-rows">
+          aria-expanded={expanded} aria-controls="league-ranking-rows">
           {expanded ? "Ocultar estadísticas" : "Ver más estadísticas"}
         </button>
       </div>
@@ -52,7 +52,7 @@ export function AdminLeagueTable({ data, played }: { data: League; played: numbe
             <th scope="col" className="rank-form">Racha</th>
           </tr>
         </thead>
-        <tbody id="admin-ranking-rows">
+        <tbody id="league-ranking-rows">
           {data.table.map((row, index) => {
             const zone = classificationZone(row, data);
             const form = teamForm(data.matches, row.id);
@@ -76,7 +76,8 @@ export function AdminLeagueTable({ data, played }: { data: League; played: numbe
                     {row.tie_pending && <span aria-label="Empatado">=</span>}{row.position}
                   </span></td>
                   <th scope="row">
-                    <TeamIdentity name={row.name} crest={row.crest} />
+                    <TeamIdentity name={row.name} crest={row.crest}
+                      href={eventId ? "/eventos/" + eventId + "/equipos/" + row.id : undefined} />
                     {(row.dq || (row.tie_pending && row.pj > 0)) && <small className="rank-team-status">{row.dq ? "Descalificado" : "Empate pendiente"}</small>}
                   </th>
                   <td><strong className="rank-points">{row.points ?? "—"}</strong></td>

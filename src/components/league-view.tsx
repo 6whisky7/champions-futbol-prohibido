@@ -139,8 +139,8 @@ export function LeagueView({
     : match && (team(match.home)?.dq || team(match.away)?.dq) ? "El marcador corresponde a una descalificación." : undefined;
   if (!data?.state)
     return (
-      <section className="admin-surface">
-        <h2>Preparar la liguilla</h2>
+      <section className={admin ? "admin-surface" : "public-event-empty"}>
+        <h2>{admin ? "Preparar la liguilla" : tab === "results" ? "Resultados" : "Calendario"}</h2>
         {data?.readiness && (
           <>
             <p>

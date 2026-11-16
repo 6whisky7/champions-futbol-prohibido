@@ -7,10 +7,26 @@ insert into public.cfp_events(id,name,starts_at,capacity,format,status,registrat
 -- No anonymous grant is restored to the legacy function.
 do $$ declare p jsonb; r jsonb; id uuid; begin
  p='{"name":"Los azules","crest":"01","number":"07","captain":"0","members":[{"roblox":"player_one","tiktok":"player.one"},{"roblox":"player_two","tiktok":"player.two"},{"roblox":"player_three","tiktok":"player.three"}]}';
+ -- Two members can share a valid number. The old team number remains present.
+ p=jsonb_set(jsonb_set(p,'{members,0,number}','"09"'),'{members,1,number}','"09"');
+ perform cfp_private.validate_application(null,p,null,false);
+ begin
+  perform cfp_private.validate_application(null,jsonb_set(p,'{members,2,number}','"00"'),null,false);
+  raise exception 'invalid player number accepted';
+ exception when raise_exception then
+  if sqlerrm <> 'El número del jugador debe ir del 01 al 99.' then raise; end if;
+ end;
+ begin
+  perform cfp_private.validate_application(null,jsonb_set(p,'{members,2,number}','99'),null,false);
+  raise exception 'unformatted player number accepted';
+ exception when raise_exception then
+  if sqlerrm <> 'El número del jugador debe ir del 01 al 99.' then raise; end if;
+ end;
  r=public.cfp_submit_application('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',p,'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
  if r->>'state'<>'pending' then raise exception 'submission failed'; end if;
  if public.cfp_submit_application('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',p,'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb')->>'id'<>r->>'id' then raise exception 'idempotency failed'; end if;
- if public.cfp_public_teams('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')::text like '%tiktok%' then raise exception 'privacy leak'; end if;
+ if public.cfp_public_teams('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')::text like '%tiktok%'
+  or public.cfp_public_teams('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')->0->'members'->0 ? 'number' then raise exception 'privacy leak'; end if;
  begin
   perform public.cfp_submit_application('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',jsonb_set(p,'{name}','"Otro nombre"'),'cccccccc-cccc-4ccc-8ccc-cccccccccccc');raise exception 'duplicate accepted';
  exception when raise_exception then if sqlerrm='duplicate accepted' then raise; end if; end;
@@ -22,6 +38,8 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','11111111-1111-4111-8111-111111111111',true);
 do $$ declare a jsonb; id uuid; begin
  a=public.cfp_admin_applications('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa')->0;id=(a->>'id')::uuid;
+ if a->'payload'->>'number' <> '07' or a->'payload'->'members'->0->>'number' <> '09'
+  or a->'payload'->'members'->1->>'number' <> '09' then raise exception 'number persistence failed'; end if;
  begin perform public.cfp_review_application(id,'approve','Sin revisar');raise exception 'approval bypass';exception when raise_exception then if sqlerrm='approval bypass' then raise;end if;end;
  perform public.cfp_review_application(id,'confirm','Capitán confirmó desde su perfil');
  perform public.cfp_review_application(id,'requirements','Todos los integrantes cumplen los tres requisitos');
