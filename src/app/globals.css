@@ -1131,3 +1131,41 @@ div[id] {
 .application-list>li>div{min-width:0;overflow-wrap:anywhere}.application-list h3{overflow-wrap:anywhere}
 .bracket-controls label{min-width:0;grid-template-columns:minmax(0,1fr)}.bracket-controls select{min-width:0;width:100%}
 #admin-content,.management-page,.closure-review{overflow-wrap:anywhere}
+
+.guided-round { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 24px; margin: 0 0 16px; }
+.guided-round h2 { font-size: clamp(1.65rem, 3vw, 2.2rem); margin-bottom: 8px; }
+.guided-round [role="status"] p { margin: 4px 0 0; }
+.guided-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.guided-calendar nav { margin-block: 16px; }
+.guided-round-select select { min-height: 44px; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--foreground); }
+.guided-calendar button, .guided-calendar .action-link { min-height: 44px; }
+.guided-calendar .match-time { display: inline-flex; align-items: center; gap: 6px; color: var(--muted-foreground); font-size: 0.9rem; }
+.match-time svg { width: 16px; height: 16px; flex: none; }
+.guided-calendar .match-center { font-family: var(--font-body), sans-serif; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: 800; }
+.guided-calendar .match-teams { grid-template-columns: minmax(0, 1fr) minmax(3ch, auto) minmax(0, 1fr); }
+.guided-calendar .team-identity { overflow-wrap: anywhere; }
+.guided-match-editor { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 18px; scroll-margin-top: 16px; }
+.guided-match-editor h3 { margin-bottom: 12px; font-size: 1.35rem; }
+.guided-score-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 36rem; }
+.guided-score-fields input { display: block; width: 100%; min-height: 48px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: var(--foreground); padding: 8px 12px; margin-top: 4px; font-size: 1.15rem; }
+.guided-score-wide { grid-column: 1 / -1; }
+.guided-options { border-top: 1px solid var(--border); margin-block-start: 16px; }
+.guided-options summary, .guided-secondary-nav summary { cursor: pointer; min-height: 44px; padding-block: 10px; }
+.guided-options form { margin-block: 12px; }
+.polished-table.guided-standings-simple { min-width: 0; }
+.guided-tie { margin-bottom: 12px; }
+.guided-phase-list { list-style: none; padding: 0; margin-top: 20px; }
+.guided-phase-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); padding: 10px 8px; }
+.guided-phase-list [aria-current="step"] { background: var(--secondary); border-inline-start: 2px solid var(--primary); font-weight: 700; }
+.guided-phase-list small { color: var(--muted-foreground); }
+@media (max-width: 600px) {
+  .guided-calendar .league-round > ol > li { padding: 16px 12px; }
+  .guided-calendar nav .trophy-button { padding-inline: 10px; font-size: 0.85rem; }
+  .guided-calendar .match-center { align-self: start; margin-top: 12px; }
+  .guided-calendar .team-identity { font-size: 0.9rem; }
+  .guided-standings-simple th, .guided-standings-simple td { padding-inline: 5px; font-size: 0.875rem; }
+  .guided-standings-simple .sticky-team { min-width: 0; }
+  .guided-standings-simple .team-identity { overflow-wrap: anywhere; flex-wrap: wrap; }
+  .guided-standings-simple thead th:nth-child(2) { min-width: 74px; }
+}
+.guided-event-name { color: var(--muted-foreground); overflow-wrap: anywhere; margin-top: 4px; }

@@ -129,23 +129,20 @@ try {
       await shot(name + "-" + width);
     }
     await ready(routes.calendar);
-    await p.getByRole("tab", { name: /^Jornada 3 / }).click();
+    await p.getByLabel("Elegir jornada").selectOption("3");
     await p.waitForURL(/jornada=3/);
     assert.equal(new URL(p.url()).searchParams.get("jornada"), "3");
     await p
-      .getByRole("button", { name: /Editar partido/ })
+      .getByRole("button", { name: /^(Registrar|Ver) resultado$/ })
       .first()
       .click();
     await p.waitForFunction(()=>document.activeElement?.id==="league-match-editor");
     await p.reload();
-    await p.getByRole("tab", { name: /^Jornada 3 / }).waitFor();
-    assert.equal(
-      await p.getByRole("tab", { name: /^Jornada 3 / }).getAttribute("aria-selected"),
-      "true",
-    );
+    assert.equal(await p.getByLabel("Elegir jornada").inputValue(), "3");
     await p.locator("#league-match-editor").waitFor();
     log("calendar round, progress, URL and editor survive reload " + width);
     await ready(routes.table);
+    await p.getByRole("button", { name: "Ver más estadísticas" }).click();
     await p.locator(".form-strip [data-result=N]").first().waitFor();
     assert.match(
       await p
@@ -154,23 +151,7 @@ try {
         .then((x) => x.join(" ")),
       /\+/,
     );
-    assert.equal(
-      await p
-        .getByRole("button", {
-          name: "Cerrar liguilla y conservar clasificación",
-          exact: true,
-        })
-        .isEnabled(),
-      false,
-    );
-    const review = await p
-      .locator(".closure-review")
-      .evaluate(
-        (e) =>
-          e.compareDocumentPosition(document.querySelector(".league-table")) &
-          window.Node.DOCUMENT_POSITION_FOLLOWING,
-      );
-    assert.ok(review);
+    assert.equal(await p.getByRole("button", { name: "Cerrar liguilla y continuar" }).count(), 0);
     if (width === 390) {
       await p.locator(".league-table-scroll").evaluate((e) => {
         e.scrollLeft = 500;
@@ -228,22 +209,14 @@ try {
       await p.locator(href).evaluate((el) => el === document.activeElement),
       true,
     );
-    assert.ok(
-      await p
-        .locator("#ko-final")
-        .evaluate(
-          (el) =>
-            el.compareDocumentPosition(document.querySelector(".ko-bracket")) &
-            window.Node.DOCUMENT_POSITION_PRECEDING,
-        ),
-    );
     await checkAxe();
   }
   log(
-    "four formats: every connector matches persisted sources, destination focus and final review after bracket",
+    "four formats: every connector matches persisted sources, destination focus and bracket navigation",
   );
   await p.setViewportSize({ width: 390, height: 1000 });
   await ready("/admin/eliminatorias?evento=" + f.round32);
+  await p.getByText("Consultar rondas y seguir equipos", { exact: true }).click();
   await p.getByRole("button", { name: "Explorar cuadro completo" }).click();
   assert.equal(await p.locator(".ko-column:visible").count(), 5);
   await p.locator(".ko-bracket").evaluate((e) => (e.scrollLeft = 800));
@@ -323,6 +296,7 @@ try {
   );
   await p.setViewportSize({ width: 1440, height: 1000 });
   await ready("/admin/calendario?evento=" + batch);
+  await p.getByText("Programar horarios", { exact: true }).click();
   await p
     .getByRole("button", { name: "Asignar fechas a la jornada", exact: true })
     .click();

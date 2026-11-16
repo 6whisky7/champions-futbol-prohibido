@@ -17,13 +17,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PhaseBar } from "./phase-bar";
 import { Badge } from "./ui/badge";
-import type { PhaseState } from "@/lib/event-phase";
 import { signOut } from "@/app/admin/actions";
 import type { TournamentEvent } from "@/lib/events";
 const sections = [
-  { label: "Resumen", path: "/admin", icon: LayoutDashboard, group: "Resumen" },
+  { label: "Torneo", path: "/admin", icon: LayoutDashboard, group: "Resumen" },
   {
     label: "Eventos",
     path: "/admin/eventos",
@@ -31,28 +29,11 @@ const sections = [
     group: "Preparar",
   },
   {
-    label: "Solicitudes",
+    label: "Inscripciones y equipos",
     path: "/admin/solicitudes",
-    view: "pending",
     icon: Inbox,
     group: "Preparar",
     counter: "pending",
-  },
-  {
-    label: "Equipos",
-    path: "/admin/solicitudes",
-    view: "approved",
-    icon: Users,
-    group: "Preparar",
-    counter: "approved",
-  },
-  {
-    label: "Lista de espera",
-    path: "/admin/solicitudes",
-    view: "waiting",
-    icon: ListOrdered,
-    group: "Preparar",
-    counter: "waiting",
   },
   {
     label: "Calendario",
@@ -64,8 +45,7 @@ const sections = [
     label: "Resultados",
     path: "/admin/resultados",
     icon: ListOrdered,
-    group: "Competición",
-    counter: "results",
+    group: "Herramientas",
   },
   {
     label: "Clasificación",
@@ -79,8 +59,8 @@ const sections = [
     icon: ListOrdered,
     group: "Competición",
   },
-  { label: "LIVE", path: "/admin/live", icon: Radio, group: "Competición" },
-  { label: "Privacidad y conservación", path: "/admin/privacidad", icon: ShieldCheck, group: "Configuración" },
+  { label: "LIVE", path: "/admin/live", icon: Radio, group: "Herramientas" },
+  { label: "Privacidad y conservación", path: "/admin/privacidad", icon: ShieldCheck, group: "Herramientas" },
 ];
 export function AdminShell({
   events,
@@ -94,18 +74,18 @@ export function AdminShell({
     router = useRouter();
   const [menu, setMenu] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
+  const requested = params.getAll("evento");
   const event =
     events.find(
       (e) =>
         e.id ===
         (path.startsWith("/admin/eventos/")
-          ? path.split("/").at(-1)
-          : params.get("evento")),
-    ) ?? events[0];
+          ? path.split("/")[3]
+          : requested.length === 1 ? requested[0] : undefined),
+    );
   const [counts, setCounts] = useState<{
     evento: string;
     values: Record<string, number>;
-    phase: PhaseState;
   } | null>(null);
   useEffect(() => {
     if (!event) return;
@@ -124,7 +104,7 @@ export function AdminShell({
         })
         .then((values) => {
           if (!requestController.signal.aborted)
-            setCounts({ evento: values.evento, values, phase: values.phase });
+            setCounts({ evento: values.evento, values });
         })
         .catch(() => {});
     };
@@ -135,21 +115,16 @@ export function AdminShell({
       window.removeEventListener("cfp-admin-refresh", load);
     };
   }, [event]);
-  const view = params.get("vista") ?? "pending";
-  const current =
-    sections.find((s) => s.path === path && (!s.view || s.view === view)) ??
-    (path === "/admin/solicitudes"
-      ? sections.find((s) => s.label === "Solicitudes")!
-      : sections.find((s) => s.label === "Eventos")!);
+  const current = sections.find((s) => s.path === path);
   const title = path.endsWith("/nuevo")
     ? "Crear evento"
     : path.startsWith("/admin/eventos/")
-      ? "Configurar evento"
-      : current.label;
-  function href(p: string, v?: string) {
+      ? event?.name ?? "Evento"
+      : current?.label ?? "Eventos";
+  function href(p: string) {
+    if (p === "/admin" && event) return "/admin/eventos/" + event.id;
     const q = new URLSearchParams();
     if (event) q.set("evento", event.id);
-    if (v) q.set("vista", v);
     return p + (q.size ? "?" + q : "");
   }
   return (
@@ -166,7 +141,7 @@ export function AdminShell({
           }
         }}
       >
-        <Link className="admin-brand" href="/admin">
+        <Link className="admin-brand" href={href("/admin")}>
           <span className="brand-pennant">CFP</span>
           <span>
             Champions<strong>Fútbol Prohibido</strong>
@@ -193,7 +168,7 @@ export function AdminShell({
           }}
         >
           <nav aria-label="Administración">
-            {["Resumen", "Preparar", "Competición", "Configuración"].map((group) => (
+            {["Resumen", "Preparar", "Competición"].map((group) => (
               <div
                 className="admin-nav-group"
                 role="group"
@@ -206,9 +181,9 @@ export function AdminShell({
                   .map((s) => (
                     <Link
                       key={s.label}
-                      href={href(s.path, s.view)}
+                      href={href(s.path)}
                       aria-current={
-                        current.label === s.label ? "page" : undefined
+                        current?.label === s.label || (s.path === "/admin" && Boolean(event) && path === "/admin/eventos/" + event?.id) ? "page" : undefined
                       }
                       onClick={() => setMenu(false)}
                     >
@@ -217,9 +192,7 @@ export function AdminShell({
                       {s.counter && counts && event && counts.evento === event.id && (
                         <span className="admin-nav-count">
                           <span className="sr-only">
-                            {s.counter === "results"
-                              ? "Partidos por resolver: "
-                              : "Cantidad: "}
+                            Cantidad:
                           </span>
                           {counts.values[s.counter]}
                         </span>
@@ -228,6 +201,15 @@ export function AdminShell({
                   ))}
               </div>
             ))}
+            <details className="guided-secondary-nav">
+              <summary>Herramientas</summary>
+              <div className="admin-nav-group">
+                {sections.filter((item) => item.group === "Herramientas").map((item) => (
+                  <Link key={item.path} href={href(item.path)} aria-current={path === item.path ? "page" : undefined}
+                    onClick={() => setMenu(false)}><item.icon size={21} />{item.label}</Link>
+                ))}
+              </div>
+            </details>
           </nav>
           <div className="admin-sidebar-bottom">
             <Link href="/" target="_blank">
@@ -254,7 +236,13 @@ export function AdminShell({
             disabled={!events.length}
             onChange={(e) => {
               const q = new URLSearchParams(params);
-              q.set("evento", e.target.value);
+              const id = e.target.value;
+              if (!id) return;
+              if (path === "/admin" || path.startsWith("/admin/eventos") || path === "/admin/privacidad") {
+                router.push("/admin/eventos/" + id);
+                return;
+              }
+              q.set("evento", id);
               ["partido", "jornada", "solicitud"].forEach((k) => q.delete(k));
               router.push(
                 (path.startsWith("/admin/eventos/") ? "/admin/eventos" : path) +
@@ -263,7 +251,7 @@ export function AdminShell({
               );
             }}
           >
-            {!events.length && <option value="">Sin eventos todavía</option>}
+            <option value="" disabled>{events.length ? "Selecciona un evento" : "Sin eventos todavía"}</option>
             {events.map((e) => (
               <option key={e.id} value={e.id}>
                 {e.is_test === null ? "ANTERIOR · " : e.is_test ? "PRUEBA · " : ""}{e.name}
@@ -282,77 +270,13 @@ export function AdminShell({
             </div>
           )}
         </section>
-        {counts?.evento === event?.id && counts?.phase && (
-          <PhaseBar phase={counts.phase} />
-        )}
         <header className="admin-page-heading">
           <div>
             <h1>{title}</h1>
-            <p>
-              {path === "/admin"
-                ? "El estado de tu competición y lo que necesita atención."
-                : path.startsWith("/admin/eventos")
-                  ? "Fechas, formato y apertura. Publicar y abrir son decisiones distintas."
-                  : [
-                        "/admin/calendario",
-                        "/admin/resultados",
-                        "/admin/clasificacion",
-                        "/admin/eliminatorias",
-                        "/admin/live",
-                        "/admin/privacidad",
-                      ].includes(path)
-                    ? path === "/admin/live"
-                      ? "Marcador de trabajo, espera, OBS y permisos limitados por evento."
-                      : path === "/admin/privacidad"
-                        ? "Aviso publicado, conservación de solicitudes y controles de acceso."
-                      : path === "/admin/eliminatorias"
-                        ? "Cuadro fijo, avance de ganadores y cierre del evento."
-                        : "Rivales, resultados oficiales y posiciones de la liguilla."
-                    : "Revisa las plantillas y resuelve cada solicitud con sus requisitos."}
-            </p>
+            {event && title !== event.name && <p className="guided-event-name">{event.name}</p>}
           </div>
-          {path === "/admin/eventos" ? (
-            <Link className="action-link" href="/admin/eventos/nuevo">
-              <Plus size={20} />
-              Crear evento
-            </Link>
-          ) : (
-            event &&
-            path !== "/admin" &&
-            !path.endsWith("/nuevo") && (
-              <Link
-                className="action-link"
-                href={
-                  path === "/admin/live"
-                    ? href("/admin/resultados")
-                    : path === "/admin/calendario"
-                      ? "#league-calendar"
-                      : path === "/admin/clasificacion"
-                        ? "#league-table"
-                        : path === "/admin/eliminatorias"
-                          ? "#ko-final"
-                          : path === "/admin/resultados"
-                            ? href("/admin/live")
-                            : path === "/admin/solicitudes"
-                              ? "#application-list"
-                              : href("/admin/eventos")
-                }
-              >
-                {path === "/admin/live"
-                  ? "Resultados oficiales"
-                  : path === "/admin/calendario"
-                    ? "Ver jornada"
-                    : path === "/admin/clasificacion"
-                      ? "Ver clasificación"
-                      : path === "/admin/eliminatorias"
-                        ? "Ir a la final"
-                        : path === "/admin/resultados"
-                          ? "Abrir LIVE"
-                          : path === "/admin/solicitudes"
-                            ? "Consultar equipos"
-                            : "Ver eventos"}
-              </Link>
-            )
+          {path === "/admin/eventos" && (
+            <Link className="action-link" href="/admin/eventos/nuevo"><Plus size={20} />Crear evento</Link>
           )}
         </header>
         <div id="admin-content" tabIndex={-1}>

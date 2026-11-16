@@ -40,7 +40,7 @@ async function submit(name, crest, n, { four = false, waiting = false, reuse = n
     return null;
 } await p.getByRole('heading', { name: waiting ? 'Solicitud en lista de espera' : 'Solicitud recibida: pendiente de revisión', exact: true }).waitFor(); const id = (await p.getByRole('status').innerText()).match(/[0-9a-f]{8}-[0-9a-f-]{27}/i)[0]; return id; }
 async function detail(id) { await a.goto(base + `/admin/solicitudes?evento=${e}&vista=&solicitud=${id}#application-detail`); await a.locator('#review-reason').fill('Revisión controlada ' + tag); }
-async function decide(id, label) { await detail(id); await post(a, a.getByRole('button', { name: label, exact: true })); await a.reload(); }
+async function decide(id, label) { await detail(id); if (label.startsWith('Rechazar')) await a.getByText('Más opciones del equipo', {exact:true}).click(); await post(a, a.getByRole('button', { name: label, exact: true })); await a.reload(); }
 try {
     await a.goto(base + '/admin/eventos/nuevo');
     await a.getByLabel('Nombre del evento', { exact: true }).fill('Ensayo integral ' + tag);
@@ -94,6 +94,7 @@ try {
     await a.getByRole('alert').filter({ hasText: /integrante/ }).waitFor();
     await log('waiting promotion refuses active player conflict');
     await detail(wait);
+    await a.getByText('Más opciones del equipo', {exact:true}).click();
     await a.getByRole('button', { name: 'Corregir datos', exact: true }).click();
     await a.locator('#roblox-1').fill(crew(12, 1).roblox);
     await a.locator('#tiktok-1').fill(crew(12, 1).tiktok);
@@ -114,82 +115,83 @@ try {
     await a.locator('#application-detail').screenshot({ path: out + '/03-detalle.png' });
     const before = (await db.query('select expires_at from cfp_private.applications where id=$1', [wait])).rows[0].expires_at;
     await a.goto(base + '/admin/eventos/' + e);
+    if (!await a.locator('#registration_status').isVisible()) await a.getByText('Más opciones del evento', {exact:true}).click();
     await a.locator('#registration_status').selectOption('closed');
     await post(a, a.getByRole('button', { name: 'Guardar evento' }));
     assert.equal(String((await db.query('select expires_at from cfp_private.applications where id=$1', [wait])).rows[0].expires_at), String(before));
     await a.goto(base + '/admin/calendario?evento=' + e);
-    assert.equal(await a.getByRole('button', { name: 'Generar revisión del calendario' }).isDisabled(), true);
+    assert.equal(await a.getByRole('button', { name: 'Preparar calendario' }).isDisabled(), true);
     await log('closing preserves pending deadline and blocks draw until resolved');
     await decide(wait, 'Confirmar capitán');
     await decide(wait, 'Marcar requisitos revisados');
     await decide(wait, 'Aprobar equipo');
     await a.goto(base + '/admin/calendario?evento=' + e);
-    await post(a, a.getByRole('button', { name: 'Generar revisión del calendario' }));
+    await post(a, a.getByRole('button', { name: 'Preparar calendario' }));
     await a.reload();
-    await post(a, a.getByRole('button', { name: 'Confirmar y fijar calendario' }));
+    await post(a, a.getByRole('button', { name: 'Confirmar calendario e iniciar liguilla' }));
     await a.reload();
     await shot(a, '04-calendario');
     let matches = (await db.query('select * from cfp_private.league_matches where event_id=$1 order by round,game_order', [e])).rows;
     assert.equal(matches.length, 24);
     for (const m of matches) {
-        await a.getByRole('tab',{name:new RegExp(`^Jornada ${m.round} `)}).click();
-        await a.waitForFunction((round) => document.querySelector('.league-round h3')?.textContent?.trim() === `Jornada ${round}`, m.round);
-        await a.getByRole('button', { name: `Editar partido ${m.game_order} · jornada ${m.round}`, exact: true }).click();
-        await a.locator('#match-state').selectOption('sport');
+        await a.getByLabel('Elegir jornada').selectOption(String(m.round));
+        await a.locator('.guided-calendar .match-row').nth(m.game_order - 1)
+            .getByRole('button', { name: 'Registrar resultado', exact: true }).click();
         await a.locator('#home-goals').fill('5');
         await a.locator('#away-goals').fill('2');
-        await a.locator('#match-reason').fill('Resultado oficial de ensayo');
         if (m.id === matches[0].id)
-            await a.locator('form.event-form').last().screenshot({ path: out + '/04-resultados.png' });
-        await post(a, a.getByRole('button', { name: 'Guardar partido', exact: true }));
+            await a.locator('#league-match-editor').screenshot({ path: out + '/04-resultados.png' });
+        await post(a, a.getByRole('button', { name: 'Guardar resultado', exact: true }));
         await a.reload();
     }
     await log('24 league results entered through UI on the same approved teams');
     const first = matches[0];
     const beforeStats = (await db.query('select cfp_private.league_table($1) t', [e])).rows[0].t;
-    await a.getByRole('tab',{name:new RegExp(`^Jornada ${first.round} `)}).click();
-    await a.waitForFunction((round) => document.querySelector('.league-round h3')?.textContent?.trim() === `Jornada ${round}`, first.round);
-    await a.getByRole('button', { name: `Editar partido ${first.game_order} · jornada ${first.round}`, exact: true }).click();
-    await a.locator('#match-state').selectOption('sport');
+    await a.getByLabel('Elegir jornada').selectOption(String(first.round));
+    await a.locator('.guided-calendar .match-row').nth(first.game_order - 1)
+        .getByRole('button', { name: 'Ver resultado', exact: true }).click();
+    await a.getByRole('button', { name: 'Corregir resultado', exact: true }).click();
     await a.locator('#home-goals').fill('4');
     await a.locator('#away-goals').fill('2');
     await a.locator('#match-reason').fill('Corrección controlada de goles');
-    await post(a, a.getByRole('button', { name: 'Guardar partido', exact: true }));
+    await post(a, a.getByRole('button', { name: 'Guardar corrección', exact: true }));
     await a.reload();
     const afterStats = (await db.query('select cfp_private.league_table($1) t', [e])).rows[0].t;
     assert.equal(afterStats.find(t => t.id === first.home).gf, beforeStats.find(t => t.id === first.home).gf - 1);
     assert.equal(afterStats.reduce((n, t) => n + t.pj, 0), 48);
     await log('corrected result recalculates GF without duplicate played matches or points');
     await a.goto(base + '/admin/clasificacion?evento=' + e);
-    await a.getByRole('button', { name: 'Cerrar liguilla y conservar clasificación' }).waitFor();
     await a.waitForLoadState('networkidle');
-    while (await a.getByRole('button', { name: /^Sortear:/ }).count()) {
-        await post(a, a.getByRole('button', { name: /^Sortear:/ }).first());
+    while (await a.getByRole('button', { name: 'Resolver desempate' }).count()) {
+        await post(a, a.getByRole('button', { name: 'Resolver desempate' }).first());
         await a.reload();
         await a.waitForLoadState('networkidle');
     }
     await shot(a, '05-clasificacion');
-    await post(a, a.getByRole('button', { name: 'Cerrar liguilla y conservar clasificación' }));
+    await post(a, a.getByRole('button', { name: 'Cerrar liguilla y continuar' }));
     await a.reload();
     assert.equal((await db.query('select state from cfp_private.leagues where event_id=$1', [e])).rows[0].state, 'closed');
     await log('final tie lots persisted and league table closed');
     await a.goto(base + '/admin/eliminatorias?evento=' + e);
-    await post(a, a.getByRole('button', { name: 'Preparar revisión del cuadro' }));
+    await post(a, a.getByRole('button', { name: 'Preparar cuartos de final' }));
     await a.reload();
-    await post(a, a.getByRole('button', { name: 'Confirmar cuadro fijo' }));
+    await post(a, a.getByRole('button', { name: 'Confirmar emparejamientos' }));
     await a.reload();
     await shot(a, '06-cuadro');
     for (let i = 1; i <= 7; i++) {
-        await a.getByRole('button', { name: 'Detalle del partido ' + i, exact: true }).click();
+        await a.locator('#ko-game-' + i).getByRole('button', { name: 'Registrar resultado', exact: true }).click();
         await a.locator('#ko-hg').fill('5');
         await a.locator('#ko-ag').fill('2');
-        await a.locator('#ko-reason').fill('Eliminatoria oficial de ensayo');
-        await post(a, a.getByRole('button', { name: 'Guardar decisión del partido' }));
-        await a.getByRole('status').filter({ hasText: /Guardado/ }).waitFor();
+        await post(a, a.getByRole('button', { name: 'Guardar resultado' }));
+        await a.getByRole('status').filter({ hasText: /Resultado guardado correctamente/ }).waitFor();
         await a.reload();
     }
-    await post(a, a.getByRole('button', { name: 'Confirmar campeón y terminar evento' }));
+    await post(a, a.getByRole('button', { name: 'Confirmar campeón' }));
     await a.reload();
+    await a.goto(base + '/admin/eventos/' + e);
+    await a.getByLabel('Motivo administrativo').first().fill('Fin de la prueba integral aislada');
+    await post(a, a.getByRole('button', { name: 'Finalizar evento', exact: true }));
+    await a.getByRole('heading', { name: 'Torneo finalizado', exact: true }).waitFor();
     await p.goto(base + '/eventos/' + e);
     await p.getByRole('region', { name: 'Campeón del evento', exact: true }).waitFor();
     assert.ok(!(await p.content()).includes(crew(1, 0).tiktok));

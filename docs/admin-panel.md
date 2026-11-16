@@ -2,7 +2,20 @@
 
 La administración autenticada comparte marco en `src/app/admin/(panel)/layout.tsx`. El acceso por correo permanece en `/admin/acceso`, fuera del marco. Cada página y operación conserva la comprobación del propietario; no se cambiaron migraciones, reservas, vencimientos ni privacidad.
 
-## Recorrido
+## Administración guiada
+
+Abre un evento desde el listado para ver su siguiente paso. La guía calcula siete fases a partir de las inscripciones, la liguilla, la clasificación, el cuadro y el estado del evento. Si un enlace perdió el identificador o el evento ya no existe, el panel pide elegirlo de nuevo antes de mostrar controles.
+
+Calendario concentra el registro deportivo. Abre un partido, introduce los dos goles y pulsa «Guardar resultado». El servidor comprueba el marcador, el evento y la versión vigente, conserva el horario y vuelve a leer el resultado de Supabase. En una corrección se solicita el motivo. Las decisiones administrativas y los horarios individuales siguen en «Más opciones del partido». La programación conjunta está en «Programar horarios».
+
+Al terminar una jornada, el calendario ofrece ir a la siguiente o revisar la clasificación final. Los desempates, el cierre de la liguilla, la confirmación del cuadro, el campeón y la finalización del evento requieren pasos explícitos. Los ganadores avanzan por los cruces existentes. La clasificación permite abrir las estadísticas adicionales y conserva la descalificación y los criterios de desempate.
+
+«Inscripciones y equipos» reúne solicitudes, equipos aprobados y lista de espera. «Herramientas» mantiene la vista de resultados, LIVE y privacidad. El historial, la edición del evento y la exportación del ensayo siguen disponibles desde sus opciones secundarias.
+
+## Documentación de entregas anteriores
+
+
+### Recorrido
 
 - Resumen: evento seleccionado, ocupación, disponibilidad, pendientes, aprobados y espera. Pendientes y aprobados ocupan plaza; espera no reserva.
 - Atención: pendientes y vencimientos en las próximas seis horas, con enlaces directos al detalle. Actividad: cinco decisiones más recientes del evento.

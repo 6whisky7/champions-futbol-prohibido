@@ -1,3 +1,4 @@
+import { SelectAdminEvent } from "@/components/select-admin-event";
 import { KnockoutView } from "@/components/knockout-view";
 import type { Knockout } from "@/lib/knockout";
 import Link from "next/link";
@@ -22,38 +23,31 @@ export default async function Competition({
     notFound();
   const { data: events, error } = await client
     .from("cfp_events")
-    .select("id,name")
+    .select("id,name,format")
     .order("starts_at");
   if (error) throw new Error("No se pudieron cargar los eventos");
   const { evento } = await searchParams;
-  const event = events?.find((e) => e.id === evento) ?? events?.[0];
-  if (!event)
-    return (
+  const event = events?.find((e) => e.id === evento);
+  if (!event) return <main><SelectAdminEvent invalid={Boolean(evento)} /></main>;
+  const { data, error: err } = await client.rpc("cfp_league_read", { e: event.id, admin: true });
+  const league = data as League | null;
+  if (section === "eliminatorias") {
+    if (err) throw new Error("No se pudo cargar la competición");
+    if (league?.state !== "closed") return (
       <main className="admin-empty">
-        <h2>{section === "eliminatorias" ? "Todavía no hay cuadro de eliminatorias" : "Primero crea un evento"}</h2>
-        <p>
-          {section === "eliminatorias" ? "El cuadro se prepara después de cerrar la clasificación de liguilla. Primero crea el evento y completa esa fase." : "Crea un evento como borrador. Después de aprobar a los participantes y cerrar las inscripciones podrás preparar la liguilla."}
-        </p>
-        <Link className="action-link" href="/admin/eventos">
-          Ir a Eventos
-        </Link>
+        <h2>Cierra primero la liguilla</h2>
+        <p>Confirma la clasificación final antes de preparar las eliminatorias.</p>
+        <Link className="action-link" href={"/admin/clasificacion?evento=" + event.id}>Ver clasificación</Link>
       </main>
     );
-  const { data: ko, error: koError } = await client.rpc("cfp_knockout_read", {
-    e: event.id,
-    admin: true,
-  });
-  if (koError) throw new Error("No se pudo cargar el cuadro");
-  if (section === "eliminatorias")
+    const { data: ko, error } = await client.rpc("cfp_knockout_read", { e: event.id, admin: true });
+    if (error) throw new Error("No se pudo cargar el cuadro");
     return (
       <main>
-        <KnockoutView eventId={event.id} data={ko as Knockout | null} admin />
+        <KnockoutView key={event.id} eventId={event.id} data={ko as Knockout | null} format={event.format} admin />
       </main>
     );
-  const { data, error: err } = await client.rpc("cfp_league_read", {
-    e: event.id,
-    admin: true,
-  });
+  }
   if (err) throw new Error("No se pudo cargar la competición");
   return (
     <main>
@@ -70,13 +64,8 @@ export default async function Competition({
               : "calendar"
         }
       />
-      {section !== "clasificacion" && ko && (
-        <KnockoutView
-          eventId={event.id}
-          data={ko as Knockout}
-          admin
-          mode={section === "resultados" ? "results" : "bracket"}
-        />
+      {section === "resultados" && league?.state === "closed" && (
+        <Link href={"/admin/eliminatorias?evento=" + event.id}>Ver resultados de eliminatorias</Link>
       )}
     </main>
   );

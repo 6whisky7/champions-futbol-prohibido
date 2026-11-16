@@ -40,7 +40,7 @@ export default async function Events() {
               </span>
               <span>{e.capacity} plazas</span>
             </div>
-            <Link href={`/admin/eventos/${e.id}`}>Configurar →</Link>
+            <Link href={`/admin/eventos/${e.id}`}>Abrir torneo →</Link>
           </li>
         ))}
       </ul>

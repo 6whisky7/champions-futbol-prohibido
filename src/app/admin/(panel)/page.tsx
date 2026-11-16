@@ -1,13 +1,11 @@
+import { SelectAdminEvent } from "@/components/select-admin-event";
 import { Occupancy } from "@/components/occupancy";
 import { ExpiryTime } from "@/components/expiry-time";
 import Link from "next/link";
-import { CalendarDays, ArrowRight, Clock3 } from "lucide-react";
+import { ArrowRight, Clock3 } from "lucide-react";
 import { requireOwner } from "@/lib/owner";
 import { eventColumns, eventDate, type TournamentEvent } from "@/lib/events";
 import { type Application } from "@/lib/applications";
-import { adminNextStep } from "@/lib/admin-next-step";
-import type { League } from "@/lib/league/types";
-import type { Knockout } from "@/lib/knockout";
 export default async function Admin({
   searchParams,
 }: {
@@ -21,36 +19,17 @@ export default async function Admin({
   if (error) throw new Error("No se pudieron consultar los eventos.");
   const events = data as TournamentEvent[];
   const { evento } = await searchParams;
-  const event = events.find((e) => e.id === evento) ?? events[0];
-  if (!event)
-    return (
-      <main className="admin-empty">
-        <CalendarDays size={48} />
-        <h2>Tu próximo torneo empieza aquí</h2>
-        <p>
-          Crea el primer evento como borrador. Después podrás preparar su
-          formato, abrir inscripciones y revisar a los equipos desde este panel.
-        </p>
-        <Link className="action-link" href="/admin/eventos">
-          Preparar primer evento <ArrowRight size={20} />
-        </Link>
-        <p className="admin-note">
-          El borrador es privado y nace con las inscripciones cerradas.
-        </p>
-      </main>
-    );
+  const event = events.find((e) => e.id === evento);
+  if (!event) return <main><SelectAdminEvent invalid={Boolean(evento)} /></main>;
   const { data: raw, error: failed } = await client.rpc(
     "cfp_admin_applications",
     { e: event.id },
   );
   if (failed) throw new Error("No se pudieron consultar las solicitudes.");
   const items = raw as Application[];
-  const [league,knockout,privacy]=await Promise.all([client.rpc("cfp_league_read",{e:event.id,admin:true}),client.rpc("cfp_knockout_read",{e:event.id,admin:true}),client.rpc("cfp_registration_status")]);
-  if(league.error||knockout.error||privacy.error)throw new Error("No se pudo calcular el siguiente paso.");
   const pending = items.filter((a) => a.state === "pending"),
     approved = items.filter((a) => a.state === "approved"),
     waiting = items.filter((a) => a.state === "waiting");
-  const next=adminNextStep(event,league.data as League|null,knockout.data as Knockout|null,pending.length,approved.length,privacy.data?.enabled===true);
   const near = pending.filter(
     (a) =>
       a.expires_at &&
@@ -84,31 +63,9 @@ export default async function Admin({
             {eventDate(event.starts_at)} · {event.capacity} plazas
           </p>
         </div>
-        <Link href={`/admin/eventos/${event.id}`}>Configurar evento →</Link>
+        <Link href={`/admin/eventos/${event.id}`} className="action-link">Abrir torneo <ArrowRight size={20} /></Link>
       </section>
-      <section className="admin-surface admin-next-step"><h2>Siguiente paso</h2><h3>{next.title}</h3><p>{next.text}</p><Link className="action-link" href={next.href}>{next.action} <ArrowRight size={20}/></Link></section>
       <Occupancy pending={pending.length} approved={approved.length} capacity={event.capacity}/>
-      <dl className="admin-counts">
-        {[
-          ["Plazas ocupadas", pending.length + approved.length],
-          [
-            "Disponibles",
-            Math.max(0, event.capacity - pending.length - approved.length),
-          ],
-          ["Pendientes", pending.length],
-          ["Aprobados", approved.length],
-          ["En espera", waiting.length],
-        ].map(([label, n]) => (
-          <div key={label}>
-            <dt>{label}</dt>
-            <dd>{n}</dd>
-          </div>
-        ))}
-      </dl>
-      <p className="admin-note">
-        Pendientes y aprobados ocupan plaza. La lista de espera no reserva cupo,
-        escudo ni jugadores.
-      </p>
       <div className="admin-summary-grid">
         <section className="admin-surface">
           <h2>
@@ -119,7 +76,7 @@ export default async function Admin({
               <p>
                 {pending.length} {pending.length===1?"solicitud espera":"solicitudes esperan"} confirmación o revisión.
               </p>
-              <Link className="action-link" href={review()}>
+              <Link href={review()}>
                 Revisar solicitudes →
               </Link>
               <h3>Próximas a vencer · en 6 horas</h3>
