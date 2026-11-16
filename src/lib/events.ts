@@ -1,3 +1,6 @@
+// Preserve editions that predate event classification while excluding private tests.
+export const publicEventFilter = "is_test.is.null,is_test.eq.false";
+
 export const eventFormats = {
   quarters: { label: "Cuartos", minimum: 8, opponents: 4, qualified: 8 },
   round16: { label: "Octavos", minimum: 16, opponents: 6, qualified: 16 },

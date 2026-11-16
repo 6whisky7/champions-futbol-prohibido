@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { publicEventFilter } from "@/lib/events";
 import { createClient } from "@/lib/supabase/server";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -22,7 +23,7 @@ export default async function Events({
     !policy.error && !!policy.data?.enabled && !!policy.data?.version;
   const { data, error } = await client
     .from("cfp_events")
-    .select(eventColumns)
+    .select(eventColumns).or(publicEventFilter)
     .in("status", ["published", "finished"])
     .order("starts_at");
   const events = ((data ?? []) as TournamentEvent[])

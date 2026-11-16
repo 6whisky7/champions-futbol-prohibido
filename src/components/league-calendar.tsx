@@ -14,21 +14,24 @@ export function LeagueCalendar({
   eventId,
   admin,
   tab,
+  locked,
+  onSelect,
+  startOperation,
+  finishOperation,
 }: {
   data: League;
   eventId: string;
   admin: boolean;
   tab: string;
+  locked: boolean;
+  startOperation: () => boolean;
+  finishOperation: () => void;
+  onSelect: (id: string | null, round: number) => void;
 }) {
   const params = useSearchParams(),
     r = Number(params.get("jornada")),
     round = Number.isInteger(r) && r > 0 && r <= data.rounds ? r : 1;
-  const setRound = (r: number) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("jornada", String(r));
-    url.searchParams.delete("partido");
-    window.history.replaceState(null, "", url);
-  };
+  const setRound = (r: number) => onSelect(null, r);
   return (
     <section className="league-calendar" id="league-calendar">
       <h2>
@@ -41,7 +44,7 @@ export function LeagueCalendar({
           {Array.from({ length: data.rounds }, (_, i) => i + 1).map((j) => {
             const rows = data.matches.filter((m) => m.round === j);
             return (
-              <TabsTrigger key={j} value={String(j)}>
+              <TabsTrigger key={j} value={String(j)} disabled={locked}>
                 Jornada {j}{" "}
                 <span>
                   {rows.filter((m) => !unresolved(m.kind)).length}/{rows.length}{" "}
@@ -61,6 +64,9 @@ export function LeagueCalendar({
                   data={data}
                   eventId={eventId}
                   round={j}
+                  locked={locked}
+                  startOperation={startOperation}
+                  finishOperation={finishOperation}
                 />
               )}
               <ol>
@@ -115,11 +121,8 @@ export function LeagueCalendar({
                           {admin && data.state === "active" ? (
                             <button
                               className="match-edit trophy-button"
-                              onClick={() => {
-                                const url = new URL(window.location.href);
-                                url.searchParams.set("partido", m.id);
-                                window.history.replaceState(null, "", url);
-                              }}
+                              disabled={locked}
+                              onClick={() => onSelect(m.id, j)}
                             >
                               <Pencil aria-hidden="true" />
                               Editar partido {m.game_order} · jornada {j}

@@ -15,6 +15,7 @@ import {
 } from "@/app/admin/solicitudes/actions";
 import { RequirementChecks } from "@/components/requirement-checks";
 const actionLabels: Record<string, string> = {
+  test_fixture: "Plantilla admitida para ensayo privado",
   confirm: "Capitán confirmado",
   requirements: "Requisitos revisados",
   requirement: "Comprobación de integrante",
@@ -215,6 +216,9 @@ export function ApplicationManager({
               captain: String(i) === a.payload.captain,
             }))}
           />
+          {a.history.some(h => h.action === "test_fixture") ? (
+            <p className="admin-note">Plantilla ficticia de ensayo. La admisión de prueba no acredita cuentas, requisitos ni autorizaciones reales.</p>
+          ) : <>
           <h3>Requisitos</h3>
           {a.state === "pending" && (
             <p className="admin-note">
@@ -234,6 +238,7 @@ export function ApplicationManager({
               ? "Revisados"
               : "Revisar a todos: seguimiento, La Chapizza y amistad con SOYWHYSKY"}
           </p>
+          </>}
           <div className="event-form">
             <label htmlFor="review-reason">
               Motivo o evidencia de la revisión (privado)
@@ -246,7 +251,7 @@ export function ApplicationManager({
               onChange={(e) => setReason(e.target.value)}
             />
           </div>
-          <RequirementChecks
+          {!a.history.some(h => h.action === "test_fixture") && <RequirementChecks
             application={a}
             disabled={busy || reason.trim().length < 3}
             save={(i, k, checked) => {
@@ -267,6 +272,7 @@ export function ApplicationManager({
                 .finally(() => setBusy(false));
             }}
           />
+          }
           <p>Rechazar libera la plaza, el nombre, los jugadores y el escudo.</p>
           <div className="admin-tabs">
             {a.state === "pending" && (
