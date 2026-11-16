@@ -1190,7 +1190,7 @@ div[id] {
 .rank-tools button { min-height: 44px; }
 .rank-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; table-layout: fixed; font-variant-numeric: tabular-nums; }
 .rank-table th, .rank-table td { text-align: center; }
-.rank-table thead th { padding: 4px 6px; color: var(--muted-foreground); font-size: .875rem; }
+.rank-table thead th { padding: 4px 6px; white-space: nowrap; color: var(--muted-foreground); font-size: .875rem; }
 .rank-table thead th:first-child { width: 64px; }
 .rank-table thead th:nth-child(2), .rank-team-row th[scope="row"] { text-align: left; }
 .rank-table thead th:nth-child(3) { width: 88px; }
@@ -1228,6 +1228,7 @@ div[id] {
 @container (max-width: 590px) {
   .rank-table .rank-form { display: none; }
   .rank-team-row > :nth-last-child(2) { border-inline-end: 1px solid #2d4869; border-radius: 0 12px 12px 0; }
+  .rank-table thead th { padding-inline: 3px; }
   .rank-table thead th:first-child { width: 38px; }
   .rank-table thead th:nth-child(3) { width: 43px; }
   .rank-table thead th:nth-child(4), .rank-table thead th:nth-child(5) { width: 32px; }
