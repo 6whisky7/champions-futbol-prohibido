@@ -2,6 +2,9 @@ import "server-only";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
+import { ChampionPoster } from "@/lib/champion-poster";
+import { defeatedRivals, knockoutImagePhase } from "@/lib/champion-poster-data";
+import type { Knockout } from "@/lib/knockout";
 import { crests } from "@/lib/crests";
 import type { PublicMatch } from "@/lib/public-matches";
 
@@ -9,7 +12,8 @@ export async function resultImage(
   eventName: string,
   match: PublicMatch,
   vertical: boolean,
-  champion?: { name: string; crest: string },
+  knockout: Knockout | null,
+  downloadKind: "campeon" | "resultado" = "resultado",
 ) {
   const font = await readFile(
     path.join(
@@ -17,17 +21,46 @@ export async function resultImage(
       "node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-700-normal.woff",
     ),
   );
-  const crest = async (id: string | null) =>
-    id && crests.some((c) => c.id === id)
-      ? `data:image/png;base64,${(await readFile(path.join(process.cwd(), "public/escudos-mini", id + ".png"))).toString("base64")}`
-      : null;
-  const images = await Promise.all([
-    crest(match.homeCrest),
-    crest(match.awayCrest),
-  ]);
-  const championImage = champion ? await crest(champion.crest) : null;
-  const w = vertical ? 1080 : 1200,
-    h = vertical ? 1920 : 630;
+  const crest = async (id: string | null, fullSize = false) => {
+    const entry = crests.find((item) => item.id === id);
+    if (!entry) return null;
+    const file = fullSize
+      ? path.join(process.cwd(), "public/escudos", path.basename(entry.src))
+      : path.join(process.cwd(), "public/escudos-mini", entry.id + ".png");
+    const bytes = await readFile(file);
+    return "data:image/png;base64," + bytes.toString("base64");
+  };
+  const options = {
+    width: vertical ? 1080 : 1200,
+    height: vertical ? 1920 : 630,
+    fonts: [{ name: "Barlow", data: font, weight: 700 as const, style: "normal" as const }],
+    headers: {
+      "Cache-Control": "no-store",
+      ...(vertical ? {
+        "Content-Disposition": 'attachment; filename="cfp-' + downloadKind + '-' + match.id + '.png"',
+      } : {}),
+    },
+  };
+  const snapshot = knockout?.state === "finished" ? knockout.champion : null;
+  if (knockout && snapshot?.final.id === match.id) {
+    const [winnerImage, runnerUpImage, rivals] = await Promise.all([
+      crest(snapshot.team.crest, true),
+      crest(snapshot.runner_up?.crest ?? null),
+      Promise.all(defeatedRivals(knockout, snapshot).map(async ({ phase, team }) => ({
+        phase, name: team.name, image: await crest(team.crest),
+      }))),
+    ]);
+    return new ImageResponse(
+      <ChampionPoster
+        eventName={eventName} phase="Eliminatorias · Final" champion={snapshot}
+        vertical={vertical} winnerImage={winnerImage} runnerUpImage={runnerUpImage} rivals={rivals}
+      />,
+      options,
+    );
+  }
+
+  const phase = (knockout && knockoutImagePhase(knockout, match.id)) ?? match.phase;
+  const images = await Promise.all([crest(match.homeCrest), crest(match.awayCrest)]);
   const scored = match.hg !== null && match.ag !== null;
   return new ImageResponse(
     <div
@@ -59,42 +92,16 @@ export async function resultImage(
           {eventName}
         </div>
         <div style={{ fontSize: vertical ? 32 : 24, color: "#b5c3d9" }}>
-          {match.phase}
+          {phase}
         </div>
       </div>
-      {champion && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 12,
-            textAlign: "center",
-            color: "#edcb83",
-          }}
-        >
-          <div style={{ fontSize: 36 }}>CAMPEÓN</div>
-          {championImage && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={championImage} alt="" width={180} height={180} />
-          )}
-          <div
-            style={{
-              fontSize: champion.name.length > 40 ? 46 : 64,
-              wordBreak: "break-word",
-            }}
-          >
-            {champion.name}
-          </div>
-        </div>
-      )}
       <div
         style={{
           display: "flex",
           flexDirection: vertical ? "column" : "row",
           alignItems: "center",
           justifyContent: "space-around",
-          gap: vertical ? (champion ? 20 : 40) : 24,
+          gap: vertical ? 40 : 24,
         }}
       >
         {[0, 1, 2].map((i) =>
@@ -126,8 +133,8 @@ export async function resultImage(
                 <img
                   src={images[i === 0 ? 0 : 1]!}
                   alt=""
-                  width={vertical ? (champion ? 130 : 220) : 120}
-                  height={vertical ? (champion ? 130 : 220) : 120}
+                  width={vertical ? 220 : 120}
+                  height={vertical ? 220 : 120}
                 />
               )}
               <span
@@ -138,9 +145,7 @@ export async function resultImage(
                         ? 48
                         : 30
                       : vertical
-                        ? champion
-                          ? 48
-                          : 68
+                        ? 68
                         : 42,
                   wordBreak: "break-word",
                 }}
@@ -162,18 +167,6 @@ export async function resultImage(
         </div>
       </div>
     </div>,
-    {
-      width: w,
-      height: h,
-      fonts: [{ name: "Barlow", data: font, weight: 700, style: "normal" }],
-      headers: {
-        "Cache-Control": "no-store",
-        ...(vertical
-          ? {
-              "Content-Disposition": `attachment; filename="cfp-${champion ? "campeon" : "resultado"}-${match.id}.png"`,
-            }
-          : {}),
-      },
-    },
+    options,
   );
 }
