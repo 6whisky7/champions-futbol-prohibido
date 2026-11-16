@@ -1,3 +1,4 @@
+import { SelectAdminEvent } from "@/components/select-admin-event";
 import Link from "next/link";
 import { requireOwner } from "@/lib/owner";
 import type { LiveDocument, LiveAdmin } from "@/lib/live";
@@ -14,20 +15,8 @@ export default async function AdminLive({
       .select("id,name,status")
       .order("starts_at");
   if (error) throw Error("No se pudieron consultar los eventos.");
-  const event = events?.find((e) => e.id === evento) ?? events?.[0];
-  if (!event)
-    return (
-      <main className="admin-empty">
-        <h2>Prepara el primer evento</h2>
-        <p>
-          LIVE estará disponible cuando exista un evento publicado y partidos
-          confirmados.
-        </p>
-        <Link className="action-link" href="/admin/eventos">
-          Ir a Eventos
-        </Link>
-      </main>
-    );
+  const event = events?.find((e) => e.id === evento);
+  if (!event) return <main><SelectAdminEvent invalid={Boolean(evento)} /></main>;
   if (event.status !== "published")
     return (
       <main className="admin-empty">

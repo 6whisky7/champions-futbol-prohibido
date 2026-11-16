@@ -1,4 +1,6 @@
 "use client";
+import { useState } from "react";
+import Link from "next/link";
 import { Scale, LockKeyhole } from "lucide-react";
 import type { League } from "@/lib/league/types";
 import { classificationZone, unresolved } from "@/lib/public-matches";
@@ -23,6 +25,8 @@ export function LeagueStandings({
   message: string;
   onAction: (action: string, p?: Record<string, unknown>) => Promise<boolean>;
 }) {
+  const [detailed, setDetailed] = useState(false);
+  const showDetails = !admin || detailed;
   const remaining = data.matches.filter((m) => unresolved(m.kind)).length,
     lots = [
       ...new Set(
@@ -37,61 +41,61 @@ export function LeagueStandings({
       : `Los ${data.qualified} primeros habilitados pasan a ${data.format === "quarters" ? "cuartos" : data.format === "round16" ? "octavos" : "dieciseisavos"}.`;
   return (
     <section className="admin-surface standings-surface">
-      {admin && data.state === "active" && (
+      {admin && data.state === "active" && remaining === 0 && (
         <section className="closure-review" id="league-close" tabIndex={-1}>
-          <h2>Revisión de cierre</h2>
-          <p>
-            <strong>
-              {data.matches.length - remaining}/{data.matches.length} partidos
-              resueltos
-            </strong>{" "}
-            · {lots.length} desempates pendientes.
-          </p>
+          <h2>{lots.length ? "Desempates pendientes" : "Ya puedes cerrar la liguilla"}</h2>
           <p id="league-close-block">
-            {remaining
-              ? `Faltan ${remaining} partidos por resolver.`
-              : lots.length
-                ? "Resuelve los sorteos pendientes antes de fijar la tabla."
-                : "Puedes revisar y fijar la clasificación final."}{" "}
-            El cierre conserva puestos y participantes; no crea eliminatorias
-            automáticamente.
+            {lots.length
+              ? "Hay equipos empatados. Debes resolver estos empates antes de cerrar la liguilla."
+              : "Todos los partidos están finalizados. Revisa las posiciones antes de fijar la clasificación."}
           </p>
-          {lots.map((key) => (
-            <Button
-              key={key}
-              variant="outline"
-              disabled={busy || remaining > 0}
-              onClick={() =>
-                void onAction("lot", {
-                  key,
-                  reason: "Sorteo explícito de puestos empatados",
-                })
-              }
-            >
-              Sortear:{" "}
-              {data.table
-                .filter((r) => r.tie_key === key)
-                .map((r) => r.name)
-                .join(", ")}
-            </Button>
-          ))}
-          <ConfirmAction
-            label="Cerrar liguilla y conservar clasificación"
-            title="Fijar la clasificación final"
-            description="Los puestos y la clasificación de referencia quedarán conservados. No podrás cambiar los resultados de la liguilla desde estas pantallas después del cierre. El cuadro se prepara y confirma aparte; no se añaden equipos de espera."
-            busy={busy}
-            message={message}
-            disabled={remaining > 0 || lots.length > 0}
-            onConfirm={() => onAction("close")}
-          />
+          {lots.map((key) => {
+            const teams = data.table.filter((row) => row.tie_key === key).map((row) => row.name).join(", ");
+            return (
+              <div key={key} className="guided-tie">
+                <p>{teams}</p>
+                <ConfirmAction label="Resolver desempate" title="Sortear puestos empatados"
+                  description={"Se sorteará el orden de estos equipos según el reglamento: " + teams + "."}
+                  busy={busy} message={message}
+                  onConfirm={() => onAction("lot", { key, reason: "Sorteo explícito de puestos empatados" })} />
+              </div>
+            );
+          })}
+          {!lots.length && (
+            <ConfirmAction
+              label="Cerrar liguilla y continuar"
+              title="Fijar la clasificación final"
+              description="Los puestos y resultados de la liguilla quedarán fijados. El cuadro de eliminatorias se prepara en el siguiente paso."
+              busy={busy}
+              message={message}
+              onConfirm={() => onAction("close")}
+            />
+          )}
         </section>
+      )}
+      {admin && data.state === "closed" && (
+        <div className="closure-review">
+          <h2>Clasificación final confirmada</h2>
+          <Link className="action-link" href={"/admin/eliminatorias?evento=" + eventId}>
+            {data.format === "quarters" ? "Continuar a cuartos de final" : "Continuar a eliminatorias"}
+          </Link>
+        </div>
       )}
       <div className="standings-heading">
         <h2 id="league-table">
           Clasificación {data.state === "closed" ? "final" : "provisional"}
         </h2>
         <p>{passing}</p>
-        {data.state !== "closed" && (
+        {admin && <>
+          <p>La clasificación se actualiza automáticamente con los resultados.</p>
+          {remaining === data.matches.length && <p>Todavía no se han jugado partidos.</p>}
+          {remaining > 0 && remaining < data.matches.length && <p>Faltan {remaining} partidos por jugar.</p>}
+          {remaining > 0 && lots.length > 0 && <p>Hay equipos empatados. Podrás resolver el empate al terminar la liguilla.</p>}
+          <button type="button" className="trophy-button" onClick={() => setDetailed(!detailed)} aria-expanded={detailed}>
+            {detailed ? "Ocultar estadísticas adicionales" : "Ver más estadísticas"}
+          </button>
+        </>}
+        {!admin && data.state !== "closed" && (
           <p className="admin-note">
             Zonas provisionales. Un empate pendiente mantiene la zona por
             resolver.
@@ -104,22 +108,10 @@ export function LeagueStandings({
         role="region"
         aria-label="Tabla de clasificación"
       >
-        <table className="league-table polished-table">
+        <table className={"league-table polished-table" + (admin && !showDetails ? " guided-standings-simple" : "")}>
           <thead>
             <tr>
-              {[
-                "Pos.",
-                "Equipo",
-                "Puntos",
-                "DG",
-                "Racha",
-                "PJ",
-                "PG",
-                "PP",
-                "PN",
-                "GF",
-                "GC",
-              ].map((h) => (
+              {["Pos.", "Equipo", "Puntos", "PJ", "DG", ...(showDetails ? ["Racha", "PG", "PP", "PN", "GF", "GC"] : [])].map((h) => (
                 <th key={h} scope="col">
                   {h}
                 </th>
@@ -129,7 +121,7 @@ export function LeagueStandings({
           <tbody>
             {data.table.map((r, i) => {
               const zone = classificationZone(r, data),
-                form = teamForm(data.matches, r.id),
+                form = showDetails ? teamForm(data.matches, r.id) : [],
                 cut =
                   i > 0 &&
                   ((r.position > data.qualified &&
@@ -157,10 +149,10 @@ export function LeagueStandings({
                           : undefined
                       }
                     />
-                    <span className={"zone-label zone-" + zone.key}>
+                    {(showDetails || r.dq) && <span className={"zone-label zone-" + zone.key}>
                       {zone.label}
-                    </span>
-                    <details className="tie-explanation">
+                    </span>}
+                    {(showDetails || r.tie_pending) && <details className="tie-explanation">
                       <summary>
                         <Badge variant="outline">
                           <Scale aria-hidden="true" />
@@ -176,14 +168,15 @@ export function LeagueStandings({
                           ? tieExplanation(r, data.teams)
                           : "No hay un criterio de desempate individual registrado en esta clasificación histórica."}
                       </p>
-                    </details>
+                    </details>}
                   </th>
                   <td className="points-cell">{r.points ?? "—"}</td>
+                  <td className="secondary-stat">{r.pj ?? "—"}</td>
                   <td className="difference-cell">
                     {r.dg > 0 ? "+" : ""}
                     {r.dg ?? "—"}
                   </td>
-                  <td>
+                  {showDetails && <td>
                     <span
                       className="form-strip"
                       aria-label="Últimos cinco partidos por jornada y orden"
@@ -203,8 +196,8 @@ export function LeagueStandings({
                         <span className="form-empty">Sin jugar</span>
                       )}
                     </span>
-                  </td>
-                  {[r.pj, r.pg, r.pp, r.pn, r.gf, r.gc].map((v, j) => (
+                  </td>}
+                  {showDetails && [r.pg, r.pp, r.pn, r.gf, r.gc].map((v, j) => (
                     <td className="secondary-stat" key={j}>
                       {v ?? "—"}
                     </td>
@@ -215,12 +208,12 @@ export function LeagueStandings({
           </tbody>
         </table>
       </div>
-      <p className="admin-note">
+      {showDetails && <p className="admin-note">
         V: victoria · D: derrota · N: nulo administrativo. Racha por jornada y
         orden del calendario. DG = GF − GC. La línea señala el corte; los
         descalificados no clasifican. PJ jugados, PG ganados, PP perdidos, PN
         nulos.
-      </p>
+      </p>}
       {data.state === "closed" && (
         <p className="locked-note">
           <LockKeyhole aria-hidden="true" />

@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { SelectAdminEvent } from "@/components/select-admin-event";
+import { adminNextStep, adminPhases } from "@/lib/admin-next-step";
+import type { League } from "@/lib/league/types";
+import type { Knockout } from "@/lib/knockout";
 import { requireOwner } from "@/lib/owner";
 import { EventForm } from "@/components/event-form";
 import { EventLifecycleActions, TestSeedForm } from "@/components/event-lifecycle-actions";
@@ -14,38 +17,72 @@ export default async function EditEvent({
 }) {
   const client = await requireOwner();
   const { id } = await params;
-  if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
+  if (!/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i.test(id)) return <main><SelectAdminEvent invalid /></main>;
   const { data, error } = await client
     .from("cfp_events")
     .select(`${eventColumns},roster_locked` as const)
     .eq("id", id)
     .maybeSingle();
   if (error) throw new Error("No se pudo consultar el evento.");
-  if (!data) notFound();
+  if (!data) return <main><SelectAdminEvent invalid /></main>;
+  const event = data as TournamentEvent;
+  const [l, k] = await Promise.all([
+    client.rpc("cfp_league_read", { e: id, admin: true }),
+    client.rpc("cfp_knockout_read", { e: id, admin: true }),
+  ]);
+  if (l.error || k.error) throw new Error("No se pudo consultar el progreso del torneo.");
+  const league = l.data as League | null;
+  const knockout = k.data as Knockout | null;
+  const needsPrivacy = event.status === "published" && !data.roster_locked && event.registration_status === "closed" && !league?.state;
+  const privacy = needsPrivacy ? await client.rpc("cfp_registration_status") : null;
+  if (privacy?.error) throw new Error("No se pudo consultar el estado de las inscripciones.");
+  const next = adminNextStep({ ...event, roster_locked: data.roster_locked }, league, knockout, privacy?.data?.enabled === true);
+  const configIsNext = next.href?.endsWith("#event-settings");
+  const terminal = eventStatusTerminal(event.status);
   return (
     <main className="admin-editor">
       <Link href="/admin/eventos">← Eventos</Link>
       {(await searchParams).guardado && <p role="status">Evento guardado.</p>}
-      {data.status === "published" && !data.is_test && (
-        <Link href={`/eventos/${id}`}>Ver página pública →</Link>
+      {event.is_test && <p className="admin-note">Evento de prueba privado</p>}
+      {event.status !== "cancelled" ? (
+        <section className="admin-surface admin-next-step">
+          <h2>{next.phase === 7 ? "Torneo finalizado" : "Siguiente paso"}</h2>
+          <p>{next.text}</p>
+          {next.href && <Link href={next.href} className="action-link">{next.action}</Link>}
+          <ol className="guided-phase-list" aria-label="Fases del torneo">
+            {adminPhases.map((name, i) => {
+              const current = next.phase === i;
+              return (
+                <li key={name} aria-current={current ? "step" : undefined}>
+                  <span>{i === 4 && event.format !== "quarters" ? "Eliminatorias hasta cuartos" : name}</span>
+                  <small>{next.phase > i ? "Completada" : current ? "En curso" : "Pendiente"}</small>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      ) : <p>El evento está cancelado.</p>}
+      {knockout?.champion && event.status === "published" && (
+        <EventLifecycleActions event={event} only="finish" />
       )}
-      {data.is_test && (
-        <>
-          <p className="admin-note"><strong>PRUEBA</strong> · El evento está aislado de listados y proyecciones públicas.</p>
-          <nav className="admin-tabs" aria-label="Gestionar el ensayo">
-            <Link href={"/admin/solicitudes?evento=" + id + "&vista=approved"}>Ver equipos del ensayo</Link>
-            <Link href={"/admin/calendario?evento=" + id}>Administrar calendario</Link>
-            <Link href={"/admin/eventos/" + id + "/exportar"}>Exportar el ensayo</Link>
-          </nav>
-        </>
+      {configIsNext && !terminal && (
+        <section className="admin-surface" id="event-settings">
+          <h2>Configuración del evento</h2>
+          <EventForm key={id} event={event} />
+        </section>
       )}
-      {eventStatusTerminal(data.status as TournamentEvent["status"]) ? (
-        <p className="admin-note">Este evento es terminal. Su configuración queda protegida; utiliza las acciones de estado si la restauración está permitida.</p>
-      ) : (
-        <EventForm key={id} event={data as TournamentEvent} />
-      )}
-      {data.is_test && !data.roster_locked && !eventStatusTerminal(data.status as TournamentEvent["status"]) && <TestSeedForm eventId={id} />}
-      <EventLifecycleActions event={data as TournamentEvent} />
+      <details className="admin-surface guided-options" id={configIsNext ? undefined : "event-settings"}>
+        <summary>Más opciones del evento</summary>
+        <nav className="admin-tabs" aria-label="Opciones del evento">
+          <Link href={"/admin/solicitudes?evento=" + id + "&vista=approved"}>{event.is_test ? "Ver equipos del ensayo" : "Ver equipos aprobados"}</Link>
+          {event.is_test && <Link href={"/admin/eventos/" + id + "/exportar"}>Exportar el ensayo</Link>}
+          {event.status === "published" && !event.is_test && <Link href={"/eventos/" + id}>Ver página pública</Link>}
+          <Link href={"/admin?evento=" + id + "&vista=actividad"}>Ver actividad de inscripciones</Link>
+        </nav>
+        {!terminal && !configIsNext && <EventForm key={id} event={event} />}
+        {event.is_test && !data.roster_locked && !terminal && <TestSeedForm eventId={id} />}
+        <EventLifecycleActions event={event} only="maintenance" />
+      </details>
     </main>
   );
 }

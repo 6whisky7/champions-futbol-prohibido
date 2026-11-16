@@ -85,26 +85,7 @@ export function ApplicationManager({
   return (
     <>
       <Occupancy pending={pending} approved={approved} capacity={capacity} />
-      <dl className="event-facts application-stats">
-        <div>
-          <dt>Plazas ocupadas</dt>
-          <dd>
-            {pending + approved} / {capacity}
-          </dd>
-        </div>
-        <div>
-          <dt>Disponibles</dt>
-          <dd>{Math.max(0, capacity - pending - approved)}</dd>
-        </div>
-        <div>
-          <dt>Pendientes</dt>
-          <dd>{pending}</dd>
-        </div>
-        <div>
-          <dt>Aprobados</dt>
-          <dd>{approved}</dd>
-        </div>
-      </dl>
+      <p className="admin-note">Inscripciones {open ? "abiertas" : "cerradas"} · {items.filter((item) => item.state === "waiting").length} equipos en lista de espera</p>
       <div className="event-form admin-filters">
         <label htmlFor="application-search">Buscar equipo o capitán</label>
         <input
@@ -161,6 +142,7 @@ export function ApplicationManager({
                 )}
                 <button
                   className="trophy-button"
+                  disabled={busy}
                   onClick={() => {
                     setSelected(a.id);
                     requestAnimationFrame(() => {
@@ -201,12 +183,7 @@ export function ApplicationManager({
             Equipo · {a.payload.name}
           </h2>
           <p>
-            {stateLabels[a.state]} · Referencia {a.id}
-          </p>
-          <p className="admin-note">
-            {a.accepted_privacy_version
-              ? `Aviso presentado: ${a.accepted_privacy_version}. Aceptación registrada por quien envió; no acredita el consentimiento de toda la plantilla.`
-              : "Sin aceptación versionada registrada. No se presume consentimiento por una inscripción anterior."}
+            {stateLabels[a.state]}
           </p>
           <h3>Jugadores</h3>
           <RosterLineup
@@ -273,25 +250,24 @@ export function ApplicationManager({
             }}
           />
           }
-          <p>Rechazar libera la plaza, el nombre, los jugadores y el escudo.</p>
           <div className="admin-tabs">
             {a.state === "pending" && (
               <>
-                <button
-                  className="trophy-button"
+                {!a.captain_confirmed && <button
+                  className="action-link"
                   disabled={busy || reason.trim().length < 3}
                   onClick={() => void act("confirm")}
                 >
                   Confirmar capitán
-                </button>
-                <button
-                  className="trophy-button"
+                </button>}
+                {a.captain_confirmed && !a.requirements_checked && <button
+                  className="action-link"
                   disabled={busy || reason.trim().length < 3}
                   onClick={() => void act("requirements")}
                 >
                   Marcar requisitos revisados
-                </button>
-                <button
+                </button>}
+                {a.captain_confirmed && a.requirements_checked && <button
                   className="action-link"
                   disabled={
                     busy ||
@@ -306,7 +282,7 @@ export function ApplicationManager({
                   onClick={() => void act("approve")}
                 >
                   Aprobar equipo
-                </button>
+                </button>}
               </>
             )}
             {a.state === "waiting" && (
@@ -318,6 +294,10 @@ export function ApplicationManager({
                 Promover y reservar plaza
               </button>
             )}
+          </div>
+          <details className="guided-options">
+            <summary>Más opciones del equipo</summary>
+            <p className="admin-note">Rechazar libera la plaza, el nombre, los jugadores y el escudo.</p>
             {["waiting", "pending", "approved"].includes(a.state) && (
               <>
                 <button
@@ -337,7 +317,7 @@ export function ApplicationManager({
                 </button>
               </>
             )}
-          </div>
+          </details>
           <SaveStatus busy={busy} message={message} />
           {!open && (
             <p>
@@ -372,7 +352,14 @@ export function ApplicationManager({
               }}
             />
           )}
-          <h3>Historial privado</h3>
+          <details className="guided-options">
+            <summary>Historial privado</summary>
+            <p className="admin-note">Referencia {a.id}</p>
+          <p className="admin-note">
+            {a.accepted_privacy_version
+              ? `Aviso presentado: ${a.accepted_privacy_version}. Aceptación registrada por quien envió; no acredita el consentimiento de toda la plantilla.`
+              : "Sin aceptación versionada registrada. No se presume consentimiento por una inscripción anterior."}
+          </p>
           <ul>
             {a.history.map((h, i) => (
               <li key={i}>
@@ -445,6 +432,7 @@ export function ApplicationManager({
               </li>
             ))}
           </ul>
+          </details>
         </section>
       )}
     </>

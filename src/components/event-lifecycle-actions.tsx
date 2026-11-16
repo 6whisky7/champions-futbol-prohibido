@@ -5,18 +5,16 @@ import { ConfirmAction } from "@/components/confirm-action";
 import { runEventLifecycle, seedTestApplications } from "@/app/admin/actions";
 import type { TournamentEvent } from "@/lib/events";
 
-export function EventLifecycleActions({ event }: { event: TournamentEvent }) {
+export function EventLifecycleActions({ event, only }: { event: TournamentEvent; only: "finish" | "maintenance" }) {
   const router = useRouter();
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
-  const actions = event.status === "published"
-    ? ["finish", "cancel"] as const
-    : event.status === "draft"
-      ? ["cancel"] as const
-      : event.status === "cancelled"
-        ? ["restore"] as const
-        : [];
+  const actions: ("finish" | "cancel" | "restore")[] = only === "finish"
+    ? ["finish"] : event.status === "published" || event.status === "draft"
+      ? ["cancel"] : event.status === "cancelled" ? ["restore"] : [];
+  const title = "event-lifecycle-title-" + only;
+  const input = "lifecycle-reason-" + only;
   const copy = {
     finish: ["Finalizar evento", "Finalizar y conservar el campeón", "Cierra las inscripciones. La base exige un resultado de final confirmado y conserva la competición en el historial público."],
     cancel: ["Cancelar evento", "Cancelar este evento", "Cierra las inscripciones y retira el evento de la web pública. Los resultados e historial se conservan para administración."],
@@ -36,11 +34,11 @@ export function EventLifecycleActions({ event }: { event: TournamentEvent }) {
   }
   if (!actions.length) return null;
   return (
-    <section className="admin-card" aria-labelledby="event-lifecycle-title">
-      <h2 id="event-lifecycle-title">Estado del evento</h2>
+    <section className="admin-card" id={only === "finish" ? "event-lifecycle" : undefined} aria-labelledby={title}>
+      <h2 id={title}>{only === "finish" ? "Finalizar el evento" : "Estado del evento"}</h2>
       <p>Estado actual: <strong>{event.status === "draft" ? "Borrador" : event.status === "published" ? "Publicado" : event.status === "finished" ? "Finalizado" : "Cancelado"}</strong>. Inscripciones {event.registration_status === "open" ? "abiertas" : "cerradas"}.</p>
-      <label htmlFor="lifecycle-reason">Motivo administrativo</label>
-      <textarea id="lifecycle-reason" value={reason} minLength={3} maxLength={1000} onChange={(e) => setReason(e.target.value)} rows={3} />
+      <label htmlFor={input}>Motivo administrativo</label>
+      <textarea id={input} value={reason} minLength={3} maxLength={1000} onChange={(e) => setReason(e.target.value)} rows={3} />
       <div className="admin-action-row">
         {actions.map((action) => {
           const [label, title, description] = copy[action];

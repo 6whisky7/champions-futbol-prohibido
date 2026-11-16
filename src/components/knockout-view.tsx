@@ -9,6 +9,7 @@ import { SaveStatus } from "./save-status";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCrest } from "@/lib/crests";
+import { unresolved } from "@/lib/public-matches";
 import { localDate } from "@/lib/events";
 import { type Knockout, knockoutLabels, knockoutDate } from "@/lib/knockout";
 import { knockoutAction } from "@/app/admin/knockout-actions";
@@ -19,11 +20,13 @@ export function KnockoutView({
   data,
   admin = false,
   mode = "bracket",
+  format,
 }: {
   eventId: string;
   data: Knockout | null;
   admin?: boolean;
   mode?: string;
+  format?: string;
 }) {
   const [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
@@ -32,7 +35,9 @@ export function KnockoutView({
     [tracked, setTracked] = useState(""),
     [allRounds, setAllRounds] = useState(false);
   const router = useRouter();
+  const saving = useRef(false);
   const bracket = useRef<HTMLDivElement>(null);
+  const [correction, setCorrection] = useState<string | null>(null);
   const [target, setTarget] = useState<string | null>(null);
   async function act(
     action: string,
@@ -40,6 +45,8 @@ export function KnockoutView({
       reason: "Revisión explícita del propietario",
     },
   ) {
+    if (saving.current) return false;
+    saving.current = true;
     setBusy(true);
     setMessage("");
     try {
@@ -50,7 +57,7 @@ export function KnockoutView({
         data?.revision ?? 0,
       );
       setMessage(result);
-      if (result === "Guardado.") {
+      if (result === "Guardado." || result === "Resultado guardado correctamente") {
         router.refresh();
         window.dispatchEvent(new Event("cfp-admin-refresh"));
         return true;
@@ -62,6 +69,7 @@ export function KnockoutView({
       );
       return false;
     } finally {
+      saving.current = false;
       setBusy(false);
     }
   }
@@ -76,7 +84,7 @@ export function KnockoutView({
         </p>
         {admin && (
           <Button disabled={busy} onClick={() => void act("preview")}>
-            Preparar revisión del cuadro
+            {format === "quarters" ? "Preparar cuartos de final" : "Preparar eliminatorias"}
           </Button>
         )}
         <SaveStatus busy={busy} message={message} />
@@ -85,7 +93,9 @@ export function KnockoutView({
   const matches = data.matches;
   const maxRound = Math.max(...matches.map((m) => m.round));
   const rounds = [...new Set(matches.map((m) => m.round))];
-  const currentRound = round === -1 ? rounds[0] : round;
+  const pending = matches.filter((m) => !m.winner && m.kind !== "void");
+  const nextRound = rounds.find((r) => pending.some((m) => m.round === r));
+  const currentRound = round === -1 ? (admin ? nextRound : undefined) ?? rounds[0] : round;
   const selectedMatch = matches.find((m) => m.id === selected);
   const path = new Set<string>();
   for (const m of matches.filter(
@@ -116,7 +126,7 @@ export function KnockoutView({
         : r === maxRound - 1
           ? "Semifinales"
           : r === maxRound - 2
-            ? "Cuartos"
+            ? "Cuartos de final"
             : r === maxRound - 3
               ? "Octavos"
               : "Dieciseisavos";
@@ -140,44 +150,22 @@ export function KnockoutView({
     );
   };
   function open(id: string) {
+    if (saving.current) return;
+    setMessage("");
+    setCorrection(null);
     setSelected(id);
     requestAnimationFrame(() => document.getElementById("ko-detail")?.focus());
   }
   const final = matches.find((m) => m.round === maxRound);
   const winner = team(final?.winner ?? null);
-  return (
-    <section className="ko-section">
-      <h2>Cuadro de eliminatorias</h2>
-      <p>
-        {data.state === "preview"
-          ? "Revisión previa · aún no confirmada"
-          : data.state === "finished"
-            ? "Evento terminado"
-            : "Cuadro confirmado · a partido único"}
-        . Los destinos son fijos, aunque gane el peor clasificado.
-      </p>
-      <SaveStatus busy={busy} message={message} />
-      {data.champion && (
-        <ChampionPresentation
-          champion={data.champion}
-          eventId={eventId}
-          matches={matches}
-          teams={data.teams}
-        />
-      )}
-      <div className="admin-tabs">
-        {admin && data.state === "preview" && (
-          <ConfirmAction
-            label="Confirmar cuadro fijo"
-            title="Fijar el cuadro de eliminatorias"
-            description="Los participantes, cruces y destinos de esta revisión quedarán fijados. El ganador avanza por esas conexiones, sin reordenar por favoritos. Revisa todo el cuadro antes de confirmar."
-            busy={busy}
-            message={message}
-            onConfirm={() => act("confirm")}
-          />
-        )}
-      </div>
-      <label className="ko-round-switch" htmlFor="ko-round">
+  const done = matches.filter((m) => m.round === currentRound && (m.winner || m.kind === "void")).length;
+  const total = matches.filter((m) => m.round === currentRound).length;
+  const readyMatch = pending.find((m) => m.round === currentRound && m.home && m.away && m.kind !== "blocked" && m.id !== selected);
+  const nextStage = nextRound === maxRound ? "la final" : roundName(nextRound ?? currentRound).toLowerCase();
+  const selectedPlayed = selectedMatch ? !unresolved(selectedMatch.kind) : false;
+  const bracketControls = (
+    <>
+      <label className={admin ? "guided-ko-round" : "ko-round-switch"} htmlFor="ko-round">
         Consultar ronda
         <select
           id="ko-round"
@@ -223,6 +211,248 @@ export function KnockoutView({
           fijos.
         </p>
       )}
+    </>
+  );
+  return (
+    <section className="ko-section">
+      <h2>Cuadro de eliminatorias</h2>
+      <p>
+        {data.state === "preview"
+          ? "Revisión previa · aún no confirmada"
+          : data.state === "finished"
+            ? "Evento terminado"
+            : "Cuadro confirmado · a partido único"}
+        . Los destinos son fijos, aunque gane el peor clasificado.
+      </p>
+      {message === "Resultado guardado correctamente"
+        ? <p className="save-status" role="status" data-state="saved">{message}</p>
+        : <SaveStatus busy={busy} message={message} />}
+      {data.champion && (
+        <ChampionPresentation
+          champion={data.champion}
+          eventId={eventId}
+          matches={matches}
+          teams={data.teams}
+        />
+      )}
+      <div className="admin-tabs">
+        {admin && data.state === "preview" && (
+          <ConfirmAction
+            label="Confirmar emparejamientos"
+            title="Fijar el cuadro de eliminatorias"
+            description="Los participantes, cruces y destinos de esta revisión quedarán fijados. El ganador avanza por esas conexiones, sin reordenar por favoritos. Revisa todo el cuadro antes de confirmar."
+            busy={busy}
+            message={message}
+            onConfirm={() => act("confirm")}
+          />
+        )}
+      </div>
+      {admin && data.state === "active" && (
+        <div className="admin-surface guided-round">
+          <div role="status">
+            <h3>{roundName(currentRound)}</h3>
+            <p>{done === total && total > 0 ? "Ronda completada: " : ""}{done} de {total} partidos resueltos.</p>
+            {readyMatch && <p>Continúa con el siguiente partido pendiente.</p>}
+            {!readyMatch && nextRound === currentRound && selected === null && <p>Revisa las decisiones pendientes de esta ronda.</p>}
+          </div>
+          {nextRound !== undefined && nextRound !== currentRound && done === total ? (
+            <button className="action-link" disabled={busy} onClick={() => { setRound(nextRound); setSelected(null); }}>
+              Continuar a {nextStage}
+            </button>
+          ) : readyMatch && (
+            <button className="action-link" disabled={busy} onClick={() => { setRound(currentRound); open(readyMatch.id); }}>
+              {selected ? "Registrar siguiente resultado" : "Registrar resultados"}
+            </button>
+          )}
+        </div>
+      )}
+      {(!admin || winner || data.state === "finished") && <section
+        className="closure-review ko-final-review"
+        id="ko-final"
+        tabIndex={-1}
+      >
+        <h3>
+          {data.state === "finished"
+            ? "Final y campeón confirmados"
+            : "Revisión de la final"}
+        </h3>
+        <p>
+          <strong>
+            {matches.filter((m) => m.winner || m.kind === "void").length}/
+            {matches.length} partidos resueltos
+          </strong>
+        </p>
+        <p>
+          {winner
+            ? `Ganador de la final: ${winner.name}. ${knockoutLabels[final!.kind]}.`
+            : "La final todavía no tiene un ganador habilitado."}
+        </p>
+        {admin && data.state === "active" && (
+          <ConfirmAction
+            label="Confirmar campeón"
+            title="Confirmar campeón y cerrar la edición"
+            description="Se conserva el campeón, el subcampeón habilitado, la final y la plantilla Roblox oficial. El cierre es definitivo en esta etapa; no permite cambiar después el campeón desde estas pantallas. Las resoluciones administrativas no añaden goles deportivos."
+            busy={busy}
+            message={message}
+            disabled={!winner || winner.dq}
+            onConfirm={() => act("close")}
+          />
+        )}
+        {admin && data.state === "finished" && (
+          <Link href={"/admin/eventos/" + eventId} className="action-link">Volver al evento</Link>
+        )}
+      </section>}
+      {selectedMatch && (
+        <section
+          className="admin-surface ko-detail"
+          id="ko-detail"
+          tabIndex={-1}
+        >
+          <h3>
+            Partido {selectedMatch.number} · {roundName(selectedMatch.round)}
+          </h3>
+          <p>
+            {participant(selectedMatch.home, selectedMatch.home_source)} contra{" "}
+            {participant(selectedMatch.away, selectedMatch.away_source)}
+          </p>
+          <p>
+            {knockoutLabels[selectedMatch.kind]} · Intento{" "}
+            {selectedMatch.attempt}
+          </p>
+          <p>
+            Cinco minutos; si empatan, siguiente gol. Cuatro goles de diferencia
+            terminan el partido. Un pase por clasificación no añade goles.
+          </p>
+          {admin && data.state === "active" && (
+            <>
+              {selectedMatch.home && selectedMatch.away && selectedMatch.kind !== "blocked" && (
+                selectedPlayed && correction !== selectedMatch.id ? (
+                  <Button variant="outline" disabled={busy} onClick={() => setCorrection(selectedMatch.id)}>Corregir resultado</Button>
+                ) : (
+                  <form key={selectedMatch.id + "-score-" + data.revision}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const f = new FormData(e.currentTarget);
+                      void act("score", { id: selectedMatch.id, hg: Number(f.get("hg")), ag: Number(f.get("ag")), reason: f.get("reason") })
+                        .then((saved) => { if (saved) setCorrection(null); });
+                    }}>
+                    <fieldset className="guided-score-fields" disabled={busy}>
+                      <label htmlFor="ko-hg">Goles del local
+                        <input id="ko-hg" name="hg" type="number" inputMode="numeric" min={0} step={1} required defaultValue={selectedMatch.hg ?? ""} />
+                      </label>
+                      <label htmlFor="ko-ag">Goles del visitante
+                        <input id="ko-ag" name="ag" type="number" inputMode="numeric" min={0} step={1} required defaultValue={selectedMatch.ag ?? ""} />
+                      </label>
+                      {selectedPlayed && <label className="guided-score-wide" htmlFor="ko-reason">
+                        Motivo de la corrección
+                        <input id="ko-reason" name="reason" required minLength={3} maxLength={1000} />
+                      </label>}
+                      <div className="guided-score-wide">
+                        <Button type="submit">{selectedPlayed ? "Guardar corrección" : "Guardar resultado"}</Button>
+                      </div>
+                    </fieldset>
+                  </form>
+                )
+              )}
+              <details className="guided-options">
+                <summary>Más opciones del partido</summary>
+              <form
+                key={selectedMatch.id + data.revision}
+                className="event-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const f = new FormData(e.currentTarget);
+                  const kind = String(f.get("kind"));
+                  void act(
+                    kind === "double_absence" || kind === "reset"
+                      ? kind
+                      : "match",
+                    {
+                      id: selectedMatch.id,
+                      kind,
+                      scheduled_at: selectedMatch.scheduled_at,
+                      reason: f.get("reason"),
+                    },
+                  );
+                }}
+              >
+                <label htmlFor="ko-kind">Decisión oficial</label>
+                <select id="ko-kind" name="kind">
+                  {[
+                    "absence_home",
+                    "absence_away",
+                    "abandon_home",
+                    "abandon_away",
+                    "replay",
+                    "postponed",
+                  ].map((k) => (
+                    <option key={k} value={k}>
+                      {knockoutLabels[k]}
+                    </option>
+                  ))}
+                  <option value="double_absence">
+                    Doble ausencia · primer intento reprograma; segundo decide
+                    clasificación
+                  </option>
+                  <option value="reset">
+                    Retirar resultado para corregir una dependencia
+                  </option>
+                </select>
+                <label htmlFor="ko-decision-reason">Motivo de la decisión</label>
+                <input
+                  id="ko-decision-reason"
+                  name="reason"
+                  required
+                  minLength={3}
+                  maxLength={1000}
+                />
+                <Button type="submit" disabled={busy}>
+                  Guardar decisión del partido
+                </Button>
+              </form>
+              <form
+                key={selectedMatch.id + "-schedule-" + data.revision}
+                className="event-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const f = new FormData(e.currentTarget);
+                  const raw = String(f.get("date"));
+                  void act("schedule", {
+                    id: selectedMatch.id,
+                    scheduled_at: raw
+                      ? new Date(raw + ":00-06:00").toISOString()
+                      : null,
+                    reason: f.get("reason"),
+                  });
+                }}
+              >
+                <label htmlFor="ko-date">
+                  Programar o reprogramar · hora de Costa Rica
+                </label>
+                <input
+                  id="ko-date"
+                  name="date"
+                  type="datetime-local"
+                  defaultValue={localDate(selectedMatch.scheduled_at)}
+                />
+                <label htmlFor="ko-schedule-reason">Motivo de la fecha</label>
+                <input
+                  id="ko-schedule-reason"
+                  name="reason"
+                  required
+                  minLength={3}
+                  maxLength={1000}
+                />
+                <Button type="submit" variant="outline" disabled={busy}>
+                  Guardar fecha
+                </Button>
+              </form>
+              </details>
+            </>
+          )}
+        </section>
+      )}
+      {admin ? <details className="guided-options"><summary>Consultar rondas y seguir equipos</summary>{bracketControls}</details> : bracketControls}
       <div
         ref={bracket}
         className={`ko-bracket${allRounds ? " ko-all-rounds" : ""}`}
@@ -317,8 +547,10 @@ export function KnockoutView({
                           <ChevronRight size={18} />
                         </a>
                       )}
-                      <Button variant="outline" onClick={() => open(m.id)}>
-                        Detalle del partido {m.number}
+                      <Button variant="outline" disabled={busy} onClick={() => { if (admin) setRound(m.round); open(m.id); }}>
+                        {admin && data.state === "active" && m.home && m.away && m.kind !== "blocked"
+                          ? (m.winner ? "Ver" : "Registrar") + " resultado"
+                          : "Detalle del partido " + m.number}
                       </Button>
                       {!admin && (
                         <Link
@@ -337,180 +569,6 @@ export function KnockoutView({
           </section>
         ))}
       </div>
-      <section
-        className="closure-review ko-final-review"
-        id="ko-final"
-        tabIndex={-1}
-      >
-        <h3>
-          {data.state === "finished"
-            ? "Final y campeón confirmados"
-            : "Revisión de la final"}
-        </h3>
-        <p>
-          <strong>
-            {matches.filter((m) => m.winner || m.kind === "void").length}/
-            {matches.length} partidos resueltos
-          </strong>
-        </p>
-        <p>
-          {winner
-            ? `Ganador de la final: ${winner.name}. ${knockoutLabels[final!.kind]}.`
-            : "La final todavía no tiene un ganador habilitado."}
-        </p>
-        {admin && data.state === "active" && (
-          <ConfirmAction
-            label="Confirmar campeón y terminar evento"
-            title="Confirmar campeón y cerrar la edición"
-            description="Se conserva el campeón, el subcampeón habilitado, la final y la plantilla Roblox oficial. El cierre es definitivo en esta etapa; no permite cambiar después el campeón desde estas pantallas. Las resoluciones administrativas no añaden goles deportivos."
-            busy={busy}
-            message={message}
-            disabled={!winner || winner.dq}
-            onConfirm={() => act("close")}
-          />
-        )}
-      </section>
-      {selectedMatch && (
-        <section
-          className="admin-surface ko-detail"
-          id="ko-detail"
-          tabIndex={-1}
-        >
-          <h3>
-            Partido {selectedMatch.number} · {roundName(selectedMatch.round)}
-          </h3>
-          <p>
-            {participant(selectedMatch.home, selectedMatch.home_source)} contra{" "}
-            {participant(selectedMatch.away, selectedMatch.away_source)}
-          </p>
-          <p>
-            {knockoutLabels[selectedMatch.kind]} · Intento{" "}
-            {selectedMatch.attempt}
-          </p>
-          <p>
-            Cinco minutos; si empatan, siguiente gol. Cuatro goles de diferencia
-            terminan el partido. Un pase por clasificación no añade goles.
-          </p>
-          {admin && data.state === "active" && (
-            <>
-              <form
-                key={selectedMatch.id + data.revision}
-                className="event-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const f = new FormData(e.currentTarget);
-                  const kind = String(f.get("kind"));
-                  void act(
-                    kind === "double_absence" || kind === "reset"
-                      ? kind
-                      : "match",
-                    {
-                      id: selectedMatch.id,
-                      kind,
-                      hg: Number(f.get("hg")),
-                      ag: Number(f.get("ag")),
-                      scheduled_at: selectedMatch.scheduled_at,
-                      reason: f.get("reason"),
-                    },
-                  );
-                }}
-              >
-                <label htmlFor="ko-kind">Decisión oficial</label>
-                <select id="ko-kind" name="kind" defaultValue="sport">
-                  {[
-                    "sport",
-                    "absence_home",
-                    "absence_away",
-                    "abandon_home",
-                    "abandon_away",
-                    "replay",
-                    "postponed",
-                  ].map((k) => (
-                    <option key={k} value={k}>
-                      {knockoutLabels[k]}
-                    </option>
-                  ))}
-                  <option value="double_absence">
-                    Doble ausencia · primer intento reprograma; segundo decide
-                    clasificación
-                  </option>
-                  <option value="reset">
-                    Retirar resultado para corregir una dependencia
-                  </option>
-                </select>
-                <label htmlFor="ko-hg">Goles del local (solo deportivo)</label>
-                <input
-                  id="ko-hg"
-                  name="hg"
-                  type="number"
-                  min={0}
-                  step={1}
-                  defaultValue={selectedMatch.hg ?? 0}
-                />
-                <label htmlFor="ko-ag">
-                  Goles del visitante (solo deportivo)
-                </label>
-                <input
-                  id="ko-ag"
-                  name="ag"
-                  type="number"
-                  min={0}
-                  step={1}
-                  defaultValue={selectedMatch.ag ?? 0}
-                />
-                <label htmlFor="ko-reason">Motivo o corrección</label>
-                <input
-                  id="ko-reason"
-                  name="reason"
-                  required
-                  minLength={3}
-                  maxLength={1000}
-                />
-                <Button type="submit" disabled={busy}>
-                  Guardar decisión del partido
-                </Button>
-              </form>
-              <form
-                key={selectedMatch.id + "-schedule-" + data.revision}
-                className="event-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const f = new FormData(e.currentTarget);
-                  const raw = String(f.get("date"));
-                  void act("schedule", {
-                    id: selectedMatch.id,
-                    scheduled_at: raw
-                      ? new Date(raw + ":00-06:00").toISOString()
-                      : null,
-                    reason: f.get("reason"),
-                  });
-                }}
-              >
-                <label htmlFor="ko-date">
-                  Programar o reprogramar · hora de Costa Rica
-                </label>
-                <input
-                  id="ko-date"
-                  name="date"
-                  type="datetime-local"
-                  defaultValue={localDate(selectedMatch.scheduled_at)}
-                />
-                <label htmlFor="ko-schedule-reason">Motivo de la fecha</label>
-                <input
-                  id="ko-schedule-reason"
-                  name="reason"
-                  required
-                  minLength={3}
-                  maxLength={1000}
-                />
-                <Button type="submit" variant="outline" disabled={busy}>
-                  Guardar fecha
-                </Button>
-              </form>
-            </>
-          )}
-        </section>
-      )}
       {admin && data.state === "active" && (
         <details className="admin-surface">
           <summary>Situación administrativa de un equipo</summary>
