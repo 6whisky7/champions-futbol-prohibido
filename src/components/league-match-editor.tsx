@@ -10,7 +10,7 @@ export type EditMode = "score" | "schedule" | "decision";
 export type ScoreDraft = { hg: string; ag: string; reason: string };
 
 export function LeagueMatchEditor({
-  match, names, locked, busy, error, saved, draft, onDraft, onSave,
+  match, names, locked, busy, error, saved, draft, readOnlyReason, onDraft, onSave,
 }: {
   match: LeagueMatch;
   names: [string, string];
@@ -19,6 +19,7 @@ export function LeagueMatchEditor({
   error: string;
   saved?: string;
   draft?: ScoreDraft;
+  readOnlyReason?: string;
   onDraft: (draft: ScoreDraft) => void;
   onSave: (form: FormData, mode: EditMode) => void;
 }) {
@@ -29,6 +30,15 @@ export function LeagueMatchEditor({
     ag: pending ? "" : String(match.ag),
     reason: "",
   };
+
+  if (readOnlyReason) return (
+    <section className="guided-match-editor" id="league-match-editor" tabIndex={-1}
+      aria-labelledby="league-match-title">
+      <h3 id="league-match-title">Resultado del partido</h3>
+      <p>{names[0]} {match.hg} – {match.ag} {names[1]}</p>
+      <p className="admin-note">{readOnlyReason}</p>
+    </section>
+  );
 
   return (
     <section className="guided-match-editor" id="league-match-editor" tabIndex={-1}

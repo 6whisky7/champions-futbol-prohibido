@@ -74,7 +74,7 @@ export function LeagueCalendar({
                     ? admin ? weekday.format(date).replace(",", "").replace(/^./u, (c) => c.toUpperCase()) + " · " + time.format(date) : knockoutDate(m.scheduled_at)
                     : admin ? "Horario sin definir" : "Sin fecha"}
                 </span>
-                {admin && data.state === "active" && (
+                {admin && data.state !== "preview" && (data.state === "active" || !unplayed) && (
                   <button className="match-edit trophy-button" disabled={locked}
                     aria-expanded={selected === m.id}
                     onClick={() => onSelect(selected === m.id ? null : m.id, j)}>
