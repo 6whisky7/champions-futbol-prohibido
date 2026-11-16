@@ -43,19 +43,28 @@ export async function resultImage(
   };
   const snapshot = knockout?.state === "finished" ? knockout.champion : null;
   if (knockout && snapshot?.final.id === match.id) {
-    const [winnerImage, runnerUpImage, rivals] = await Promise.all([
+    const [winnerImage, runnerUpImage, rivals, artwork, displayFont] = await Promise.all([
       crest(snapshot.team.crest, true),
       crest(snapshot.runner_up?.crest ?? null),
       Promise.all(defeatedRivals(knockout, snapshot).map(async ({ phase, team }) => ({
         phase, name: team.name, image: await crest(team.crest),
       }))),
+      readFile(path.join(process.cwd(), "public/graficas/final-estadio-rojo.jpg")),
+      readFile(path.join(
+        process.cwd(),
+        "node_modules/@fontsource/barlow-condensed/files/barlow-condensed-latin-800-italic.woff",
+      )),
     ]);
     return new ImageResponse(
       <ChampionPoster
         eventName={eventName} phase="Eliminatorias · Final" champion={snapshot}
+        backdrop={"data:image/jpeg;base64," + artwork.toString("base64")}
         vertical={vertical} winnerImage={winnerImage} runnerUpImage={runnerUpImage} rivals={rivals}
       />,
-      options,
+      {
+        ...options,
+        fonts: [...options.fonts, { name: "Barlow", data: displayFont, weight: 800, style: "italic" }],
+      },
     );
   }
 
