@@ -51,7 +51,12 @@ export function ChampionPoster({
     : vertical ? 53 : 36;
   const name = champion.team.name;
   const runnerUp = champion.runner_up?.name ?? "Sin rival habilitado";
-  const championSize = vertical ? (name.length > 38 ? 76 : 116) : (name.length > 35 ? 44 : 64);
+  const championSize = vertical
+    ? (name.length > 48 ? 62 : name.length > 38 ? 76 : 116)
+    : (name.length > 48 ? 34 : name.length > 35 ? 44 : 64);
+  const eventSize = vertical
+    ? (eventName.length > 74 ? 32 : eventName.length > 52 ? 40 : 56)
+    : (eventName.length > 74 ? 25 : eventName.length > 55 ? 29 : 36);
   const hero = (
     <div style={{
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -206,7 +211,7 @@ export function ChampionPoster({
             CHAMPIONS FÚTBOL PROHIBIDO
           </div>
           <div style={{
-            fontSize: vertical ? (eventName.length > 52 ? 40 : 56) : (eventName.length > 55 ? 29 : 36),
+            fontSize: eventSize,
             lineHeight: 0.99, wordBreak: "break-word", maxWidth: "100%",
           }}>{eventName}</div>
         </div>
