@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "environment": "Embedded PostgreSQL 127.0.0.1:55439; existing SQL RPC, not real Supabase Auth/PostgREST",
+  "production": false,
+  "checks": [
+    "valid signed request with repeated optional numbers",
+    "72-hour expiry unchanged",
+    "exact retry creates one row and returns same reference",
+    "raw identities and player numbers retained",
+    "invalid punctuation rejected by SQL",
+    "00 rejected by SQL",
+    "canonical duplicate in roster",
+    "team name conflict",
+    "crest conflict",
+    "cross-team private handle conflict",
+    "waiting does not reserve or block duplicate reserved assets",
+    "@, no @, dot, outer spaces remain SQL-compatible",
+    "optional complete substitute and blank numbers",
+    "only valid test submissions exist",
+    "transaction rolled back: test event and requests not persisted"
+  ]
+}

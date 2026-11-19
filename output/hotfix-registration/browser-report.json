@@ -1,0 +1,42 @@
+{
+  "transport": "Local Next Server Actions + simulated Supabase RPC; no production writes",
+  "checks": [
+    "missing fields: summary links, first focus and scroll; no send",
+    "live invalid usernames and correction; with/without @, dot, underscore",
+    "safe suggestion requires ownership confirmation",
+    "optional substitute and numbers; invalid 100; repeated numbers; captain",
+    "required confirmations independent; no automatic checks",
+    "review/back preserves fields/confirmations; review is not send",
+    "canonical duplicate identifies roster field",
+    "1440/390/320/720 layouts, keyboard, reflow, reduced motion and axe",
+    "server team/crest/member conflicts preserve fields; no private details",
+    "newly full: voluntary waiting with same key and data",
+    "reserved crest disabled normally and selectable in voluntary waiting",
+    "uncertain saved result: no success, locked data, exact retry",
+    "transport failure, malformed receipt, unknown SQL: no false success",
+    "double click: one send, indicator, actual reference",
+    "Android touch emulation: error focus and mobile input hints"
+  ],
+  "accessibility": [
+    {
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "width": 390,
+      "violations": []
+    },
+    {
+      "width": 320,
+      "violations": []
+    },
+    {
+      "width": 720,
+      "violations": []
+    }
+  ],
+  "browserErrors": [],
+  "consoleErrors": [],
+  "android": "PASS Pixel 5 / Chromium touch emulation; no physical Android or TikTok in-app browser",
+  "webkit": "PASS WebKit emulation: validation, focus, signed submit and receipt; no physical iPhone"
+}

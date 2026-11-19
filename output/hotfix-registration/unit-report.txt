@@ -1,0 +1,38 @@
+PASS valid roster, no substitute, optional numbers blank
+PASS roblox: "Jugador⚽10"
+PASS roblox: "Jugador-10"
+PASS tiktok: "𝓙𝓾𝓰𝓪𝓭𝓸𝓻"
+PASS roblox: ""
+PASS tiktok: "https://tiktok.com/@jugador"
+PASS roblox: "https://roblox.com/users/123"
+PASS roblox: "jugador 10"
+PASS tiktok: "jugador​10"
+PASS roblox: "ab"
+PASS tiktok: "aaaaaaaaaaaaaaaaaaaaaaaaa"
+PASS compatible format tiktok: @jugador.10
+PASS compatible format tiktok: jugador.10
+PASS compatible format tiktok: www.jugador
+PASS compatible format tiktok: @aaaaaaaaaaaaaaaaaaaaaaaa
+PASS compatible format roblox: Jugador_10
+PASS compatible format roblox:  @Jugador_10
+PASS compatible format roblox: old__account
+PASS compatible format tiktok: legacy.
+PASS compatibility: existing canonical comparison, original JSON untouched
+PASS invalid number 00
+PASS invalid number 100
+PASS invalid number 1
+PASS invalid number -1
+PASS invalid number a1
+PASS numbers repeat and remain optional
+PASS incomplete starter
+PASS enabled incomplete substitute; removing it removes its errors
+PASS canonical duplicates inside roster
+PASS missing crest; reserved crest; voluntary waiting bypasses reservation
+PASS both confirmations required independently; waiting never required
+PASS team length and existing normalization, no new decorative-name ban
+PASS malformed captain/roster/runtime values
+PASS safe suggestion strips only spaces; emoji/decorations/URLs never become invented identities
+PASS success requires real reference/state/expiry shape
+PASS safe known conflicts and unknown server failures
+PASS Server Action preserves signature, raw JSON, key, waiting and privacy contract
+PASS 41 validation/response/server-contract checks; no database connection

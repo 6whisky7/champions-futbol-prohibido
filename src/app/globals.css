@@ -1332,6 +1332,30 @@ div[id] {
 .application-crest-preview img { width: 50px; height: 50px; object-fit: contain; }
 .application-form .player-number input { max-width: 7rem; }
 .application-form #player-number-help { margin-top: 0; font-size: .9rem; }
+
+/* Signup validation stays beside the affected control and never relies on color alone. */
+.event-form.application-form input[aria-invalid="true"]:not([type="checkbox"]):not([type="radio"]),
+.event-form.application-form select[aria-invalid="true"] { border: 2px solid #ff929d; }
+.application-form input,.application-form select { scroll-margin-block: 7rem; }
+.application-form .application-field-error { color: #ffb7c0; display: flex; align-items: flex-start; gap: .5rem; font-size: 1rem; line-height: 1.5; margin-block: .5rem 1rem; }
+.application-field-error svg,.application-format-ok svg,.application-error-summary svg { flex-shrink: 0; margin-top: .2em; }
+.application-form .application-field-help { font-size: 1rem; color: var(--muted-foreground); line-height: 1.6; margin-block: .4rem; }
+.application-form .application-format-ok { color: #9ce6bd; display: flex; gap: .5rem; font-size: .9rem; margin-block: .4rem 1rem; }
+.application-error-summary { border: 1px solid #ff929d; background: #281823; border-radius: 12px; padding: 1rem; color: #ffe5e9; overflow-wrap: anywhere; }
+.application-error-summary h3 { font-size: 1.2rem; margin-bottom: .75rem; }
+.application-error-summary ul { padding-left: 1.25rem; display: grid; gap: .6rem; }
+.application-error-summary a { color: #ffe5e9; text-decoration: underline; text-underline-offset: .2em; }
+.application-error-summary p { display: flex; align-items: flex-start; gap: .5rem; margin: 0; }
+.application-confirmation-invalid { border: 1px solid #ff929d; border-radius: 8px; padding: .75rem; }
+.application-suggestion { padding: 1rem; border: 1px solid var(--border); border-radius: 10px; margin-block: .75rem; overflow-wrap: anywhere; }
+.application-suggestion label { margin-block: .75rem; }
+.application-suggestion button { margin-top: .75rem; }
+.application-reference { overflow-wrap: anywhere; }
+.application-form fieldset:disabled { opacity: .75; }
+.application-form > button { display: inline-flex; justify-content: center; align-items: center; gap: .5rem; }
+.application-spinner { animation: application-spin 1s linear infinite; }
+@keyframes application-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .application-spinner { animation: none; } }
 .roster-number { margin-left: 6px; color: var(--primary); font-size: .8rem; }
 .public-competition > .competition-rankings { margin-block-start: 20px; }
 .public-knockout .ko-match { background: linear-gradient(120deg, #0a1528, #12243d); border-color: #355373; }
